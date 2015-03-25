@@ -1,0 +1,67 @@
+<?php 
+	session_start();
+	require_once('top.php');
+	//something about index
+
+	$sidebar ='reports';
+	$folder ='reports/';
+	if(isset($_GET["cat"])) {
+		$id= mysql_real_escape_string($_GET["cat"]);
+		$id= preg_replace('/[^(0-9)]*/','', $id);
+	}
+	else {
+		$id=1;
+	}
+
+	if(isset($_GET["type"])) {
+		$type= mysql_real_escape_string($_GET["type"]);
+		$type= preg_replace('/[^(0-9)]*/','', $type);
+	}
+	else {
+		$type=0;
+	}
+
+	if($id==1) 	$title='Proxy Advisory Reports';
+	if($id==2) $title = 'Governance Scores';
+	if($id==3) $title = 'Governance Research';
+
+	if(isset($_GET["pan"])){
+		$pan= mysql_real_escape_string($_GET["pan"]);
+		$pan= preg_replace('/[^(0-9)]*/','', $pan);
+	}
+	else {
+		$pan=1;
+	}
+
+	$flag = 0;
+
+	$user_id = $_SESSION["MEM_ID"];
+	
+	$sub_sidebar=$id;
+	if($id>3 || $id<1) {header("location: ".STRSITE."access-denied.php");}
+
+	require_once('header.php');?>
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container row-fluid">
+		<?php require_once('sidebar.php');?>
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+		<?php
+			switch($id)
+			{
+				case 1: include($folder.'pa_reports.php');
+						break;
+				case 2: include($folder.'cgs_reports.php');
+						break;
+				case 3: include($folder.'res_reports.php');
+						break;
+			}
+		?>			
+		</div>
+		<!-- END PAGE -->	 	
+	</div>
+	<!-- END CONTAINER -->
+<?php
+	require_once('footer.php');
+	
+?>

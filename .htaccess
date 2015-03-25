@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www\.portal\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://portal.%1/$1 [R=301,L]
+Options -Indexes
+</IfModule>
