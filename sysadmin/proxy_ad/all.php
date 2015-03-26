@@ -83,6 +83,7 @@ if(!isset($title)) {
                                  <th>#</th>
                                  <th>Company Name</th>
                                  <th>Meeting Date</th>
+                                 <th>e-Voting Deadline</th>
                                  <th>Type</th>
                                  <th>Coverage</th>
                                  <th>Subscribers</th>
@@ -96,6 +97,7 @@ if(!isset($title)) {
                                 <th>#</th>
                                  <th>Company Name</th>
                                  <th>Meeting Date</th>
+                                 <th>e-Voting Deadline</th>
                                  <th>Type</th>
                                  <th>Coverage</th>
                                  <th>Subscribers</th>
@@ -136,6 +138,7 @@ if(!isset($title)) {
                                  ?></td>
                                  
                                  <td><?php echo $proxy_report->meeting_date; ?></td>
+                                 <td><?php echo $proxy_report->evoting_end; ?></td>
                                  <td><?php echo $proxy_report->meeting_type;?></td>
                                  
                                  <td><?php echo $proxy_report->report() ?></td>

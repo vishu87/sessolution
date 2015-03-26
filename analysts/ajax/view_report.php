@@ -19,8 +19,8 @@ $update = array();
 echo '<table class="table table-bordered table-hover">';
 switch ($report_type) {
 	case '1':
-		$ar_fields_name = array("Report Type","Meeting Date","Record Date","Evoting Period","Evoting Platform","Vote Record Date","Meeting Type","Report","Notice","Proxy Slips","Annual Report","Meeting Outcome","Meeting Minutes");
-		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingPeriod","EvotingPlatform","VoteRecordDate","MeetingType","Report","Notice","ProxySlips","AnnualReport","MeetingOutcome","MeetingMinutes");
+		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","Evoting Platform","Vote Record Date","Meeting Type","Report","Notice","Proxy Slips","Annual Report","Meeting Outcome","Meeting Minutes");
+		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","VoteRecordDate","MeetingType","Report","Notice","ProxySlips","AnnualReport","MeetingOutcome","MeetingMinutes");
 		$pa_view = new PA($report_id);
 		
 		$user->pa_subscribed_comapnies_year($user->parent,$pa_view->year);
@@ -30,7 +30,8 @@ switch ($report_type) {
 		$update["VoteRecordDate"] = $pa_view->record_date;
 		$update["MeetingDate"] = $pa_view->meeting_date;
 		$update["RecordDate"] = $pa_view->record_date;
-		$update["EvotingPeriod"] = $pa_view->evoting_start.' - '.$pa_view->evoting_end;
+		$update["EvotingStart"] = $pa_view->evoting_start;
+		$update["EvotingEnd"] = $pa_view->evoting_end;
 		$update["EvotingPlatform"] = $pa_view->evoting_plateform;
 		$update["MeetingType"] = $pa_view->meeting_type;
 		//print_r($user->companies_subscribed_year);

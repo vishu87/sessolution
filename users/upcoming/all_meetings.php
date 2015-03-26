@@ -124,8 +124,8 @@ if(!isset($title)) {
 <div class="container-fluid">
    <div class="row-fluid">
     <div class="span6"><h3 class="page-title">
-      Calender View 
-      <small></small>
+      Calender View
+      <small>(as per e-Voting Deadline)</small>
     </h3></div>
     <div class="span6" style="text-align:right;margin-top:20px">
       

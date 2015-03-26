@@ -157,6 +157,7 @@ class PA_admin{
 		$this->company_id = stripslashes($result["com_id"]);
 		$this->company_name = stripslashes($result["com_name"]);
 		$this->meeting_date = ($result["meeting_date"])?date("d M Y",$result["meeting_date"]):'';
+		$this->evoting_end = ($result["evoting_end"])?date("d M Y",$result["evoting_end"]):'';
 		$this->meeting_timestamp = $result["meeting_date"];
 		$this->meeting_type = $meeting_types[$result["meeting_type"]];
 		$this->year = $result["year"];

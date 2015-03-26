@@ -27,6 +27,7 @@ $proxy_report = new PA_admin($proxy_id);
    ?></td>
    
    <td><?php echo $proxy_report->meeting_date; ?></td>
+   <td><?php echo $proxy_report->evoting_end; ?></td>
    <td><?php echo $proxy_report->meeting_type;?></td>
    
    <td><?php echo $proxy_report->report() ?></td>

@@ -35,6 +35,7 @@ if(!isset($title)) {
                    <th>SN</th>
                    <th>Company Name</th>
                    <th>Meeting Date</th>
+                   <th>e-Voting Deadline</th>
                    <th>Type</th>
                    <th>Report</th>
                    <th>Record Vote</th>
@@ -48,6 +49,7 @@ if(!isset($title)) {
                   <th>SN</th>
                    <th>Company Name</th>
                    <th>Meeting Date</th>
+                   <th>e-Voting Deadline</th>
                    <th>Type</th>
                    <th>Report</th>
                     <th>Record Vote</th>
@@ -109,6 +111,7 @@ if(!isset($title)) {
                    <?php echo $pa_report->company_name;;?>
                   </td>
                    <td><?php echo $pa_report->meeting_date;?></td>
+                   <td><?php echo $pa_report->evoting_end;?></td>
                     <td><?php echo $pa_report->meeting_type;?></td>
                    <td id="sub_<?php echo $pa_report->id ?>">
                     <?php 

@@ -1,5 +1,5 @@
 <?php session_start();
-require_once('../../sysauth.php');
+//require_once('../../sysauth.php');
 require_once('../../config.php');
 require_once('../../classes/UserClass.php');
 
@@ -13,14 +13,11 @@ if(!$db) {
 	die("Unable to select database");
 }
 
-$query = mysql_query("SELECT companies.com_name, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
-$row_comp = mysql_fetch_array($query);
-
 $base_font_size='15';
 
 $line_height='1.5';
 
-$report_id = mysql_real_escape_string($_POST["report_id"]);
+$report_id = mysql_real_escape_string($_GET["report_id"]);
 $query = mysql_query("SELECT companies.com_name, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
 
@@ -31,7 +28,10 @@ $str ='';
 	
 	<style type="text/css">
 	@page {
-	margin: 140px auto 120px 30px;
+		margin: 140px auto 120px 30px;
+	}
+	#firstpage{
+		
 	}
 	
 	#header { position: fixed; left: 0px; top: -120px; right: 0px; height: 150px;  }
@@ -40,9 +40,9 @@ $str ='';
 
 	body {
 	
-			font-family:Arial;
-			font-size:'.$base_font_size.'px;
-			line-height:1.5;
+		font-family:Arial;
+		font-size:'.$base_font_size.'px;
+		line-height:1.5;
 			
 	}
 	
@@ -101,38 +101,49 @@ $str ='';
 	</style>
 	</head>
 	<body>
-	<div id="header">
-	<table style=" border-bottom:2px solid #eee">
-		<tr>
-			<td><img src="../../logo.jpg" style="opacity:0.7"></td>
-			<td style="text-align:right; color:#888"><h1>'.$row_comp["com_name"].'</h1></td>
-		</tr>
-	</table>
-	<table style=" ">
-		<tr>
-			<td style="color:#888">Meeting Type: '.$meeting_types[$row_comp["meeting_type"]].'</td>
-			<td style="text-align:right; color:#888">Meeting Date: '.date("d M y", $row_comp["meeting_date"]).'</td>
-		</tr>
-	</table>
-    	
-	 </div>
+		<div id="header">
+			<table style=" border-bottom:2px solid #eee">
+				<tr>
+					<td><img src="../../logo.jpg" style="opacity:0.7"></td>
+					<td style="text-align:right; color:#888"><h1>'.$row_comp["com_name"].'</h1></td>
+				</tr>
+			</table>
+			<table style=" ">
+				<tr>
+					<td style="color:#888">Meeting Type: '.$meeting_types[$row_comp["meeting_type"]].'</td>
+					<td style="text-align:right; color:#888">Meeting Date: '.date("d M y", $row_comp["meeting_date"]).'</td>
+				</tr>
+			</table>	
+		</div>
 
-	  <div id="footer">
-		 <table style=" border-top:2px solid #eee">
-			<tr>
-				<td style="width:50px;"><img src="../../logo_small.jpg" style="opacity:0.7"></td>
-				<td style="width:450px;">&copy; 2012 | Stakeholders Empowerment Services | All Rights Reserved</td>
-				<td style="text-align:right; color:#888"> <span class="page" style="font-size:15px"> |&nbsp;<span style="font-size:12px">PAGE</span></span></td>
-			</tr>
-		</table>
-	   
-	  </div>
+		<div id="footer">
+			 <table style=" border-top:2px solid #eee">
+				<tr>
+					<td style="width:50px;"><img src="../../logo_small.jpg" style="opacity:0.7"></td>
+					<td style="width:450px;">&copy; 2012 | Stakeholders Empowerment Services | All Rights Reserved</td>
+					<td style="text-align:right; color:#888"> <span class="page" style="font-size:15px"> |&nbsp;<span style="font-size:12px">PAGE</span></span></td>
+				</tr>
+			</table>
+		   
+		</div>
+
+		<div id="firstpage">
+			<table>
+				<tr>	
+					<td>
+						<img src="../../hands.png" style="text-align:right; margin-top:50px;">
+					</td>
+					<td style="background:#F00; min-height:400px"></td>
+				</tr>
+			</table>
+			<p style="page-break-before: always;"></p>
+		</div>
 
 	
 ';
 
 
-$str .= '<table style="">
+$str .= '<div class="rest_page"><table style="">
 	<tr style="background:#464646; color:#fff"><td class="center">S. No.</td><td>Resolution</td><td class="center">Recommendation</td></tr>
 ';
 $count =0;
@@ -157,7 +168,7 @@ while ($row = mysql_fetch_array($query)) {
 		'.$row["detail"].'
 		'.$row["reco"].'</p>';
 }
-$str .= '<p style="page-break-before: always;"></p>
+$str .= '<p style="page-break-before: always;"></p></div>
 	
 	<table >
 		<tr class="light">
@@ -215,7 +226,7 @@ All disputes subject to jurisdiction of High Court of Bombay, Mumbai</div>
 
 require_once("../../dompdf/dompdf_config.inc.php");
 
-$is_local = true;
+	$is_local = true;
 
   if ( get_magic_quotes_gpc() )
     $str= stripslashes($str);
@@ -225,15 +236,17 @@ $is_local = true;
   $dompdf->load_html($str);
   $dompdf->set_paper('letter', 'portrait');
   $dompdf->render();
-  $pdf = $dompdf->output();
+  $dompdf->stream("hello_world.pdf",array('Attachment'=>0));
+  //$dompdf->stream();
+ //  $pdf = $dompdf->output();
 
-	$name = substr(str_shuffle(strtotime("now")), 0, 10).name_filter($row_comp["com_name"]).'_SES Proxy Advisory Report Abridged_'.$meeting_types[$row_comp["meeting_type"]].' '.date("d-M-y",$row_comp["meeting_date"]).'.pdf';
+	// $name = substr(str_shuffle(strtotime("now")), 0, 10).name_filter($row_comp["com_name"]).'_SES Proxy Advisory Report Abridged_'.$meeting_types[$row_comp["meeting_type"]].' '.date("d-M-y",$row_comp["meeting_date"]).'.pdf';
 
 
-	file_put_contents(dirname(__FILE__).'/../../abridged_reports/'.$name, $pdf);
+	// file_put_contents(dirname(__FILE__).'/../../abridged_reports/'.$name, $pdf);
 	
-	if(mysql_query("UPDATE proxy_ad set abridged_report='$name' where id='".$report_id."' ")){
-    	echo 'success';
-   }
+	// if(mysql_query("UPDATE proxy_ad set abridged_report='$name' where id='".$report_id."' ")){
+ //    	echo 'success';
+ //   }
 
 ?>

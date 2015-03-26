@@ -128,6 +128,54 @@ $rid = $_GET["id"];
                                        <!--/span-->
                                     </div>
                                     <!--/row-->
+                                                                         <div class="row-fluid">
+                                       <div class="span6 ">
+                                         <div class="control-group">
+                                       <label class="control-label">Record Date</label>
+                                       <div class="controls">
+                                           <input type="text" class="datepicker_month_top"  name="record_date" placeholder="Record Date" value="<?php echo ($report["record_date"])?date("d-m-Y", $report["record_date"]):''; ?>">
+                                          <span class="help-block" ></span>
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                       <label class="control-label">E-voting Start</label>
+                                       <div class="controls">
+                                           <input type="text" class="datepicker_month_top"  name="evoting_start" placeholder="" value="<?php echo ($report["evoting_start"])?date("d-m-Y", $report["evoting_start"]):''; ?>">
+                                          <span class="help-block" ></span>
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+                                    <!--/row-->
+
+                                     <div class="row-fluid">
+                                       <div class="span6 ">
+                                         <div class="control-group">
+                                       <label class="control-label">E-voting End</label>
+                                       <div class="controls">
+                                           <input type="text" class="datepicker_month_top"  name="evoting_end" placeholder="" value="<?php echo ($report["evoting_end"])?date("d-m-Y", $report["evoting_end"]):''; ?>">
+                                          <span class="help-block" ></span>
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                       <label class="control-label">E-voting Platform</label>
+                                       <div class="controls">
+                                           <input type="text"  name="evoting_plateform" placeholder="" value="<?php echo $report["evoting_plateform"]?>">
+                                          <span class="help-block" ></span>
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+                                    <!--/row-->
+                                    
                                     <div class="row-fluid">
                                        <div class="span6 ">
                                           <div class="control-group">
@@ -258,53 +306,7 @@ $rid = $_GET["id"];
                                     </div>
                                     <!--/row-->
 
-                                     <div class="row-fluid">
-                                       <div class="span6 ">
-                                         <div class="control-group">
-                                       <label class="control-label">Record Date</label>
-                                       <div class="controls">
-                                           <input type="text" class="datepicker_month_top"  name="record_date" placeholder="Record Date" value="<?php echo ($report["record_date"])?date("d-m-Y", $report["record_date"]):''; ?>">
-                                          <span class="help-block" ></span>
-                                       </div>
-                                       </div>
-                                       </div>
-                                       <!--/span-->
-                                       <div class="span6 ">
-                                          <div class="control-group">
-                                       <label class="control-label">E-voting Start</label>
-                                       <div class="controls">
-                                           <input type="text" class="datepicker_month_top"  name="evoting_start" placeholder="" value="<?php echo ($report["evoting_start"])?date("d-m-Y", $report["evoting_start"]):''; ?>">
-                                          <span class="help-block" ></span>
-                                       </div>
-                                       </div>
-                                       </div>
-                                       <!--/span-->
-                                    </div>
-                                    <!--/row-->
 
-                                     <div class="row-fluid">
-                                       <div class="span6 ">
-                                         <div class="control-group">
-                                       <label class="control-label">E-voting End</label>
-                                       <div class="controls">
-                                           <input type="text" class="datepicker_month_top"  name="evoting_end" placeholder="" value="<?php echo ($report["evoting_end"])?date("d-m-Y", $report["evoting_end"]):''; ?>">
-                                          <span class="help-block" ></span>
-                                       </div>
-                                       </div>
-                                       </div>
-                                       <!--/span-->
-                                       <div class="span6 ">
-                                          <div class="control-group">
-                                       <label class="control-label">E-voting Platform</label>
-                                       <div class="controls">
-                                           <input type="text"  name="evoting_plateform" placeholder="" value="<?php echo $report["evoting_plateform"]?>">
-                                          <span class="help-block" ></span>
-                                       </div>
-                                       </div>
-                                       </div>
-                                       <!--/span-->
-                                    </div>
-                                    <!--/row-->
 
 
                                     <!--/row-->

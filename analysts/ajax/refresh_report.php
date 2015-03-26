@@ -34,6 +34,7 @@ $count = $_POST["count"];
                                  <?php echo $pa_report->company_name;;?>
                                 </td>
                                  <td><?php echo $pa_report->meeting_date;?></td>
+                                 <td><?php echo $pa_report->evoting_end;?></td>
                                   <td><?php echo $pa_report->meeting_type;?></td>
                                  <td>
                                   <?php 
