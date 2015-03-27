@@ -16,10 +16,13 @@ if(!$db) {
 $base_font_size='15';
 $meeting_types_full = array("","AGM", "EGM", "Postal Ballot","CCM");
 
+$types_res_os_short = array("","O","S");
+
+
 $line_height='1.5';
 
 $report_id = mysql_real_escape_string($_GET["report_id"]);
-$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, companies.com_address, companies.com_telephone, companies.com_sec_email from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
+$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
 
 $str ='';
@@ -108,6 +111,15 @@ $str ='';
 	#firstpage table{
 		width:820px;
 	}
+	.rotated_vertical {
+	    -webkit-transform:rotate(270deg);
+	    -moz-transform:rotate(270deg);
+	    -ms-transform:rotate(270deg);
+	    -o-transform:rotate(270deg);
+	    transform:rotate(270deg);
+	    transform-origin: 50%;
+	    width: 20px;
+	}
 	</style>
 	</head>
 	<body>
@@ -115,7 +127,10 @@ $str ='';
 			<table style=" border-bottom:2px solid #eee">
 				<tr>
 					<td><img src="../../logo.jpg" style="opacity:0.7"></td>
-					<td style="text-align:right; color:#888"><h1>'.$row_comp["com_name"].'</h1></td>
+					<td style="text-align:right; color:#888">
+						<h1>'.$row_comp["com_name"].'</h1>
+						<span>'.$row_comp["com_website"].'</span>
+					</td>
 				</tr>
 			</table>
 			<table style=" ">
@@ -153,9 +168,15 @@ $str ='';
 							BSE Code: '.$row_comp["com_bse_code"].' | NSE Code: '.$row_comp["com_nse_sym"].' | ISIN : '.$row_comp["com_isin"].'<br>
 							Sector:[]<br>
 							Type: '.$meeting_types_full[$row_comp["meeting_type"]].'<br>
-							e-Voting Platform: <a href="'.$row_comp["evoting_plateform"].'">'.$row_comp["evoting_plateform"].'</a><br>
-							e-Voting Period: From '.date("d M y", $row_comp["evoting_start"]).' To '.date("d M y", $row_comp["evoting_end"]).'<br>
-							Meeting Date: '.date("d M y", $row_comp["meeting_date"]).'at '.$row_comp["meeting_time"].'<br>';
+							e-Voting Platform: <a href="'.$row_comp["evoting_plateform"].'">'.$row_comp["evoting_plateform"].'</a><br>';
+							if($row_comp["evoting_start"] && $row_comp["evoting_end"]):
+								$str .= 'e-Voting Period: From '.date("d M y", $row_comp["evoting_start"]).' To '.date("d M y", $row_comp["evoting_end"]).'<br>';
+							endif;
+							if($row_comp["meeting_type"] != 3):
+								$str .= 'Meeting Date: '.date("d M y", $row_comp["meeting_date"]);
+								$str .= ($row_comp["meeting_time"])?' at '.$row_comp["meeting_time"]:'';
+								$str .= '<br>';
+							endif;
 							$str .= ($row_comp["meeting_venue"])?'Meeting Venue: '.$row_comp["meeting_venue"].'<br>':'';
 							$str .= '
 							Notice:  <a href="'.$row_comp["notice_link"].'">Click Here</a> | Annual Report:  <a href="'.$row_comp["annual_report"].'">Click Here</a><br>
@@ -171,17 +192,17 @@ $str ='';
 				Proxy Advisory Report<br>'.$row_comp["com_name"].'
 				
 			</div>
-			<div style="position:absolute; top:900px; width:500px; height:140px; font-size:14px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
-				<table style="width:500px;">
+			<div style="position:absolute; top:950px; width:500px; height:140px; font-size:14px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
+				<table style="width:500px; color:#888">
 					<tr>
-						<td style="padding:0 40px; border-right:3px solid #000">
+						<td style="padding:0 30px; border-right:3px solid #888; width:200px; line-height:1.2; font-weight:bold;">
 							Proxy Advisory<br>
 							Corporate Governance Research<br>
 							Corporate Governance Scores<br>
-							Stakeholders’ Education
+							Stakeholders\' Education
 						</td>
-						<td>
-							<img src="../../logo.jpg" style="opacity:0.7">
+						<td style="padding:0 15px;">
+							<img src="../../logo2.png" style="opacity:0.8">
 						</td>
 					</tr>
 				</table>
@@ -194,30 +215,58 @@ $str ='';
 ';
 
 
-$str .= '<div class="rest_page"><table style="">
-	<tr style="background:#464646; color:#fff"><td class="center">S. No.</td><td>Resolution</td><td class="center">Recommendation</td></tr>
+$str .= '<div class="rest_page">
+<div style="width:400px; background:#EB641B; padding:10px 40px; color:#FFF; font-size:24px; line-height:1; margin-left:420px; text-transform:uppercase">
+	<span style="font-size:30px">SES R</span>ecommendations
+</div>
+<div style="margin:10px 0 0 0; padding:10px 0 0 0; border-top:1px solid #000; font-size:14px; line-height:1; text-transform:uppercase">
+	<span style="font-size:16px">T</span>ABLE 1 - <span style="font-size:16px">A</span>GENDA <span style="font-size:16px">I</span>TEMS AND <span style="font-size:16px">R</span>ECOMMENDATIONS
+</div>
+
+<table style="">
+	<tr style="background:#464646; color:#fff"><td class="center">S. No.</td><td>Resolution</td><td class="center">O/S</td><td class="center">Recommendation</td><td class="center">Focus</td></tr>
 ';
 $count =0;
-$query = mysql_query("SELECT voting.resolution_number, voting.resolution_name, ses_recos.reco from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$report_id' order by voting.resolution_number asc ");
+$query = mysql_query("SELECT voting.resolution_number, voting.resolution_name, ses_recos.reco, voting.type_res_os from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$report_id' order by voting.resolution_number asc ");
 while ($row = mysql_fetch_array($query)) {
 	$str .= '<tr class="';
 	$str .= ($count%2 == 0)?'light':'dark';
 	$str .= '">
 		<td class="center" style="width:40px">'.$row["resolution_number"].'</td>
 		<td>'.$row["resolution_name"].'</td>
-		<td class="center" style="width:200px">'.$row["reco"].'</td>
+		<td class="center" style="width:50px">'.$types_res_os_short[$row["type_res_os"]].'</td>
+		<td class="center" style="width:100px">'.$row["reco"].'</td>
+		<td class="center" style="width:80px">'.$types_res_os[$row["type_res_os"]].'</td>
 	</tr>';
 	$count++;
 }
-$str .= '</table>';
+$str .= '</table>
+	<div style="margin:5px 0 0 60px; font-size:14px; line-height:1;">
+		<i>O - Ordinary Resolution; S - Special Resolution</i>
+	</div>
+	<div style="margin:15px 0 0 0px; font-size:14px; line-height:1.5; text-align:justify">
+		<b><i>C - Compliance:</i></b> The Company has not met statutory compliance requirements.<br>
+		<b><i>F - Fairness: </i></b> The Company has proposed steps which may lead to undue advantage of a particular class of shareholders and can have adverse impact on non-controlling shareholders including minority shareholders<br>
+		<b><i>G - Governance: </i></b> SES questions the governance practices of the Company. The Company may have complied with the statutory requirements in letter. However, SES finds governance issues as per its standards.<br>
+		<b><i>T- Disclosures & Transparency: </i></b> The Company has not made adequate disclosures necessary for shareholders to make an informed decision. The Company has intentionally or unintentionally kept the shareholders in dark.<br>
+	</div>
+	<div style="margin:15px 0 0 0px; font-size:14px; line-height:1.5; text-align:justify">
+		<b>EXPLANATION</b><br>
+		In view of the fact that E-Voting neither has any scope of interaction of shareholders with the management, nor there is any possibility for amendment of resolution and management cannot explain its rationale any further than what is provided in Notice, therefore to ease decision making and e-voting process for the users of the reports SES has discontinued using recommendations such as -MODIFY, SPLIT, WITHDRAW and CONDITIONAL FOR/ AGAINST. Henceforth SES will give only FOR or AGAINST recommendation. However in Analysis section of the Report, SES will continue to analyse and indicate any of the discontinued recommendations subject to further disclosures etc. This will enable the companies to draft the future notices in a manner which will give relevant information to shareholders to take a considered decision.
 
-$str .= '<div style="margin-top:15px; border-top:1px solid #888;border-bottom:1px solid #888;padding:5px 0; color:#555"><h2>Comments</h2></div>';
+	</div>
+	<p style="page-break-before: always;"></p>
 
-$query = mysql_query("SELECT resolution_name, detail from voting where report_id='$report_id' order by resolution_number asc ");
+';
+
+$str .= '<div style="width:300px; background:#EB641B; padding:10px 40px; color:#FFF; font-size:24px; line-height:1; margin-left:520px; text-transform:uppercase">
+	<span style="font-size:30px">SES C</span>omments
+</div>';
+
+$query = mysql_query("SELECT resolution_number, resolution_name, detail from voting where report_id='$report_id' order by resolution_number asc ");
 while ($row = mysql_fetch_array($query)) {
-	$str .= '<p><b>'.$row["resolution_name"].'</b>: 
-		'.$row["detail"].'
-		'.$row["reco"].'</p>';
+	$str .= '<p><b>Resolution #'.$row["resolution_number"].':'.$row["resolution_name"].'</b><br>
+		'.$row["detail"].'</p>';
 }
 $str .= '<p style="page-break-before: always;"></p></div>
 	
@@ -229,7 +278,7 @@ $str .= '<p style="page-break-before: always;"></p></div>
 
 	<table style="line-height:1.2; text-align:justify">
 		<tr >
-			<td style="widht:550px; padding:0">
+			<td style="widht:530px; padding:0">
 				<div style="width:550px; padding:2px 5px" class="light">Sources</div>
 				<div style="width:100%; padding:2px 5px">Only publicly available data has been used while making the report. Our data sources include: BSE, NSE, SEBI, Capitaline, Moneycontrol, Businessweek, Reuters, Annual Reports, IPO Documents and Company Website.</div>
 
@@ -241,33 +290,34 @@ $str .= '<p style="page-break-before: always;"></p></div>
 
 				<div style="width:550px; padding:2px 5px; margin-top:10px;" class="light">Disclaimer</div>
 				<div style="width:100%; padding:2px 5px">While SES has made every effort and has exercised due skill, care and diligence in compiling this report based on publicly available information, it neither guarantees its accuracy, completeness or usefulness, nor assumes any liability whatsoever for any consequence from its use.  This report does not have any approval, express or implied, from any authority, nor is it required to have such approval.  The users are strongly advised to exercise due diligence while using this report.<br<br>
-This report in no manner constitutes an offer, solicitation or advice to buy or sell securities, nor solicits votes or proxies on behalf of any party. SES, which is a not-for-profit Initiative or its staff, has no financial interest in the companies covered in this report except what is disclosed on its website.<br<br>
-The report is released in India and SES has ensured that it is in accordance with Indian laws. Person resident outside India shall ensure that laws in their country are not violated while using this report; SES shall not be responsible for any such violation.
-All disputes subject to jurisdiction of High Court of Bombay, Mumbai</div>
+					This report in no manner constitutes an offer, solicitation or advice to buy or sell securities, nor solicits votes or proxies on behalf of any party. SES, which is a not-for-profit Initiative or its staff, has no financial interest in the companies covered in this report except what is disclosed on its website.<br<br>
+					The report is released in India and SES has ensured that it is in accordance with Indian laws. Person resident outside India shall ensure that laws in their country are not violated while using this report; SES shall not be responsible for any such violation.
+					All disputes subject to jurisdiction of High Court of Bombay, Mumbai</div>
 
 			</td>
-			<td style="widht:250px; vertical-align:top; padding:0">
-				<div style="width:100%; padding:2px 5px" class="light">Contact Information</div>
-				<div style="width:100%; padding:2px 5px">
-				<a href="mailto:research@sesgovernance.com">research@sesgovernance.com</a><br>
-				<a href="mailto:info@sesgovernance.com">info@sesgovernance.com</a><br>
-				+91 22 4022 0322</div>
-				<div style="width:100%; padding:2px 5px;margin-top:10px;" class="light">Company Information</div>
-				<div style="width:100%; padding:2px 5px; text-align:center">
-					Stakeholders Empowerment Services<br><br>
-					A 202, Muktangan, Upper Govind Nagar, Malad East, Mumbai, 400097<br><br>
-					Tel +91 22 4022 0322<br><br>
-					<img src="../../logo.jpg" style="margin:5px 0"><br>
+			<td style="widht:270px; vertical-align:top; padding:0">
+				<div style="width:100%; padding:2px 5px; font-weight:bold;" class="light" align="center">Company Information</div>
+				<div align="center" style="width:100%; padding:2px 5px;"">
+					<img src="../../logo.jpg" style="margin:10px 0"><br>
+					<span style="font-size:13px">SEBI Reg. No. INH000000016</span>
 					<a href="www.sesgovernance.com">www.sesgovernance.com</a><br><br>
 				</div>
 				<div style="width:100%; padding:2px 5px; text-align:justify">
-										<span style="text-align:justify">This report or any portion hereof may not be reprinted, sold, reproduced or redistributed without the written consent of Stakeholders Empowerment Services</span>
+					<span style="text-align:justify">This report or any portion hereof may not be reprinted, sold, reproduced or redistributed without the written consent of Stakeholders Empowerment Services</span>
+				</div>
+				<div style="width:100%; padding:2px 5px;margin-top:10px; font-weight:bold;" class="light" align="center">Contact Information</div>
+				<div style="width:100%; padding:10px 5px; text-align:center">
+					<span style="font-size:16px"><b>Stakeholders Empowerment Services</b></span><br>
+					A 202, Muktangan,<br>Upper Govind Nagar,<br>Malad East,<br>Mumbai, 400097<br>
+					Tel +91 22 4022 0322<br>
+				</div>
+				<div style="width:100%; padding:2px 5px" align="center">
+					<a href="mailto:research@sesgovernance.com">research@sesgovernance.com</a><br>
+					<a href="mailto:info@sesgovernance.com">info@sesgovernance.com</a><br>
 				</div>
 			</td>
 		</tr>
 	</table>
-
-
 	</body>
 	</html>';
 
