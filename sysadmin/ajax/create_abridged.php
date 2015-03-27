@@ -1,5 +1,5 @@
 <?php session_start();
-//require_once('../../sysauth.php');
+require_once('../../sysauth.php');
 require_once('../../config.php');
 require_once('../../classes/UserClass.php');
 
@@ -339,17 +339,17 @@ require_once("../../dompdf/dompdf_config.inc.php");
   $dompdf->load_html($str);
   $dompdf->set_paper('letter', 'portrait');
   $dompdf->render();
-  $dompdf->stream("hello_world.pdf",array('Attachment'=>0));
-  //$dompdf->stream();
- //  $pdf = $dompdf->output();
+  //$dompdf->stream("hello_world.pdf",array('Attachment'=>0));
+  $dompdf->stream();
+  $pdf = $dompdf->output();
 
-	// $name = substr(str_shuffle(strtotime("now")), 0, 10).name_filter($row_comp["com_name"]).'_SES Proxy Advisory Report Abridged_'.$meeting_types[$row_comp["meeting_type"]].' '.date("d-M-y",$row_comp["meeting_date"]).'.pdf';
+	$name = substr(str_shuffle(strtotime("now")), 0, 10).name_filter($row_comp["com_name"]).'_SES Proxy Advisory Report Abridged_'.$meeting_types[$row_comp["meeting_type"]].' '.date("d-M-y",$row_comp["meeting_date"]).'.pdf';
 
 
-	// file_put_contents(dirname(__FILE__).'/../../abridged_reports/'.$name, $pdf);
+	file_put_contents(dirname(__FILE__).'/../../abridged_reports/'.$name, $pdf);
 	
-	// if(mysql_query("UPDATE proxy_ad set abridged_report='$name' where id='".$report_id."' ")){
- //    	echo 'success';
- //   }
+	if(mysql_query("UPDATE proxy_ad set abridged_report='$name' where id='".$report_id."' ")){
+    	echo 'success';
+   }
 
 ?>
