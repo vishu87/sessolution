@@ -36,7 +36,7 @@ $str ='';
 	}
 	
 	#header { position: fixed; left: 0px; top: -120px; right: 0px; height: 150px;  }
-    #footer { position: fixed; left: 0px; bottom: -180px; right: 0px; height: 150px;  }
+    #footer { position: fixed; left: 0px; top:0; height:900px; z-index:100;  }
     #footer .page:before { content: counter(page); }
 
 	body {
@@ -60,7 +60,7 @@ $str ='';
 	}
 
 	 table, div, p {
-		width:760px;
+		width:750px;
 	}
 	 tr.head {
 		background:#ddd;
@@ -111,14 +111,21 @@ $str ='';
 	#firstpage table{
 		width:820px;
 	}
+
 	.rotated_vertical {
+		position:absolute;
+		top:300px;
+		left:560px;
 	    -webkit-transform:rotate(270deg);
 	    -moz-transform:rotate(270deg);
 	    -ms-transform:rotate(270deg);
 	    -o-transform:rotate(270deg);
 	    transform:rotate(270deg);
 	    transform-origin: 50%;
-	    width: 20px;
+	    width: 700px;
+	    height:300px;
+	    text-transform:uppercase;
+	    color:#999;
 	}
 	</style>
 	</head>
@@ -142,14 +149,14 @@ $str ='';
 		</div>
 
 		<div id="footer">
-			 <table style=" border-top:2px solid #eee">
+			<div class="rotated_vertical">Proxy Advisory Report | For Limited Circulation | Report Release Date : '.date("d-m-y", strtotime("now")).' </div>
+			 <table style=" border-top:2px solid #eee; margin-top:820px">
 				<tr>
 					<td style="width:50px;"><img src="../../logo_small.jpg" style="opacity:0.7"></td>
 					<td style="width:450px;">&copy; 2012 | Stakeholders Empowerment Services | All Rights Reserved</td>
 					<td style="text-align:right; color:#888"> <span class="page" style="font-size:15px"> |&nbsp;<span style="font-size:12px">PAGE</span></span></td>
 				</tr>
 			</table>
-		   
 		</div>
 
 		<div id="firstpage">
@@ -209,9 +216,6 @@ $str ='';
 			</div>
 		</div>
 		<p style="page-break-before: always;"></p>
-
-
-	
 ';
 
 
@@ -268,17 +272,15 @@ while ($row = mysql_fetch_array($query)) {
 	$str .= '<p><b>Resolution #'.$row["resolution_number"].':'.$row["resolution_name"].'</b><br>
 		'.$row["detail"].'</p>';
 }
+
 $str .= '<p style="page-break-before: always;"></p></div>
 	
-	<table >
-		<tr class="light">
-			<td>DISCLAIMERS</td>
-		</tr>
-	</table>
-
 	<table style="line-height:1.2; text-align:justify">
+		<tr class="light">
+			<td colspan="2">DISCLAIMERS</td>
+		</tr>
 		<tr >
-			<td style="widht:530px; padding:0">
+			<td style="widht:500px; padding:0">
 				<div style="width:550px; padding:2px 5px" class="light">Sources</div>
 				<div style="width:100%; padding:2px 5px">Only publicly available data has been used while making the report. Our data sources include: BSE, NSE, SEBI, Capitaline, Moneycontrol, Businessweek, Reuters, Annual Reports, IPO Documents and Company Website.</div>
 
