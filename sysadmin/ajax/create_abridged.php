@@ -14,11 +14,12 @@ if(!$db) {
 }
 
 $base_font_size='15';
+$meeting_types_full = array("","AGM", "EGM", "Postal Ballot","CCM");
 
 $line_height='1.5';
 
 $report_id = mysql_real_escape_string($_GET["report_id"]);
-$query = mysql_query("SELECT companies.com_name, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
+$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, companies.com_address, companies.com_telephone, companies.com_sec_email from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
 
 $str ='';
@@ -29,9 +30,6 @@ $str ='';
 	<style type="text/css">
 	@page {
 		margin: 140px auto 120px 30px;
-	}
-	#firstpage{
-		
 	}
 	
 	#header { position: fixed; left: 0px; top: -120px; right: 0px; height: 150px;  }
@@ -98,6 +96,18 @@ $str ='';
 	a {
 		color:#ff8119;
 	}
+	#firstpage{
+		margin-top: -140px;
+		margin-left:-30px;
+		background:#FFF;
+		width:820px;
+		height:1060px;
+		z-index:100;
+		position:absolute;
+	}
+	#firstpage table{
+		width:820px;
+	}
 	</style>
 	</head>
 	<body>
@@ -128,16 +138,57 @@ $str ='';
 		</div>
 
 		<div id="firstpage">
-			<table>
-				<tr>	
-					<td>
-						<img src="../../hands.png" style="text-align:right; margin-top:50px;">
+			<table cellspacing="0">
+				<tr>
+					<td style="width:500px;" >
+						<div style="height:450px; width:500px;" align="right">
+							<img src="../../hands.png" style="margin-top:50px;">
+						</div>
 					</td>
-					<td style="background:#F00; min-height:400px"></td>
+					<td style="text-align:right; color:#888; background:#EB641B"></td>
+				</tr>
+				<tr>
+					<td style="width:500px;">
+						<div style="height:600px; width:500px; padding:5px; line-height: 1.7; font-size:16px" align="right">
+							BSE Code: '.$row_comp["com_bse_code"].' | NSE Code: '.$row_comp["com_nse_sym"].' | ISIN : '.$row_comp["com_isin"].'<br>
+							Sector:[]<br>
+							Type: '.$meeting_types_full[$row_comp["meeting_type"]].'<br>
+							e-Voting Platform: <a href="'.$row_comp["evoting_plateform"].'">'.$row_comp["evoting_plateform"].'</a><br>
+							e-Voting Period: From '.date("d M y", $row_comp["evoting_start"]).' To '.date("d M y", $row_comp["evoting_end"]).'<br>
+							Meeting Date: '.date("d M y", $row_comp["meeting_date"]).'at '.$row_comp["meeting_time"].'<br>';
+							$str .= ($row_comp["meeting_venue"])?'Meeting Venue: '.$row_comp["meeting_venue"].'<br>':'';
+							$str .= '
+							Notice:  <a href="'.$row_comp["notice_link"].'">Click Here</a> | Annual Report:  <a href="'.$row_comp["annual_report"].'">Click Here</a><br>
+							Company Email: '.$row_comp["com_sec_email"].'<br>
+							Phone: '.$row_comp["com_telephone"].' | Fax: []<br>
+							Company Registered Office:<br>'.$row_comp["com_address"].'
+						</div>
+					</td>
+					<td style="text-align:right; color:#888; background:#EB641B"></td>
 				</tr>
 			</table>
-			<p style="page-break-before: always;"></p>
+			<div style="position:absolute; top:290px; width:600px; background:#7F7F7F; padding:0px 40px; height:140px; color:#FFF; font-size:40px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
+				Proxy Advisory Report<br>'.$row_comp["com_name"].'
+				
+			</div>
+			<div style="position:absolute; top:900px; width:500px; height:140px; font-size:14px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
+				<table style="width:500px;">
+					<tr>
+						<td style="padding:0 40px; border-right:3px solid #000">
+							Proxy Advisory<br>
+							Corporate Governance Research<br>
+							Corporate Governance Scores<br>
+							Stakeholders’ Education
+						</td>
+						<td>
+							<img src="../../logo.jpg" style="opacity:0.7">
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
+		<p style="page-break-before: always;"></p>
+
 
 	
 ';
