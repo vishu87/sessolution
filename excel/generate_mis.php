@@ -12,6 +12,17 @@ $date_to = strtotime(mysql_real_escape_string($_POST["date_to"]));
 $users_ar = array();
 $user_id = mysql_real_escape_string($_POST["user_id"]);
 
+function getNameFromNumber($num) {
+    $numeric = ($num ) % 26;
+    $letter = chr(65 + $numeric);
+    $num2 = intval(($num ) / 26);
+    if ($num2 > 0) {
+        return getNameFromNumber($num2) . $letter;
+    } else {
+        return $letter;
+    }
+}
+
 //firm wide
 
 if($user_id == 0){
@@ -266,6 +277,188 @@ $objPHPExcel->getActiveSheet()->getStyle('I1:'.$val_chr.$seq.'')->getAlignment()
 $objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);;
 
 $objPHPExcel->getActiveSheet()->setTitle('MIS Report');
+
+$objPHPExcel->setActiveSheetIndex(1);
+
+$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Summary of Votes cast');
+$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+
+
+$objPHPExcel->getActiveSheet()->setCellValue('A3', 'F.Y.');
+$objPHPExcel->getActiveSheet()->setCellValue('B3', 'Quarter');
+$objPHPExcel->getActiveSheet()->setCellValue('C3', 'Total No. of Resolutions');
+$objPHPExcel->getActiveSheet()->setCellValue('D3', 'Break Up of Vote Decision');
+$objPHPExcel->getActiveSheet()->mergeCells('D3:F3');
+$objPHPExcel->getActiveSheet()->mergeCells('A3:A4');
+$objPHPExcel->getActiveSheet()->mergeCells('B3:B4');
+$objPHPExcel->getActiveSheet()->mergeCells('C3:C4');
+
+$objPHPExcel->getActiveSheet()->setCellValue('D4', 'FOR');
+$objPHPExcel->getActiveSheet()->setCellValue('E4', 'AGAINST');
+$objPHPExcel->getActiveSheet()->setCellValue('F4', 'ABSTAIN');
+
+$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+
+$period = array();
+$query_period = mysql_query("SELECT * from years");
+while ($row_period = mysql_fetch_array($query_period)) {
+	$period[$row_period["year_sh"]] = $row_period["period"];
+}
+$query = "SELECT distinct(proxy_ad.id) as report_id, proxy_ad.year , proxy_ad.meeting_date from user_voting_proxy_reports inner join proxy_ad on user_voting_proxy_reports.report_id = proxy_ad.id where user_voting_proxy_reports.user_id IN (".$user_string.") ".$date_sql." order by proxy_ad.meeting_date asc";
+
+$sql_query = mysql_query($query);
+
+$pre_year = 0;
+$pre_quarter = 0;
+$count = 0;
+$seq = 5;
+
+while($row = mysql_fetch_array($sql_query)){
+
+	$vote_for = 0;
+	$vote_against = 0;
+	$vote_abstain = 0;
+	$res_array = array();
+	$vote_res = 0;
+
+	$report_id = $row["report_id"];
+	$year = $row["year"];
+
+	$quarter = ceil(date("n",$row["meeting_date"])/3) - 1;
+	if($quarter == 0) $quarter = 4;
+
+	if($quarter != $pre_quarter ){
+		if($count != 0){
+			//echo '<tr><td>'.$pre_year.'</td><td>'.$pre_quarter.'</td><td>'.$res.'</td><td>'.$for.'</td><td>'.$against.'</td><td>'.$abstain.' '.$count.'</td></tr>';
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.$seq, $period[$pre_year]);
+			$objPHPExcel->getActiveSheet()->setCellValue('B'.$seq, $pre_quarter);
+			$objPHPExcel->getActiveSheet()->setCellValue('C'.$seq, $res);
+			$objPHPExcel->getActiveSheet()->setCellValue('D'.$seq, $for);
+			$objPHPExcel->getActiveSheet()->setCellValue('E'.$seq, $against);
+			$objPHPExcel->getActiveSheet()->setCellValue('F'.$seq, $abstain);
+
+			$seq++;
+		}
+		$pre_quarter = $quarter;
+		$pre_year = $year;
+		$res = 0;
+		$for = 0;
+		$against = 0;
+		$abstain = 0;
+	}
+
+	$final_freeze_query = mysql_query("SELECT final_freeze, ignore_an from user_admin_proxy_ad where report_id='$report_id' and user_id = '$_SESSION[MEM_ID]' limit 1");
+	$row_final_freeze = mysql_fetch_array($final_freeze_query);
+	if($row_final_freeze["final_freeze"] == 0) continue;
+
+	$total_res_query = mysql_query("SELECT id from voting where report_id='$report_id' ");
+	$total_res = mysql_num_rows($total_res_query);
+	while ($row_vote = mysql_fetch_array($total_res_query)) {
+		array_push($res_array, $row_vote["id"]);
+	}
+
+
+
+	$res_string = implode(',', $res_array);
+
+	$check_ignore = $row_final_freeze["ignore_an"];
+
+	if($total_res > 0){
+		if($check_ignore == 0){
+
+				$res += $total_res;
+				$vote_res += $total_res;
+
+				foreach ($res_array as $res_id) {
+					$query_user_admin_vote = mysql_query("SELECT vote from user_admin_voting where vote_id = '$res_id' and user_id='$_SESSION[MEM_ID]' order by id desc limit 1 ");
+					if(mysql_num_rows($query_user_admin_vote) > 0){
+						$row_vote_value = mysql_fetch_array($query_user_admin_vote);
+
+						switch ($row_vote_value["vote"]) {
+							case 1:
+								$vote_for++;
+								break;
+							
+							case 2:
+								$vote_against++;
+								break;
+
+							case 3:
+								$vote_abstain++;
+								break;
+						}
+					}
+
+				}
+
+		} else {
+			// get users for that meeting
+			$query_users = mysql_query("SELECT user_id from user_voting_proxy_reports where user_id IN (".$user_string.") and report_id = '$report_id' ");
+			while ($row_users = mysql_fetch_array($query_users)) {
+				
+				$res += $total_res;
+				$vote_res += $total_res;
+
+				foreach ($res_array as $res_id) {
+					$query_user_admin_vote = mysql_query("SELECT vote from user_voting where vote_id = '$res_id' and user_id='$row_users[user_id]' order by id desc limit 1 ");
+					if(mysql_num_rows($query_user_admin_vote) > 0){
+						$row_vote_value = mysql_fetch_array($query_user_admin_vote);
+
+						switch ($row_vote_value["vote"]) {
+							case 1:
+								$vote_for++;
+								break;
+							
+							case 2:
+								$vote_against++;
+								break;
+
+							case 3:
+								$vote_abstain++;
+								break;
+						}
+					}
+
+				}
+			}
+
+
+		}
+	}
+
+	$for += $vote_for;
+	$against += $vote_against;
+	$abstain += $vote_abstain;
+	$count++;
+}
+
+//echo '<tr><td>'.$pre_year.'</td><td>'.$pre_quarter.'</td><td>'.$res.'</td><td>'.$for.'</td><td>'.$against.'</td><td>'.$abstain.' '.$count.'</td></tr>';
+
+
+$objPHPExcel->getActiveSheet()->setCellValue('A'.$seq, $period[$pre_year]);
+$objPHPExcel->getActiveSheet()->setCellValue('B'.$seq, $pre_quarter);
+$objPHPExcel->getActiveSheet()->setCellValue('C'.$seq, $res);
+$objPHPExcel->getActiveSheet()->setCellValue('D'.$seq, $for);
+$objPHPExcel->getActiveSheet()->setCellValue('E'.$seq, $against);
+$objPHPExcel->getActiveSheet()->setCellValue('F'.$seq, $abstain);
+
+
+for($i = 3; $i<=$seq; $i++){
+	for($j = 0; $j<= 5; $j++){
+		$objPHPExcel->getActiveSheet()->getStyle(getNameFromNumber($j).$i)->applyFromArray($styleArrayborder);
+	}
+}
+
+//echo '</table>';
+$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray4);
+$objPHPExcel->getActiveSheet()->setTitle('Summary Report');
+$objPHPExcel->setActiveSheetIndex(0);
+
 
 $name = $name.'_MIS_Report_'.date("dMy",strtotime("today"));
 
