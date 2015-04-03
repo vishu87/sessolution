@@ -573,3 +573,33 @@ function send_reminder(user_id,report_id){
       }
   }); 
 }
+
+function set_mark(report_id){
+    var item = $("#set_mark");
+    item.html("Marking..");
+    var file = 'set_mark';
+     $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
+      if(data == 'success'){
+        item.html("Unmark for Proxy Committee Approval");
+        item.attr('onclick','set_unmark('+report_id+')');
+      } else {
+        item.html("Mark for Proxy Committee Approval");
+        bootbox.alert('Failure');
+      }
+  }); 
+}
+
+function set_unmark(report_id){
+    var item = $("#set_unmark");
+    item.html("Unmarking..");
+    var file = 'set_unmark';
+     $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
+      if(data == 'success'){
+        item.html("Mark for Proxy Committee Approval");
+        item.attr('onclick','set_unmark('+report_id+')');
+      } else {
+        item.html("Unmark for Proxy Committee Approval");
+        bootbox.alert('Failure');
+      }
+  }); 
+}

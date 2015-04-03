@@ -271,8 +271,20 @@ class SesVoting {
 			}
 		} else {
 			
-				echo '<a class="btn span8 disabled" href="javascript:;" style="font-size:11px">Votes have been freezed by Admin or deadline is breached</i></a>';
+				echo '<a class="btn span4 disabled" href="javascript:;" style="font-size:11px">Votes have been freezed by Admin or deadline is breached</i></a>';
 			
+		}
+
+		if($_SESSION["MEM_ID"] == $parent_id && $type == 2){
+			if($user_pa->marked == 0){
+				?>
+					<a href="javascript:;" class="btn span4 yellow" id="set_mark" onclick="set_mark(<?php echo $proxy_id; ?>)">Mark for Proxy Committee Approval</a>
+				<?php
+			} else {
+				?>
+					<a href="javascript:;" class="btn span4 yellow" id="set_unmark" onclick="set_unmark(<?php echo $proxy_id; ?>)">Unmark for Proxy Committee Approval</a>
+				<?php
+			}
 		}
 
 		if($_SESSION["MEM_ID"] == $parent_id && $type == 2){
@@ -684,10 +696,13 @@ class user_proxy_ad {
 			}
 		}
 
-		$check_ignore = mysql_query("SELECT ignore_an from user_admin_proxy_ad where user_id='$user_id' and report_id='$report_id' ");
+		$check_ignore = mysql_query("SELECT ignore_an, com_approval from user_admin_proxy_ad where user_id='$user_id' and report_id='$report_id' ");
+		$this->marked = 0;
+
 		if(mysql_num_rows($check_ignore)>0){
 			$row_ignore = mysql_fetch_array($check_ignore);
 			if($row_ignore["ignore_an"] == 1) $this->ignore_an = $row_ignore["ignore_an"];
+			if($row_ignore["com_approval"] != 0 ) $this->marked = $row_ignore["com_approval"];
 		}
 
 		$check_final_freeze = mysql_query("SELECT final_freeze, final_unfreeze from user_admin_proxy_ad where user_id='$user_id' and report_id='$report_id' and  final_freeze != 0 order by id desc limit 1");
