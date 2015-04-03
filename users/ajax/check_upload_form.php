@@ -10,7 +10,7 @@ $sql_met_date = mysql_query("SELECT meeting_date from proxy_ad where id='$report
 $row = mysql_fetch_array($sql_met_date);
 // check in ses voting
 
-$check1 = new user_proxy_ad($report_id,$_SESSION["MEM_ID"]);
+$check1 = new user_proxy_ad($report_id,$_SESSION["MEM_ID"],1);
 $today = strtotime("today");
 
 if($check1->check_form == 0 || $today > $row["meeting_date"]  ){
