@@ -37,7 +37,7 @@ $user_string = implode(',', $users_ar);
 $type_id = mysql_real_escape_string($_POST["type_id"]);
 
 
-$query = "SELECT distinct(user_admin_proxy_ad.report_id), companies.com_full_name, proxy_ad.meeting_date, proxy_ad.meeting_type from user_admin_proxy_ad inner join proxy_ad on user_admin_proxy_ad.report_id = proxy_ad.id  inner join companies on proxy_ad.com_id = companies.com_id where user_admin_proxy_ad.com_approval = '".strtotime("today")."' order by proxy_ad.meeting_date asc";
+$query = "SELECT distinct(user_admin_proxy_ad.report_id), companies.com_full_name,companies.com_isin, proxy_ad.meeting_date, proxy_ad.meeting_type, proxy_ad.evoting_end from user_admin_proxy_ad inner join proxy_ad on user_admin_proxy_ad.report_id = proxy_ad.id  inner join companies on proxy_ad.com_id = companies.com_id where user_admin_proxy_ad.com_approval = '".strtotime("today")."' order by proxy_ad.meeting_date asc";
 
 $query_rep = mysql_query($query);
 
@@ -46,7 +46,9 @@ $proxy_ids = array();
 while ($row = mysql_fetch_array($query_rep)) {
 	array_push($proxy_ids, $row["report_id"]);
 	$row_rep[$row["report_id"]]["com_full_name"] = $row["com_full_name"];
+	$row_rep[$row["report_id"]]["com_isin"] = $row["com_isin"];
 	$row_rep[$row["report_id"]]["meeting_date"] = $row["meeting_date"];
+	$row_rep[$row["report_id"]]["evoting_end"] = $row["evoting_end"];
 	$row_rep[$row["report_id"]]["meeting_type"] = $row["meeting_type"];
 }
 
@@ -67,11 +69,11 @@ $ar_fields_top = array("com_full_name","com_isin","meeting_type","meeting_date",
 
 $ar_names_top = array("Company Name", "ISIN","Meeting Type","Meeting Date","e-Voting Deadline");
 
-$ar_fields = array("user","man_share_reco","resolution_name","man_reco","vote","comment", "ses_reco");
+$ar_fields = array("user","resolution_number","resolution_name","man_reco","man_share_reco", "ses_reco","vote","comment");
 
-$ar_names = array("Portfolio Manager","Proposal by Management or Shareholder","Proposal's description","Investee company's Management Recommendation","Vote","Reason supporting the vote decision", "SES Recommendation");
+$ar_names = array("Portfolio Manager","SN","Resolution","Management Recommendation","Proposal by Management or Shareholder", "SES Recommendation","Vote","Comment");
 
-$ar_width = array("25","20","20","20","45","45","45","15","50","30");
+$ar_width = array("12","12","20","12","12","12","10","20","50","30");
 
 $seq=1;
 $offset = 0;
@@ -83,11 +85,11 @@ $count_met = 0;
 
 foreach ($proxy_ids as $proxy_id) {
 	$seq_in = $seq;
-
+	$count =0;
 	$i = 0;
 	foreach ($ar_fields_top as $ar) {
 		$cell_val = 65+$i+$offset;
-		$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names[$count]);
+		$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names_top[$count]);
 		$objPHPExcel->getActiveSheet()->getColumnDimension(chr($cell_val))->setWidth($ar_width[$count]);
 		$i++;
 		$objPHPExcel->getActiveSheet()->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
@@ -96,7 +98,7 @@ foreach ($proxy_ids as $proxy_id) {
 
 	$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.chr($cell_val).$seq)->applyFromArray($styleArray4);
 	$seq ++;
-
+	$count =0;
 	$i = 0;
 	foreach ($ar_fields_top as $ar) {
 		$cell_val = 65+$i+$offset;
@@ -110,11 +112,11 @@ foreach ($proxy_ids as $proxy_id) {
 			case 'meeting_type':
 				$var = $meeting_types[$row_rep[$proxy_id]["meeting_type"]];
 				break;
-			case 'meeting_date':
-				$var = date("d-M-y", $row_rep[$proxy_id]["meeting_date"]);
+			case 'evoting_end':
+				$var = date("d-M-y", $row_rep[$proxy_id]["evoting_end"]);
 				break;
 			case 'com_isin':
-				$var = $row_rep[$proxy_id]["com_full_name"];
+				$var = $row_rep[$proxy_id]["com_isin"];
 				break;
 			default:
 				$var = '';
@@ -125,8 +127,10 @@ foreach ($proxy_ids as $proxy_id) {
 		$objPHPExcel->getActiveSheet(0)->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
 		$i++;
 	}
+
 	$seq += 2;
 	$i = 0;
+	$count =0;
 	foreach ($ar_fields as $ar) {
 		$cell_val = 65+$i+$offset;
 		$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names[$count]);
@@ -233,35 +237,23 @@ foreach ($proxy_ids as $proxy_id) {
 						case 'user':
 							$var = $u_name;
 							break;
-						case 'quarter':
-							$var = $quarter;
-							break;
-						case 'com_full_name':
-							$var = $row_rep[$proxy_id]["com_full_name"];
-							break;
-						case 'meeting_date':
-							$var = date("d-M-y", $row_rep[$proxy_id]["meeting_date"]);
-							break;
-						case 'meeting_type':
-							$var = $meeting_types[$row_rep[$proxy_id]["meeting_type"]];
-							break;
 						case 'resolution_number':
-							$var = ($flag_admin)?$res["resolution_number"]:'';
+							$var = $res["resolution_number"];
 							break;
 						case 'resolution_name':
-							$var = ($flag_admin)?$res["resolution_name"]:'';
+							$var = $res["resolution_name"];
 							break;
 						case 'man_reco':
-							$var = ($flag_admin)?$man_reco_mis[$res["man_reco"]]:'';
+							$var = $man_reco_mis[$res["man_reco"]];
 							break;
 						case 'man_share_reco':
-							$var = ($flag_admin)?$man_share_reco_mis[$res["man_share_reco"]]:'';
+							$var = $man_share_reco_mis[$res["man_share_reco"]];
 							break;
 						case 'vote':
-							$var = ($flag_user_freeze)?$vote["vote"]:'';
+							$var = $vote["vote"];
 							break;
 						case 'comment':
-							$var = ($flag_user_freeze)?stripcslashes($vote["comment"]):'';
+							$var = stripcslashes($vote["comment"]);
 							break;
 						case 'ses_reco':
 							$var = $res["reco"];
@@ -277,22 +269,18 @@ foreach ($proxy_ids as $proxy_id) {
 				}
 				$seq++;
 			}
+		$seq += 2;
 	}
 	$seq_out = $seq -1;
 
 	$val_chr = chr($cell_val);
 
-	if($count_met%2 == 0){
-		$objPHPExcel->getActiveSheet()->getStyle('A'.$seq_in.':'.chr($cell_val).$seq_out)->applyFromArray($styleArray3);
-	} else {
-		$objPHPExcel->getActiveSheet()->getStyle('A'.$seq_in.':'.chr($cell_val).$seq_out)->applyFromArray($styleArray2);
-	}
-
 	$count_met++;
+
 }
 $seq--;
 $objPHPExcel->getActiveSheet()->getStyle('I1:'.$val_chr.$seq.'')->getAlignment()->setWrapText(true);
-// $objPHPExcel->getActiveSheet()->getStyle('F1:'.$val_chr.$seq.'')->getAlignment()->setWrapText(true);
+$objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()->setWrapText(true);
 $objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);;
 
 $objPHPExcel->getActiveSheet()->setTitle('MIS Report');
