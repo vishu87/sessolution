@@ -23,13 +23,13 @@ function getNameFromNumber($num) {
 
 //firm wide
 
-	array_push($users_ar, $_SESSION["MEM_ID"]);
-	$q_ot = mysql_query("SELECT id from users where created_by_prim = '$_SESSION[MEM_ID]' ");
-	while ($r_ot = mysql_fetch_array($q_ot)) {
-		array_push($users_ar, $r_ot["id"]);
-	}
-	$name="Firm Wide";
-	$flag_indi = 0;
+array_push($users_ar, $_SESSION["MEM_ID"]);
+$q_ot = mysql_query("SELECT id from users where created_by_prim = '$_SESSION[MEM_ID]' ");
+while ($r_ot = mysql_fetch_array($q_ot)) {
+	array_push($users_ar, $r_ot["id"]);
+}
+$name="Firm Wide";
+$flag_indi = 0;
 
 
 $user_string = implode(',', $users_ar);
@@ -63,15 +63,13 @@ include ('styles_mis.php');
 
 // //Serializing a
 
-if($type_id == 0){
-	$ar_fields = array("user","meeting_date","com_full_name","meeting_type","man_share_reco","resolution_name","man_reco","vote","comment", "ses_reco");
+$ar_fields_top = array("com_full_name","com_isin","meeting_type","meeting_date","evoting_end");
 
-$ar_names = array("Portfolio Manager","Meeting Date","Company Name","Type of Meetings","Proposal by Management or Shareholder","Proposal's description","Investee company's Management Recommendation","Vote","Reason supporting the vote decision", "SES Recommendation");
-} else {
-	$ar_fields = array("user","quarter","meeting_date","com_full_name","meeting_type","man_share_reco","resolution_name","man_reco","vote","comment", "ses_reco");
+$ar_names_top = array("Company Name", "ISIN","Meeting Type","Meeting Date","e-Voting Deadline");
 
-$ar_names = array("Portfolio Manager","Quarter","Meeting Date","Company Name","Type of Meetings","Proposal by Management or Shareholder","Proposal's description","Investee company's Management Recommendation","Vote","Reason supporting the vote decision", "SES Recommendation");
-}
+$ar_fields = array("user","man_share_reco","resolution_name","man_reco","vote","comment", "ses_reco");
+
+$ar_names = array("Portfolio Manager","Proposal by Management or Shareholder","Proposal's description","Investee company's Management Recommendation","Vote","Reason supporting the vote decision", "SES Recommendation");
 
 $ar_width = array("25","20","20","20","45","45","45","15","50","30");
 
@@ -80,23 +78,66 @@ $offset = 0;
 $count =0;
 $i=0;
 
-foreach ($ar_fields as $ar) {
-	$cell_val = 65+$i+$offset;
-	$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names[$count]);
-	$objPHPExcel->getActiveSheet()->getColumnDimension(chr($cell_val))->setWidth($ar_width[$count]);
-	$i++;
-	$objPHPExcel->getActiveSheet()->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
-	$count++;
-}
-
-$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.chr($cell_val).$seq)->applyFromArray($styleArray4);
-
-
 $seq++;
 $count_met = 0;
 
 foreach ($proxy_ids as $proxy_id) {
 	$seq_in = $seq;
+
+	$i = 0;
+	foreach ($ar_fields_top as $ar) {
+		$cell_val = 65+$i+$offset;
+		$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names[$count]);
+		$objPHPExcel->getActiveSheet()->getColumnDimension(chr($cell_val))->setWidth($ar_width[$count]);
+		$i++;
+		$objPHPExcel->getActiveSheet()->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
+		$count++;
+	}
+
+	$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.chr($cell_val).$seq)->applyFromArray($styleArray4);
+	$seq ++;
+
+	$i = 0;
+	foreach ($ar_fields_top as $ar) {
+		$cell_val = 65+$i+$offset;
+		switch ($ar) {
+			case 'com_full_name':
+				$var = $row_rep[$proxy_id]["com_full_name"];
+				break;
+			case 'meeting_date':
+				$var = date("d-M-y", $row_rep[$proxy_id]["meeting_date"]);
+				break;
+			case 'meeting_type':
+				$var = $meeting_types[$row_rep[$proxy_id]["meeting_type"]];
+				break;
+			case 'meeting_date':
+				$var = date("d-M-y", $row_rep[$proxy_id]["meeting_date"]);
+				break;
+			case 'com_isin':
+				$var = $row_rep[$proxy_id]["com_full_name"];
+				break;
+			default:
+				$var = '';
+				break;
+		}
+		
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue(chr($cell_val).$seq, $var);
+		$objPHPExcel->getActiveSheet(0)->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
+		$i++;
+	}
+	$seq += 2;
+	$i = 0;
+	foreach ($ar_fields as $ar) {
+		$cell_val = 65+$i+$offset;
+		$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names[$count]);
+		$objPHPExcel->getActiveSheet()->getColumnDimension(chr($cell_val))->setWidth($ar_width[$count]);
+		$i++;
+		$objPHPExcel->getActiveSheet()->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
+		$count++;
+	}
+	$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.chr($cell_val).$seq)->applyFromArray($styleArray4);
+	$seq ++;
+
 	
 	$check_admin_vote_freeze = mysql_query("SELECT final_freeze, final_unfreeze, id from admin_proxy_ad where report_id='$proxy_id' order by id desc limit 1");
 	$row_check = mysql_fetch_array($check_admin_vote_freeze);
@@ -185,7 +226,7 @@ foreach ($proxy_ids as $proxy_id) {
 						$u_name = $r_name["user_admin_name"];
 					}
 				}
-
+				
 				foreach ($ar_fields as $ar) {
 					$cell_val = 65+$i+$offset;
 					switch ($ar) {
