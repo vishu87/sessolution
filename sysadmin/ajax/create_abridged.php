@@ -21,7 +21,7 @@ $types_res_os_short = array("","O","S");
 
 $line_height='1.5';
 
-$report_id = mysql_real_escape_string($_GET["report_id"]);
+$report_id = mysql_real_escape_string($_POST["report_id"]);
 $query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
 
@@ -339,8 +339,6 @@ require_once("../../dompdf/dompdf_config.inc.php");
   $dompdf->load_html($str);
   $dompdf->set_paper('letter', 'portrait');
   $dompdf->render();
-  //$dompdf->stream("hello_world.pdf",array('Attachment'=>0));
-  $dompdf->stream();
   $pdf = $dompdf->output();
 
 	$name = substr(str_shuffle(strtotime("now")), 0, 10).name_filter($row_comp["com_name"]).'_SES Proxy Advisory Report Abridged_'.$meeting_types[$row_comp["meeting_type"]].' '.date("d-M-y",$row_comp["meeting_date"]).'.pdf';
