@@ -23,7 +23,7 @@ if(!isset($title)) {
 
             <div class="portlet box light-grey">
                      <div class="portlet-title">
-                        <h4><i class="icon-globe"></i>List</h4>
+                        <h4><i class="icon-globe"></i>Archived List</h4>
                      </div>
                      <?php
                         
@@ -157,6 +157,7 @@ if(!isset($title)) {
                                     $proxy_report->custom_button($count); 
                                     $proxy_report->release($count); 
                                     $proxy_report->release_abridged($count);
+                                    $proxy_report->meeting_results($count);
                                   ?>
                                 </td>
                               </tr>
@@ -188,9 +189,8 @@ if(!isset($title)) {
 
 
 <!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:90%; margin-left:-45%;">
+<div id="myModal" class="modal hide fade" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:90%; margin-left:-45%;">
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Modal header</h3>
   </div>
   <div class="modal-body" id="modal-body">

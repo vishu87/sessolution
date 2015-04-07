@@ -133,7 +133,7 @@ if($("#user_id_sub").val()){
 
 function refresh_tr(count,report_id){
   var file = 'refresh_report';
-
+  $("#sub_btn").remove();
   var c_class = $("#tr_"+report_id).attr('class');
   $("#tr_"+report_id).removeClass(c_class);
   $("#tr_"+report_id).animate({backgroundColor:'#ffff00'},{duration:500});
@@ -372,4 +372,27 @@ function abridged_release(count, company_id, report_id, year){
       }
 
    });
+}
+function meeting_results_ui(count,report_id, company_name, meeting_date){
+  $("#close_button").attr('onclick','refresh_tr('+count+','+report_id+')');
+   $("#myModalLabel").text("Meeting Results: "+company_name+" on "+meeting_date);
+   $("#myModal").css('width','98%');
+   $("#myModal").css('margin-left','-49%');
+   $("#modal-body").css('min-height','500px');
+   $("#modal-body").html('Loading');
+   $("#myModal .modal-footer").prepend('<button id="sub_btn" class="btn blue" onclick="update_meeting_result('+report_id+')">Update</button>');
+   var file = 'ses_meeting_results';
+   $.post("ajax/"+ file +".php", {id:report_id}, function(data) {
+      $("#modal-body").html(data);
+   });
+}
+
+function update_meeting_result(report_id){
+  $("#sub_btn").html("Processing...");
+     var file = "update_meeting_result";
+     var my_data = $("#meetingResultsForm").serialize();
+     $.post("ajax/"+ file +".php", my_data, function(data) {
+      bootbox.alert("Success! Meeting results are succefully saved");
+      $("#sub_btn").html("Update");
+   });  
 }

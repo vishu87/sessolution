@@ -310,12 +310,16 @@ class PA_admin{
 	}
 
 	public function edit_button_all($count){
-
 		?>
 		 <a href="#myModal" role="button" class="btn <?php echo $color; ?>" data-toggle="modal"  onclick="load_edit_all(<?php echo $count;?>,<?php echo $this->id;?>,'<?php echo $this->company_name?>','<?php echo $this->meeting_date;?>')">Edit</a>
 		 <?php
 	}
 
+	public function meeting_results($count){
+		?>
+		 <a href="#myModal" role="button" class="btn blue" data-toggle="modal"  onclick="meeting_results_ui(<?php echo $count;?>,<?php echo $this->id;?>,'<?php echo $this->company_name?>','<?php echo $this->meeting_date;?>')">Meeting<br>Results</a>
+		 <?php
+	}
     
     public function custom_button($count){
     	$flag_check = 0;
@@ -336,8 +340,8 @@ class PA_admin{
 		  <a href="#myModal" role="button" class="btn <?php echo $color; ?>" data-toggle="modal" data-backdrop="static" data-keyboard="false"  onclick="load_custom(<?php echo $count;?>,<?php echo $this->id;?>,'<?php echo $this->company_name?>','<?php echo $this->meeting_date?>',<?php echo $this->company_id?>)">Custom Reports</a>
 		 <?php
 		}
-	} 
-}
+		}
+	}
 	public function skip($count){
 		if($this->flag_users == 0){
 			if($this->is_skipped == 0){

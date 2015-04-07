@@ -22,7 +22,7 @@
 	<link href="../assets/css/master_cv.css" rel="stylesheet" />
 	<link rel="stylesheet" type="text/css" href="../assets/uniform/css/uniform.default.css" />
 	<link rel="stylesheet" type="text/css" href="../assets/css/clockface.css" />
-		<link rel="stylesheet" href="../assets/css/theme.bootstrap.css">
+	<link rel="stylesheet" href="../assets/css/theme.bootstrap.css">
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script>
 

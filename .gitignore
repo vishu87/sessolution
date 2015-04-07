@@ -20,3 +20,4 @@ assets/*
 *.doc*
 *.xls*
 xmlrpc.php
+*.sql

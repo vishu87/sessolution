@@ -27,6 +27,7 @@ $styleArray1 = array(
 ),
 
 );
+
 $styleArray2 = array(
  
 'alignment' => array(

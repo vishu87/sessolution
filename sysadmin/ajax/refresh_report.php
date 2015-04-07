@@ -48,6 +48,8 @@ $proxy_report = new PA_admin($proxy_id);
       $proxy_report->release_abridged($count); 
       $proxy_report->skip($count);
       $proxy_report->unskip($count); 
-      $proxy_report->delete(); 
+      $proxy_report->delete();
+      if($proxy_report->meeting_timestamp < strtotime("now"))$proxy_report->meeting_results($count);
+
     ?>
   </td>

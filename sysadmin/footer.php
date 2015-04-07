@@ -183,13 +183,13 @@
 
       		
 	      <?php
-		echo ($sidebar == 'analyst')?'9':'0';
+			echo ($sidebar == 'analyst')?'9':'0';
 		?>: {
 	        // disable it by setting the property sorter to false
 	        sorter: false
 	      },
 	     <?php
-		echo ($sidebar == 'analyst')?'1':'0';
+			echo ($sidebar == 'analyst')?'1':'0';
 		?>: {
 	        // disable it by setting the property sorter to false
 	        sorter: false
