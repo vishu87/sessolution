@@ -62,17 +62,17 @@ foreach ($votings as $voting){
   <tr>
     <th></th>
     <th>No. of shares held</th>
-    <th>% of Votes in<br>favour on votes polled</th>
     <th>No. of votes polled</th>
-    <th>% of votes<br>against on votes polled</th>
+    <th>% of Votes in<br>favour on votes polled</th>
+    <th>% of Votes<br>against on votes polled</th>
     <th>Results</th>
   <tr>';
   foreach ($types as $key => $value) {
     echo '<tr>';
     echo '<td>'.$value.'</td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][0].'" name="shares_held_'.$voting[0].'_'.$key.'" ></td>';
-    echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][1].'" name="votes_favour_'.$voting[0].'_'.$key.'" >%</td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][2].'" name="votes_polled_'.$voting[0].'_'.$key.'" ></td>';
+    echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][1].'" name="votes_favour_'.$voting[0].'_'.$key.'" >%</td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][3].'" name="votes_against_'.$voting[0].'_'.$key.'" >%</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][$key][4].'" name="result_'.$voting[0].'_'.$key.'" ></td>';
     echo '</tr>';
@@ -80,8 +80,8 @@ foreach ($votings as $voting){
   echo '<tr>';
     echo '<td>Grand Total</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][0].'" class="small" name="shares_held_'.$voting[0].'_4" ></td>';
-    echo '<td><input type="text" value="'.$results[$voting[0]][4][1].'" class="small" name="votes_favour_'.$voting[0].'_4" >%</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][2].'" class="small" name="votes_polled_'.$voting[0].'_4" ></td>';
+    echo '<td><input type="text" value="'.$results[$voting[0]][4][1].'" class="small" name="votes_favour_'.$voting[0].'_4" >%</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][3].'" class="small" name="votes_against_'.$voting[0].'_4" >%</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][4].'" name="result_'.$voting[0].'_4" ></td>';
     echo '</tr>';

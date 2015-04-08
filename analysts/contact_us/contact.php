@@ -35,7 +35,7 @@ if(!isset($title)) {
 			'.$text.'
 			</div>';
 	}
-  $sql_an = mysql_query("SELECT * from analysts order by name asc");
+  $sql_an = mysql_query("SELECT * from analysts where active = 0  order by name asc");
 	?>
 <div class="row-fluid">
   <div class="span8">

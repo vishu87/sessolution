@@ -43,7 +43,7 @@ if(!isset($title)) {
                                  <th>Type</th>
                                  <th>Report</th>
                                  <th>Record Vote</th>
-                                 
+                                 <th>Meeting Results</th>
                                  <th>Details</th>
                               </tr>
                               
@@ -57,7 +57,7 @@ if(!isset($title)) {
                                  <th>Type</th>
                                  <th>Report</th>
                                   <th>Record Vote</th>
-                                 
+                                 <th>Meeting Results</th>
                                  <th>Details</th>
                                 
                               </tr>
@@ -164,6 +164,7 @@ if(!isset($title)) {
                                    ?>
                                   </td>
                                 
+                               <td><?php echo $pa_report->meeting_results(); ?></td>
                                  
 
                                <td><?php echo $pa_report->details(); ?></td>

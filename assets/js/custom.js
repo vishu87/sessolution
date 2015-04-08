@@ -391,6 +391,7 @@ function update_meeting_result(report_id){
   $("#sub_btn").html("Processing...");
      var file = "update_meeting_result";
      var my_data = $("#meetingResultsForm").serialize();
+     my_data = my_data+'&report_id='+report_id;
      $.post("ajax/"+ file +".php", my_data, function(data) {
       bootbox.alert("Success! Meeting results are succefully saved");
       $("#sub_btn").html("Update");

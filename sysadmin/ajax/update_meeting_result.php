@@ -14,6 +14,7 @@ if(!$db) {
 if($_SESSION["MEM_ID"] == '' || $_SESSION["PRIV"] != 1) header("Location: ".STRSITE."access-denied.php");
 
 $resolutions = $_POST["resolutions"];
+$report_id = $_POST["report_id"];
 
 foreach ($resolutions as $resolution) {
   for ($i=1; $i <=4 ; $i++) {
@@ -24,7 +25,7 @@ foreach ($resolutions as $resolution) {
     $result = mysql_real_escape_string($_POST["result_".$resolution."_".$i]);
     $query = mysql_query("SELECT id from meeting_results where resolution_id = '$resolution' and type = '$i' limit 1");
     if(mysql_num_rows($query) == 0){
-        mysql_query("INSERT into meeting_results (resolution_id, type, shares_held, votes_favour, votes_polled, votes_against,result) values ('$resolution','$i','$shares_held','$votes_favour','$votes_polled','$votes_against', '$result') ");
+        mysql_query("INSERT into meeting_results (resolution_id, report_id, type, shares_held, votes_favour, votes_polled, votes_against,result) values ('$resolution','$report_id','$i','$shares_held','$votes_favour','$votes_polled','$votes_against', '$result') ");
     } else {
       mysql_query("UPDATE meeting_results set shares_held = '$shares_held', votes_favour = '$votes_favour', votes_polled = '$votes_polled', votes_against = '$votes_against',result = '$result' where resolution_id = '$resolution' and type = '$i' ");
     }

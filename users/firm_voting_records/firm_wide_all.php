@@ -42,7 +42,8 @@ if(!isset($title)) {
                                  <th>e-Voting Deadlines</th>
                                  <th>Type</th>
                                  <th>Report</th>
-                                 <th>Record Vote</th>                                
+                                 <th>Record Vote</th>
+                                 <th>Meeting Results</th>                             
                                  <th>Proxy Status</th>
                                  <th>Analysts</th>
                                  <th style="min-width:120px;">Details</th>
@@ -57,7 +58,8 @@ if(!isset($title)) {
                                  <th>e-Voting Deadlines</th>
                                  <th>Type</th>
                                  <th>Report</th>
-                                  <th>Record Vote</th>                                
+                                  <th>Record Vote</th>
+                                  <th>Meeting Results</th>                                
                                  <th>Proxy Status</th>
                                  <th>Analysts</th>
                                  <th>Details</th>
@@ -155,6 +157,7 @@ if(!isset($title)) {
                                   
                                    ?>
                                   </td>
+                                  <td><?php echo $pa_report->meeting_results(); ?></td>
                                   <?php
                                    $pa_report->request_proxy($_SESSION["MEM_ID"],$member->proxy_module);
                                   ?>

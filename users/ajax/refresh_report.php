@@ -57,6 +57,9 @@ if(!isset($_POST["type"])) $_POST["type"] = 1;
            
                ?>
         </td>
+        <?php if($pa_report->old_meeting){?>
+          <td><?php echo $pa_report->meeting_results(); ?></td>
+          <?php } ?>
      
    <?php if($_POST["special"] == 1 || $_POST["special"] == 2){
        $pa_report->request_proxy($_SESSION["MEM_ID"],$member->proxy_module);

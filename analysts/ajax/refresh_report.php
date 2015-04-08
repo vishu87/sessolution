@@ -72,8 +72,9 @@ $count = $_POST["count"];
                                   
                                    ?>
                                   </td>
-                                
-                                 
+                                <?php if($pa_report->old_meeting){ ?>
+                               <td><?php echo $pa_report->meeting_results(); ?></td>
+                                 <?php } ?>
 
                                <td><?php echo $pa_report->details(); ?></td>
                                

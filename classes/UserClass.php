@@ -401,6 +401,16 @@ class PA{
 		}
 	}
 
+	public function meeting_results(){
+
+		$check = mysql_query("SELECT id from meeting_results where report_id='".$this->id."' limit 1");
+		if(mysql_num_rows($check) == 0){
+			return '';
+		} else {
+			return '<a href="#stack1" data-toggle="modal" role="button" class="btn span12" style="max-width:100px" onclick="meeting_results('.$this->id.')" >View</a>';
+		}
+	}
+
 	public function self_voting($user_id, $type){
 
 		return $this->ses_voting($user_id,$type);

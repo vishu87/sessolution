@@ -603,3 +603,31 @@ function set_unmark(report_id){
       }
   }); 
 }
+
+function meeting_results(report_id){
+
+   $("#stack1 h3").text("Meeting Results");
+   $("#stack1").css('width','98%');
+   $("#stack1").css('margin-left','-49%');
+   $("#stack1 .modal-body").css('min-height','500px');
+   $("#stack1 .modal-body").html('Loading');
+   
+   var file = 'meeting_results';
+   $.post("ajax/"+ file +".php", {id:report_id}, function(data) {
+      $("#stack1 .modal-body").html(data);
+   });
+}
+
+function show_hide(voting_id){
+  var item = $(".show_hide_btn"+voting_id);
+  var show = item.attr('data-show');
+  if(show == 0){
+    item.html('Details <i class="icon-chevron-up"></i>');
+    item.attr('data-show',1);
+    $('.tr_'+voting_id).show();
+  } else {
+    item.html('Details <i class="icon-chevron-down"></i>');
+    item.attr('data-show',0);
+    $('.tr_'+voting_id).hide();
+  }
+}
