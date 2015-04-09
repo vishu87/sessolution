@@ -70,7 +70,7 @@ foreach ($votings as $voting){
     echo '<td>'.$results[$voting[0]][$key][2].'</td>';
     echo '<td>'.$results[$voting[0]][$key][1].'%</td>';
     echo '<td>'.$results[$voting[0]][$key][3].'%</td>';
-    echo '<td colspan="2">'.$results[$voting[0]][$key][4].'</td>';
+    echo '<td colspan="2"></td>';
     echo '</tr>';
   }
  

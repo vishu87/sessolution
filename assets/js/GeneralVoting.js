@@ -450,6 +450,15 @@ function search_meeting(){
       });
    }
 
+    function view_company_users(com_id){
+     $("#stack1 .modal-header h3").html('Users for this company');
+     $("#stack1 .modal-body").html("<p>Loading...</p>");
+      var file = 'view_company_users';
+         $.post("ajax/"+ file +".php", {com_id:com_id}, function(data) {
+               $("#stack1 .modal-body").html(data);
+        });
+   }
+
    function reload(){
     location.reload();
    }

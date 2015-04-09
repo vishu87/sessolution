@@ -53,6 +53,7 @@ $sql_result = mysql_query("SELECT * from meeting_results where resolution_id IN 
 while ($row_result = mysql_fetch_array($sql_result)) {
   $results[$row_result["resolution_id"]][$row_result["type"]] = array($row_result["shares_held"], $row_result["votes_favour"], $row_result["votes_polled"], $row_result["votes_against"], $row_result["result"]);
 }
+$array_result_option = array("","Passed","Rejected","Withdrawn");
 $count =1;
 foreach ($votings as $voting){
   echo   '<b>'.stripcslashes($voting[1]).' # '.stripcslashes($voting[2]).'</b>';
@@ -74,7 +75,7 @@ foreach ($votings as $voting){
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][2].'" name="votes_polled_'.$voting[0].'_'.$key.'" ></td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][1].'" name="votes_favour_'.$voting[0].'_'.$key.'" >%</td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][3].'" name="votes_against_'.$voting[0].'_'.$key.'" >%</td>';
-    echo '<td><input type="text" value="'.$results[$voting[0]][$key][4].'" name="result_'.$voting[0].'_'.$key.'" ></td>';
+    echo '<td></td>';
     echo '</tr>';
   }
   echo '<tr>';
@@ -83,7 +84,15 @@ foreach ($votings as $voting){
     echo '<td><input type="text" value="'.$results[$voting[0]][4][2].'" class="small" name="votes_polled_'.$voting[0].'_4" ></td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][1].'" class="small" name="votes_favour_'.$voting[0].'_4" >%</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][3].'" class="small" name="votes_against_'.$voting[0].'_4" >%</td>';
-    echo '<td><input type="text" value="'.$results[$voting[0]][4][4].'" name="result_'.$voting[0].'_4" ></td>';
+    echo '<td>
+          <select name="result_'.$voting[0].'_4" >';
+          foreach ($array_result_option as $option) {
+            echo '<option ';
+            if($option == $results[$voting[0]][4][4]) echo 'selected';
+            echo '>'.$option.'</option>';
+          }
+    echo '</select>
+          </td>';
     echo '</tr>';
   echo '</table><br><br>';
   $count++;

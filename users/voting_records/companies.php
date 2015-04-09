@@ -243,8 +243,8 @@ if(!isset($title)  || !isset($user_id)) {
                                  <th>SN</th>
                                  <th>Company Name</th>
                                  <th>BSE Code</th>
-                                 <th>Action</th>
-                                
+                                 <th>PM Assigned</th>
+                                <th>Action</th>
                               </tr>
                               
                            </thead>
@@ -253,8 +253,8 @@ if(!isset($title)  || !isset($user_id)) {
                                 <th>#</th>
                                  <th>Company Name</th>
                                  <th>BSE Code</th>
-                                 <th></th>
-                                 
+                                 <th>PM Assigned</th>
+                                 <th>Action</th>
                                 
                               </tr>
                               <tr>
@@ -285,6 +285,11 @@ if(!isset($title)  || !isset($user_id)) {
                                  echo '<td>'.$count.'</td>';
                                     echo '<td>'.$row["com_name"].'</td>';
                                     echo '<td>'.$row["com_bse_code"].'</td>';
+                                    ?>
+                                <td>
+                                  <a href="#stack1" data-toggle="modal" role="button" onclick="view_company_users(<?php echo $row["com_id"] ?>)" class="btn span12" style="max-width:100px;">View</a>
+                                </td>
+                                    <?php
                                     echo '<td><a href="javascript:;" onclick="delete_voting_company('.$row["com_id"].','.$pm_id.')" class="btn red">Delete</a></td>';
                                     echo '</tr>';
                                     $count++;
@@ -301,6 +306,24 @@ if(!isset($title)  || !isset($user_id)) {
           </div>
 
 </div><!-- END CONTAINER -->
+
+<div id="stack1" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="width:94%; margin-left:-47%">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Stack One</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+    <p>One fine body…</p>
+    <p>One fine body…</p>
+    <input type="text" data-tabindex="1">
+    <input type="text" data-tabindex="2">
+    <button class="btn" data-toggle="modal" href="#stack2">Launch modal</button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn" id="close_button1">Close</button>
+  </div>
+</div>
 <script type="text/javascript">
 
 
