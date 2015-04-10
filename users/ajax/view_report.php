@@ -42,7 +42,7 @@ switch ($report_type) {
 		$update["RecordDate"] = $pa_view->record_date;
 		$update["EvotingStart"] = $pa_view->evoting_start;
 		$update["EvotingEnd"] = $pa_view->evoting_end;
-		$update["EvotingPlatform"] = $pa_view->evoting_plateform;
+		$update["EvotingPlatform"] = ($pa_view->evoting_name == NULL)?$pa_view->evoting_plateform:'<a href="'.$pa_view->evoting_link.'" target="_blank">'.$pa_view->evoting_name.'</a>';
 		$update["MeetingType"] = $pa_view->meeting_type;
 		//print_r($user->companies_subscribed_year);
 

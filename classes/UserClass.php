@@ -200,7 +200,7 @@ class PA{
 	public $meeting_type;
 
 	public function __construct($id) {
-		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, companies.com_isin from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id  where proxy_ad.id='$id' ";
+		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, companies.com_isin, evoting.name, evoting.link from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter  where proxy_ad.id='$id' ";
 
 		$query = mysql_query($sql);
 		$result = mysql_fetch_array($query);
@@ -216,6 +216,9 @@ class PA{
 		$this->evoting_start = ($result["evoting_start"])?date("d M Y",$result["evoting_start"]):'';
 		$this->evoting_end = ($result["evoting_end"])?date("d M Y",$result["evoting_end"]):'';
 		$this->evoting_plateform = $result["evoting_plateform"];
+		$this->evoting_name = $result["name"];
+		$this->evoting_link = $result["link"];
+
 		$this->old_meeting = ($result["meeting_date"] < strtotime("today"))?true:false;
 		$this->meeting_type = $meeting_types[$result["meeting_type"]];
 		$this->year = $result["year"];
@@ -454,7 +457,6 @@ class PA{
 
 	public function request_proxy($user_id, $proxy_module){
 		//SES Voting Module 0->ses
-		if($this->meeting_type != 'PB' ){
 			if($proxy_module == 0)
 			{
 				$query_proxy = mysql_query("SELECT * from self_proxies where user_id='$user_id' and proxy_id = '".$this->id."' ");
@@ -497,7 +499,8 @@ class PA{
 	        $proxy = mysql_fetch_array($query_proxy);
 	        if($num == 0){
 	          $this->proxy_status = '';
-	          $this->proxy_button = '<a href="#myModal" data-toggle="modal"  role="button" style="max-width:115px;" class="btn span12" onclick="assign_voter(\''.$this->company_name.'\','.$this->id.')">Appoint Voter</a>';
+	          //$this->proxy_button = '<a href="#myModal" data-toggle="modal"  role="button" style="max-width:115px;" class="btn span12" onclick="assign_voter(\''.$this->company_name.'\','.$this->id.')">Appoint Voter</a>';
+	          $this->proxy_button = '<a href="#stack1" data-toggle="modal"  role="button" style="max-width:115px;" class="btn span12" onclick="cast_vote(\''.$this->company_name.'\','.$this->id.')">Cast Vote</a>';
 	        }  elseif ($proxy["form"] == '' && $proxy["proxy_skipped"] == 0) {
 	           $this->proxy_status = 'Proxy Assigned';
 	           $this->proxy_button = '<a href="#myModal" data-toggle="modal"  role="button" class="btn span12" style="max-width:115px;" onclick="assign_voter(\''.$this->company_name.'\','.$this->id.')">Change Voter</a><a href="#myModal" role="button" class="btn span12 yellow" data-toggle="modal" style="max-width:115px; margin-left: 0;" onclick="upload_form('.$this->id.','.$proxy["id"].',2)" data-backdrop="static" data-keyboard="false">Upload Form</a><a href="javascript:;" role="button" class="btn span12 black" onclick="reset_proxy('.$this->id.')" style="max-width:115px;margin-left: 0;">Reset Proxy</a>';
@@ -507,7 +510,7 @@ class PA{
 	        }
 	    }
 		}
-	} 
+
 
 		if($this->old_meeting) $this->proxy_button = '';
 	}

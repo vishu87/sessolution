@@ -314,6 +314,7 @@ function refresh_tr(report_id){
 }
 
 function assign_voter(company_name,report_id){
+  $("#stack1").modal('hide');
     $("#modal-body").html("Loading..");
    count = parseInt($("#tr_"+report_id+" td:first").html());
    var file = 'assign_voter';
@@ -323,7 +324,16 @@ function assign_voter(company_name,report_id){
    });
 
 }
+function cast_vote(company_name,report_id){
+    $("#stack1 .modal-body").html("Loading..");
+   count = parseInt($("#tr_"+report_id+" td:first").html());
+   var file = 'cast_vote';
+   $("#stack1 .modal-header h3").text(company_name); 
+     $.post("ajax/"+ file +".php", {company_name:company_name, report_id:report_id}, function(data) {
+      $("#stack1 .modal-body").html(data); 
+   });
 
+}
 function submit_voter(report_id){
     var file = 'submit_voter';
        $.post("ajax/"+ file +".php", {voter:$("#voter_names").val(), report_id:report_id}, function(data) {
