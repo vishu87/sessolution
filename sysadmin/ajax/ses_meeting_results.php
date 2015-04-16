@@ -32,7 +32,7 @@ $pa_report = new PA_admin($rid);
   }
   </style>
 <br>
-<form id="meetingResultsForm">
+<form class="meetingResultsForm">
 <?php
 $recos = array();
 $sql_reco = mysql_query("SELECT * from ses_recos");
@@ -54,8 +54,9 @@ while ($row_result = mysql_fetch_array($sql_result)) {
   $results[$row_result["resolution_id"]][$row_result["type"]] = array($row_result["shares_held"], $row_result["votes_favour"], $row_result["votes_polled"], $row_result["votes_against"], $row_result["result"]);
 }
 $array_result_option = array("","Passed","Rejected","Withdrawn");
-$count =1;
+$count = 1;
 foreach ($votings as $voting){
+
   echo   '<b>'.stripcslashes($voting[1]).' # '.stripcslashes($voting[2]).'</b>';
   echo   ': SES Recommendation-<b>'.$recos[$voting[3]].'</b>';
   echo '<input type="hidden" name="resolutions[]" value="'.$voting[0].'">';
@@ -71,8 +72,10 @@ foreach ($votings as $voting){
   foreach ($types as $key => $value) {
     echo '<tr>';
     echo '<td>'.$value.'</td>';
-    echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][0].'" name="shares_held_'.$voting[0].'_'.$key.'" ></td>';
-    echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][2].'" name="votes_polled_'.$voting[0].'_'.$key.'" ></td>';
+    echo '<td><input type="text" class="small shares_held ';
+    echo ($count == 1)?"shares_held_main":"";
+    echo '" data-id="'.$voting[0].'" key-id="'.$key.'" value="'.$results[$voting[0]][$key][0].'" name="shares_held_'.$voting[0].'_'.$key.'" ></td>';
+    echo '<td><input type="text" class="small votes_polled" data-id="'.$voting[0].'" value="'.$results[$voting[0]][$key][2].'" name="votes_polled_'.$voting[0].'_'.$key.'" ></td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][1].'" name="votes_favour_'.$voting[0].'_'.$key.'" >%</td>';
     echo '<td><input type="text" class="small" value="'.$results[$voting[0]][$key][3].'" name="votes_against_'.$voting[0].'_'.$key.'" >%</td>';
     echo '<td></td>';
@@ -80,8 +83,10 @@ foreach ($votings as $voting){
   }
   echo '<tr>';
     echo '<td>Grand Total</td>';
-    echo '<td><input type="text" value="'.$results[$voting[0]][4][0].'" class="small" name="shares_held_'.$voting[0].'_4" ></td>';
-    echo '<td><input type="text" value="'.$results[$voting[0]][4][2].'" class="small" name="votes_polled_'.$voting[0].'_4" ></td>';
+    echo '<td><input type="text" value="'.$results[$voting[0]][4][0].'" class="small total_shares_held ';
+    echo ($count == 1)?"total_shares_held_main":"";
+    echo '" data-id="'.$voting[0].'" key-id="4" name="shares_held_'.$voting[0].'_4" ></td>';
+    echo '<td><input type="text" value="'.$results[$voting[0]][4][2].'" class="small total_votes_polled" data-id="'.$voting[0].'" name="votes_polled_'.$voting[0].'_4" ></td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][1].'" class="small" name="votes_favour_'.$voting[0].'_4" >%</td>';
     echo '<td><input type="text" value="'.$results[$voting[0]][4][3].'" class="small" name="votes_against_'.$voting[0].'_4" >%</td>';
     echo '<td>
@@ -95,7 +100,41 @@ foreach ($votings as $voting){
           </td>';
     echo '</tr>';
   echo '</table><br><br>';
+  if($count % 2 == 0) echo '</form><form class="meetingResultsForm">';
   $count++;
 }
 ?>
 </form>
+
+<script type="text/javascript">
+  $(".shares_held").keyup(function(e){
+    var data = $(this).attr("data-id");
+    var sum = 0;
+    $(".shares_held[data-id="+data+"]").each(function(){
+      if(parseInt($(this).val())) sum = sum + parseInt($(this).val());
+    });
+    $(".total_shares_held[data-id="+data+"]").val(sum);
+    if($(".total_shares_held[data-id="+data+"]").hasClass('total_shares_held_main')){
+       $(".total_shares_held").val(sum);
+    }
+  });
+
+  $(".shares_held_main").keyup(function(e){
+    var key = $(this).attr("key-id");
+    $(".shares_held[key-id="+key+"]").val($(this).val());
+  });
+
+  $(".total_shares_held_main").keyup(function(e){
+    var key = $(this).attr("key-id");
+    $(".total_shares_held[key-id="+key+"]").val($(this).val());
+  });
+
+  $(".votes_polled").keyup(function(e){
+    var data = $(this).attr("data-id");
+    var sum = 0;
+    $(".votes_polled[data-id="+data+"]").each(function(){
+      if(parseInt($(this).val())) sum = sum + parseInt($(this).val());
+    });
+    $(".total_votes_polled[data-id="+data+"]").val(sum);
+  });
+</script>

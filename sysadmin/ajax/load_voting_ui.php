@@ -192,7 +192,30 @@ echo '
              </div>
              <!--/span-->
           </div>
+         <div class="row-fluid">
+             <div class="span6 ">
+               <div class="control-group">
+             <label class="control-label">Focus</label>
+             <div class="controls">
+                 <select name="focus" id="focus_pop"><option value="0">Select</option>';
+                    
+                    for ($i = 1; $i< sizeof($focus); $i++ ) {
+                      echo '<option value="'.$i.'" ';
+                      if($i == $vote["focus"]) echo 'selected';
+                      echo '>'.$focus[$i].'</option>';
+                    }
+                  echo '
+                  </select>
 
+             </div>
+             </div>
+             </div>
+             <!--/span-->
+             <div class="span6 ">
+
+             </div>
+             <!--/span-->
+          </div>
         <div class="row-fluid">
 
            <!--/span-->

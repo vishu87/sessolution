@@ -21,7 +21,7 @@ function check_add_vote(report_id){
           if(data == 'success'){ 
              var file = 'add_vote';
         $("#ses_voting_button").html("Adding");
-         $.post("ajax/"+ file +".php", {id:report_id, res_name:$("#resolution_name").val(),res_number:$("#resolution_number").val(),ses_reco:$("#ses_reco").val(),res:$("#resolution").val(), detail:$("#detail").val(),man_reco:$("#man_reco").val(),man_share_reco:$("#man_share_reco").val(), reason:$("#reason").val(), type_business:$("#type_business").val(), type_res_os:$("#type_res_os").val()}, function(data) {
+         $.post("ajax/"+ file +".php", {id:report_id, res_name:$("#resolution_name").val(),res_number:$("#resolution_number").val(),ses_reco:$("#ses_reco").val(),res:$("#resolution").val(), detail:$("#detail").val(),man_reco:$("#man_reco").val(),man_share_reco:$("#man_share_reco").val(), reason:$("#reason").val(), type_business:$("#type_business").val(), type_res_os:$("#type_res_os").val(), focus:$("#focus").val()}, function(data) {
 
             $('#table_votes').html(data);
             $("#resolution_name").val('');
@@ -69,7 +69,7 @@ function voting_submit(report_id,vote_id){
           if(data == 'success'){
              var file = 'edit_vote';
         
-         $.post("ajax/"+ file +".php", {report_id:report_id, id:vote_id,  res_name:$("#resolution_name_pop").val(),res_number:$("#resolution_number_pop").val(),  res:$("#resolution_pop").val(), ses_reco:$("#ses_reco_pop").val(), detail:$("#detail_pop").val(),man_reco:$("#man_reco_pop").val(), man_share_reco:$("#man_share_reco_pop").val(), reason:$("#reason_pop").val(), type_business:$("#type_business_pop").val(), type_res_os:$("#type_res_os_pop").val()}, function(data) {
+         $.post("ajax/"+ file +".php", {report_id:report_id, id:vote_id,  res_name:$("#resolution_name_pop").val(),res_number:$("#resolution_number_pop").val(),  res:$("#resolution_pop").val(), ses_reco:$("#ses_reco_pop").val(), detail:$("#detail_pop").val(),man_reco:$("#man_reco_pop").val(), man_share_reco:$("#man_share_reco_pop").val(), reason:$("#reason_pop").val(), type_business:$("#type_business_pop").val(), type_res_os:$("#type_res_os_pop").val(), focus:$("#focus_pop").val()}, function(data) {
             
             $("#table_votes").html(data);
             $("#close_button2").trigger('click');
@@ -378,7 +378,7 @@ function meeting_results_ui(count,report_id, company_name, meeting_date){
    $("#myModalLabel").text("Meeting Results: "+company_name+" on "+meeting_date);
    $("#myModal").css('width','98%');
    $("#myModal").css('margin-left','-49%');
-   $("#modal-body").css('min-height','500px');
+   $("#modal-body").css('min-height','450px');
    $("#modal-body").html('Loading');
    $("#myModal .modal-footer").prepend('<button id="sub_btn" class="btn blue" onclick="update_meeting_result('+report_id+')">Update</button>');
    var file = 'ses_meeting_results';
@@ -389,11 +389,18 @@ function meeting_results_ui(count,report_id, company_name, meeting_date){
 
 function update_meeting_result(report_id){
   $("#sub_btn").html("Processing...");
-     var file = "update_meeting_result";
-     var my_data = $("#meetingResultsForm").serialize();
-     my_data = my_data+'&report_id='+report_id;
-     $.post("ajax/"+ file +".php", my_data, function(data) {
-      bootbox.alert("Success! Meeting results are succefully saved");
-      $("#sub_btn").html("Update");
-   });  
+  var file = "update_meeting_result";
+  var count = 0;
+  $('.meetingResultsForm').each(function(){
+      var my_data = $(this).serialize();
+       my_data = my_data+'&report_id='+report_id;
+       $.post("ajax/"+ file +".php", my_data, function(data) {
+        count++;
+         if(count == $(".meetingResultsForm").length){
+          bootbox.alert("Success! Meeting results are succefully saved");
+          $("#sub_btn").html("Update");
+        }
+      });
+  });
+      
 }

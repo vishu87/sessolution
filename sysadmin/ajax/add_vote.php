@@ -24,14 +24,15 @@ $man_share_reco = mysql_real_escape_string($_POST["man_share_reco"]);
 $reason = ($_POST["reason"] != '')? implode(',', $_POST["reason"]):'';
 $type_business = mysql_real_escape_string($_POST["type_business"]);
 $type_res_os = mysql_real_escape_string($_POST["type_res_os"]);
+$focus_on = mysql_real_escape_string($_POST["focus"]);
 
 $date = strtotime("now");
 
-$query = "INSERT into voting (report_id, resolution_name, resolution_number,resolution_type,ses_reco,detail,man_reco, man_share_reco, reasons, type_business, type_res_os, modified) values ('$report_id', '$resolution_name', '$resolution_number','$resolution', '$ses_reco','$detail','$man_reco', '$man_share_reco' , '$reason', '$type_business','$type_res_os', '$date') ";
+$query = "INSERT into voting (report_id, resolution_name, resolution_number,resolution_type,ses_reco,detail,man_reco, man_share_reco, reasons, type_business, type_res_os, focus, modified) values ('$report_id', '$resolution_name', '$resolution_number','$resolution', '$ses_reco','$detail','$man_reco', '$man_share_reco' , '$reason', '$type_business','$type_res_os','$focus_on', '$date') ";
 mysql_query($query);
 ?>
 <table class="table table-bordered table-hover tablesorter" id="table_votes" >
-     <tr><th>#</th><th>Resolution Name</th><th>Type</th><th>SES Reco</th><th>Manag. Reco</th><th>Proposal by Management or Shareholder</th><th>Details</th><th>Reasons</th><th>Business Type / Resolution Type</th><th>Action</th></tr>
+     <tr><th>#</th><th>Resolution Name</th><th>Type</th><th>SES Reco</th><th>Manag. Reco</th><th>Proposal by Management or Shareholder</th><th>Details</th><th>Reasons</th><th>Business Type / Resolution Type</th><th>Focus</th><th>Action</th></tr>
 <?php
 
 $recos = array();
@@ -62,6 +63,7 @@ while ($row_reco = mysql_fetch_array($sql_reco)) {
     } ?>
         </td>
         <?php echo '<td>'.$types_business[$row_vote["type_business"]].' / '.$types_res_os[$row_vote["type_res_os"]].'</td>'; ?>
+        <?php echo '<td>'.$focus[$row_vote["focus"]].'</td>'; ?>
         <td>
          
            <button class="btn" data-toggle="modal" href="#stack2" onclick="voting('<?php echo name_filter($row_vote["resolution_name"]); ?>','<?php echo $row_vote["id"]; ?>');">Edit</button>

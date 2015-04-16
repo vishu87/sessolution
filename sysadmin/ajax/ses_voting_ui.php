@@ -232,6 +232,32 @@ if(!$flag){
                                        </div>
                                        <!--/span-->
                                     </div>
+
+                                     <div class="row-fluid">
+                                       <div class="span6 ">
+                                         <div class="control-group">
+                                       <label class="control-label">Focus</label>
+                                       <div class="controls">
+                                           <select name="focus" id="focus"><option value="0">Select</option>
+                                              <?php
+                                              for ($i = 1; $i< sizeof($focus); $i++ ) {
+                                                echo '<option value="'.$i.'" ';
+                                                if($i == $vote["focus"]) echo 'selected';
+                                                echo '>'.$focus[$i].'</option>';
+                                              }
+                                              ?>
+  
+                                            </select>
+
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="span6 ">
+
+                                       </div>
+                                       <!--/span-->
+                                    </div>
                                    
                                     <!--/row-->
                                     <div class="form-actions">
@@ -248,7 +274,7 @@ if(!$flag){
 
 <?php } ?>
      <table class="table table-bordered table-hover tablesorter" id="table_votes" >
-     <tr><th>#</th><th>Resolution Name</th><th>Type</th><th>SES Reco</th><th>Manag. Reco</th><th>Proposal by Management or Shareholder</th><th>Details</th><th>Reasons</th><th>Business Type / Resolution Type</th><th>Action</th></tr>
+     <tr><th>#</th><th>Resolution Name</th><th>Type</th><th>SES Reco</th><th>Manag. Reco</th><th>Proposal by Management or Shareholder</th><th>Details</th><th>Reasons</th><th>Business Type / Resolution Type</th><th>Focus</th><th>Action</th></tr>
 <?php
 $recos = array();
 $sql_reco = mysql_query("SELECT * from ses_recos");
@@ -282,6 +308,7 @@ while ($row_reco = mysql_fetch_array($sql_reco)) {
     } ?>
         </td>
         <?php echo '<td>'.$types_business[$row_vote["type_business"]].' / '.$types_res_os[$row_vote["type_res_os"]].'</td>'; ?>
+        <?php echo '<td>'.$focus[$row_vote["focus"]].'</td>'; ?>
         <td>
         <?php 
         if(!$flag){ ?>

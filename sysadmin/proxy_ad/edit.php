@@ -306,7 +306,39 @@ $rid = $_GET["id"];
                                     </div>
                                     <!--/row-->
 
-
+                                     <div class="row-fluid">
+                                       <div class="span6 ">
+                                         <div class="control-group">
+                                       <label class="control-label">Abridged Analyst</label>
+                                       <div class="controls">
+                                           <select name="an_id" value="<?php echo $report["an_id"]?>">
+                                            <option value="0">Select</option>
+                                            <?php
+                                              $sql_an = mysql_query("SELECT an_id, name from  analysts where active=0 order by name asc ");
+                                              while ($row_an = mysql_fetch_array($sql_an)) {
+                                                echo '<option value="'.$row_an["an_id"].'" ';
+                                                echo ($row_an["an_id"] == $report["an_id"])?'selected':'';
+                                                echo '>'.$row_an["name"].'</option>';
+                                              }
+                                            ?>
+                                           </select>
+                                          <span class="help-block" ></span>
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                       <label class="control-label">Voting Results (Clause 35A)</label>
+                                       <div class="controls">
+                                           <input type="text" name="meeting_results" placeholder="Meeting Results" value="<?php echo $report["meeting_results"]?>">
+                                          <span class="help-block" ></span>
+                                       </div>
+                                       </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+                                    <!--/row-->
 
 
                                     <!--/row-->

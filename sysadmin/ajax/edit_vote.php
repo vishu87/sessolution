@@ -22,13 +22,14 @@ $resolution = $_POST["res"];
 $ses_reco = $_POST["ses_reco"];
 $man_reco = $_POST["man_reco"];
 $man_share_reco = $_POST["man_share_reco"];
+$focus_on = $_POST["focus"];
 $type_business = mysql_real_escape_string($_POST["type_business"]);
 $type_res_os = mysql_real_escape_string($_POST["type_res_os"]);
 $detail = mysql_real_escape_string($_POST["detail"]);
 $reason = ($_POST["reason"] != '')? implode(',', $_POST["reason"]):'';
 $date = strtotime("now");
 
-mysql_query("UPDATE voting set resolution_name='$resolution_name', resolution_number='$resolution_number', ses_reco='$ses_reco', man_reco='$man_reco', man_share_reco='$man_share_reco', resolution_type = '$resolution',detail = '$detail',reasons = '$reason',type_business='$type_business',type_res_os='$type_res_os', modified = '$date' where id='$vote_id' ");
+mysql_query("UPDATE voting set resolution_name='$resolution_name', resolution_number='$resolution_number', ses_reco='$ses_reco', man_reco='$man_reco', man_share_reco='$man_share_reco', resolution_type = '$resolution',detail = '$detail',reasons = '$reason',type_business='$type_business',type_res_os='$type_res_os',focus = '$focus_on',  modified = '$date' where id='$vote_id' ");
 
 
 ?>
@@ -64,6 +65,7 @@ while ($row_reco = mysql_fetch_array($sql_reco)) {
     } ?>
         </td>
         <?php echo '<td>'.$types_business[$row_vote["type_business"]].' / '.$types_res_os[$row_vote["type_res_os"]].'</td>'; ?>
+         <?php echo '<td>'.$focus[$row_vote["focus"]].'</td>'; ?>
         <td>
          
            <button class="btn" data-toggle="modal" href="#stack2" onclick="voting('<?php echo name_filter($row_vote["resolution_name"]);  ?>','<?php echo $row_vote["id"]; ?>');">Edit</button>
