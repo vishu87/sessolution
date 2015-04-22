@@ -69,11 +69,11 @@ $ar_fields_top = array("com_full_name","com_isin","meeting_type","meeting_date",
 
 $ar_names_top = array("Company Name", "ISIN","Meeting Type","Meeting Date","e-Voting Deadline");
 
-$ar_fields = array("user","resolution_number","resolution_name","man_reco","man_share_reco", "ses_reco","vote","comment");
+$ar_fields = array("meeting_date","com_full_name","empty","empty","meeting_type","resolution_name","vote","comment", "ses_reco");
 
-$ar_names = array("Portfolio Manager","SN","Resolution","Management Recommendation","Proposal by Management or Shareholder", "SES Recommendation","Vote","Comment");
+$ar_names = array("Meeting Date","Company Name","% of AUM equity","% of capital","Meeting Type","Proposal Description","Vote","Reasons", "SES Recommendations");
 
-$ar_width = array("12","12","20","12","12","12","10","20","50","30");
+$ar_width = array("10","12","10","10","10","35","10","35","12");
 
 $seq=1;
 $offset = 0;
@@ -86,49 +86,6 @@ $count_met = 0;
 foreach ($proxy_ids as $proxy_id) {
 	$seq_in = $seq;
 	$count =0;
-	$i = 0;
-	foreach ($ar_fields_top as $ar) {
-		$cell_val = 65+$i+$offset;
-		$objPHPExcel->getActiveSheet()->setCellValue(chr($cell_val).$seq, $ar_names_top[$count]);
-		$objPHPExcel->getActiveSheet()->getColumnDimension(chr($cell_val))->setWidth($ar_width[$count]);
-		$i++;
-		$objPHPExcel->getActiveSheet()->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
-		$count++;
-	}
-
-	$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.chr($cell_val).$seq)->applyFromArray($styleArray4);
-	$seq ++;
-	$count =0;
-	$i = 0;
-	foreach ($ar_fields_top as $ar) {
-		$cell_val = 65+$i+$offset;
-		switch ($ar) {
-			case 'com_full_name':
-				$var = $row_rep[$proxy_id]["com_full_name"];
-				break;
-			case 'meeting_date':
-				$var = date("d-M-y", $row_rep[$proxy_id]["meeting_date"]);
-				break;
-			case 'meeting_type':
-				$var = $meeting_types[$row_rep[$proxy_id]["meeting_type"]];
-				break;
-			case 'evoting_end':
-				$var = date("d-M-y", $row_rep[$proxy_id]["evoting_end"]);
-				break;
-			case 'com_isin':
-				$var = $row_rep[$proxy_id]["com_isin"];
-				break;
-			default:
-				$var = '';
-				break;
-		}
-		
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue(chr($cell_val).$seq, $var);
-		$objPHPExcel->getActiveSheet(0)->getStyle(chr($cell_val).$seq)->applyFromArray($styleArrayborder);
-		$i++;
-	}
-
-	$seq += 2;
 	$i = 0;
 	$count =0;
 	foreach ($ar_fields as $ar) {
@@ -181,15 +138,6 @@ foreach ($proxy_ids as $proxy_id) {
 		}
 	}
 
-	$qu = ceil(date("n",$row_rep[$proxy_id]["meeting_date"])/3) - 1;
-	switch ($qu) {
-		case 0:
-			$quarter = 1;
-			break;
-		default:
-			$quarter = $qu;
-			break;
-	}
 
 	foreach ($user_proxy_array as $user_id) {
 
@@ -234,20 +182,17 @@ foreach ($proxy_ids as $proxy_id) {
 				foreach ($ar_fields as $ar) {
 					$cell_val = 65+$i+$offset;
 					switch ($ar) {
-						case 'user':
-							$var = $u_name;
+						case 'com_full_name':
+							$var = $row_rep[$proxy_id]["com_full_name"];
 							break;
-						case 'resolution_number':
-							$var = $res["resolution_number"];
+						case 'meeting_date':
+							$var = date("d-M-y", $row_rep[$proxy_id]["meeting_date"]);
+							break;
+						case 'meeting_type':
+							$var = $meeting_types[$row_rep[$proxy_id]["meeting_type"]];
 							break;
 						case 'resolution_name':
 							$var = $res["resolution_name"];
-							break;
-						case 'man_reco':
-							$var = $man_reco_mis[$res["man_reco"]];
-							break;
-						case 'man_share_reco':
-							$var = $man_share_reco_mis[$res["man_share_reco"]];
 							break;
 						case 'vote':
 							$var = $vote["vote"];

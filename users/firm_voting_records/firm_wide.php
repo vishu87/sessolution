@@ -13,7 +13,7 @@ if(!isset($title)) {
     </h3>
     </div>
     <div class="span6">
-      <a href="../excel/proxy_committee.php" class="btn green pull-right" style="margin-top:20px">Generate Proxy Committee Aproval report</a>
+      <a href="../excel/proxy_committee.php" class="btn green pull-right" style="margin-top:20px">Generate Voting Committee Approval File</a>
     </div>
     
   </div>

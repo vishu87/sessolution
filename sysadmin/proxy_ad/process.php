@@ -120,7 +120,15 @@ if($_GET["cat"] == 1){
 
 								$insert_rec_sql = mysql_query("SELECT user_id from user_voting_company where com_id='$com_id' and add_date <= '$meeting_on' ");
 								while ($row_rec = mysql_fetch_array($insert_rec_sql)) {
-									mysql_query("INSERT into user_voting_proxy_reports (user_id, report_id, add_date) values ('$row_rec[user_id]','$insert_id', '".strtotime("now")."') ");
+									if($record_date != ''){
+										if($record_date < strtotime("now")){
+											mysql_query("INSERT into user_proxy_allow (user_id, report_id, add_date) values ('$row_rec[user_id]','$insert_id', '".strtotime("now")."') ");
+										} else {
+											mysql_query("INSERT into user_voting_proxy_reports (user_id, report_id, add_date) values ('$row_rec[user_id]','$insert_id', '".strtotime("now")."') ");
+										}
+									} else {
+										mysql_query("INSERT into user_voting_proxy_reports (user_id, report_id, add_date) values ('$row_rec[user_id]','$insert_id', '".strtotime("now")."') ");
+									}
 								}
 
 							} else{

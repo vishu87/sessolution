@@ -388,7 +388,7 @@ class PA{
 		} else {
 
 			if($type == 1)
-				return 'Record date over';
+				return 'The company was added post record date';
 			else
 				return '<a href="#stack1" data-toggle="modal" role="button" onclick="proxy_allow_ui('.$this->id.')" class="btn yellow span12 ttip" data-toggle="tooltip" title="The company was added in portfolio post the record date for the meeting. Click to allow users record votes for this meeting" style="max-width:100px; margin:5px 0 0 0" >Allow</a>';
 		}
