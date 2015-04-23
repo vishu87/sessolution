@@ -124,7 +124,6 @@ $analysts = array();
     }
 
 $count =1;
-$meeting_types = array("","AGM", "EGM", "PB");
 $report_types  = array("","Proxy Advisory","CGS","Research");   
 
 $objPHPExcel = new PHPExcel();

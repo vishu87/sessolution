@@ -75,7 +75,6 @@ $objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.$cell_val.$seq)->applyFrom
 $seq++;
 
 $count_student = 0;
-$meeting_types = array("","AGM", "EGM", "PB");
  $voters = array();
 $sql_met = mysql_query("SELECT vid,name from proxy_voters ");
 while ($row_met = mysql_fetch_array($sql_met)) {
@@ -84,7 +83,7 @@ while ($row_met = mysql_fetch_array($sql_met)) {
 
 while($row = mysql_fetch_array($sql))
 {
-$sql_com = mysql_query("SELECT proxy_ad.meeting_date, proxy_ad.meeting_type,companies.com_name, companies.com_bse_code from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$row[proxy_id]' ");
+$sql_com = mysql_query("SELECT proxy_ad.meeting_date, proxy_ad.meeting_type,companies.com_name, companies.com_bse_code, met_type.type from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id join met_type on proxy_ad.meeting_type = met_type.id where proxy_ad.id='$row[proxy_id]' ");
 $row_com = mysql_fetch_array($sql_com);
 
  	$count_student++;
@@ -101,7 +100,7 @@ $row_com = mysql_fetch_array($sql_com);
 			$var = $row_com[$ar];
 		}
 		elseif ($ar == 'meeting_type') {
-			$var = $meeting_types[$row_com[$ar]];
+			$var = $row_com["type"];
 		}
 		elseif ($ar == 'meeting_date') {
 			$var = ($row_com[$ar])?date("d-M-y",$row_com[$ar]):'';

@@ -1,13 +1,14 @@
 function send_email($change_fields,$com_id,$proxy_id){
 	//print_r($change_fields);
-	$rep_sql = mysql_query("SELECT companies.com_name, proxy_ad.* from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where companies.com_id='$com_id' and proxy_ad.id='$proxy_id' ");
+		$rep_sql = mysql_query("SELECT companies.com_name, proxy_ad.*, met_type.type from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id join met_type on proxy_ad.meeting_type = met_type.id where companies.com_id='$com_id' and proxy_ad.id='$proxy_id' ");
+
 	$row_rep = mysql_fetch_array($rep_sql);
 	$com_name = $row_rep["com_name"];
-	$meeting_types = array("","AGM", "EGM", "PB","CCM");
+
 
 	$query = "SELECT user_id from user_voting_company where com_id = '$com_id' AND ( ";
 	$count = 0;
-	$body_in = '<p>Updates for <b>'.$com_name.'</b> / <b>'.$meeting_types[$row_rep["meeting_type"]].'</b> / <b>'.date("d-M-y",$row_rep["meeting_date"]).'</b></p>';
+	$body_in = '<p>Updates for <b>'.$com_name.'</b> / <b>'.$row_rep["type"].'</b> / <b>'.date("d-M-y",$row_rep["meeting_date"]).'</b></p>';
 	$body_in .= '<table style="" cellpadding="5" cellspacing="3">';
 	foreach ($change_fields as $change) {
 		if($count != 0) $query.= ' OR ';

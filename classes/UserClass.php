@@ -200,12 +200,10 @@ class PA{
 	public $meeting_type;
 
 	public function __construct($id) {
-		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, companies.com_isin, evoting.name, evoting.link from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter  where proxy_ad.id='$id' ";
+		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, companies.com_isin, evoting.name, evoting.link, met_type.type as meeting_type_name from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter join met_type on proxy_ad.meeting_type = met_type.id  where proxy_ad.id='$id' ";
 
 		$query = mysql_query($sql);
 		$result = mysql_fetch_array($query);
-
-		$meeting_types = array("","AGM", "EGM", "PB","CCM");
 
 		$this->id = $id;
 		$this->company_id = stripslashes($result["com_id"]);
@@ -220,7 +218,8 @@ class PA{
 		$this->evoting_link = $result["link"];
 
 		$this->old_meeting = ($result["meeting_date"] < strtotime("today"))?true:false;
-		$this->meeting_type = $meeting_types[$result["meeting_type"]];
+		$this->meeting_type = $result["meeting_type_name"];
+		$this->meeting_type_id = $result["meeting_type"];
 		$this->year = $result["year"];
 		$this->gen_report = $result["report"];
 		$this->teasor = '<a target="_blank" href="'.$result["teasor"].'">'.$result["teasor"].'</a>';
@@ -366,31 +365,33 @@ class PA{
 	}
 
 	public function ses_voting($user_id, $type=null){
+		if($this->meeting_type_id != 5){
 
-		$query = mysql_query("SELECT user_proxy_allow.id from user_proxy_allow left join users on user_proxy_allow.user_id = users.id where (user_proxy_allow.user_id='$user_id' OR users.created_by_prim = '$user_id') AND user_proxy_allow.report_id='".$this->id."' and user_proxy_allow.status = 0 ");
+			$query = mysql_query("SELECT user_proxy_allow.id from user_proxy_allow left join users on user_proxy_allow.user_id = users.id where (user_proxy_allow.user_id='$user_id' OR users.created_by_prim = '$user_id') AND user_proxy_allow.report_id='".$this->id."' and user_proxy_allow.status = 0 ");
 
-		if(mysql_num_rows($query) == 0){
-			
-			$voting = new SesVoting();
-			$check_freeze = mysql_query("SELECT final_freeze, final_unfreeze from admin_proxy_ad where report_id='".$this->id."' and final_freeze != 0 order by id desc limit 1");
-			if(mysql_num_rows($check_freeze) > 0){
-				$row_freeze = mysql_fetch_array($check_freeze);
-				if($row_freeze["final_freeze"] != 0 && $row_freeze["final_unfreeze"] == 0) $flag_v = 1;
-				else $flag_v = 0;
-			} else $flag_v = 0;
+			if(mysql_num_rows($query) == 0){
+				
+				$voting = new SesVoting();
+				$check_freeze = mysql_query("SELECT final_freeze, final_unfreeze from admin_proxy_ad where report_id='".$this->id."' and final_freeze != 0 order by id desc limit 1");
+				if(mysql_num_rows($check_freeze) > 0){
+					$row_freeze = mysql_fetch_array($check_freeze);
+					if($row_freeze["final_freeze"] != 0 && $row_freeze["final_unfreeze"] == 0) $flag_v = 1;
+					else $flag_v = 0;
+				} else $flag_v = 0;
 
-		     if($flag_v == 1){
-		     	return $voting->voting_button($this->id,$this->company_name.' '.$this->isin, $type);
-		     } else {
-		     	return $this->request_button();
-		     }
+			     if($flag_v == 1){
+			     	return $voting->voting_button($this->id,$this->company_name.' '.$this->isin, $type);
+			     } else {
+			     	return $this->request_button();
+			     }
 
-		} else {
+			} else {
 
-			if($type == 1)
-				return 'The company was added post record date';
-			else
-				return '<a href="#stack1" data-toggle="modal" role="button" onclick="proxy_allow_ui('.$this->id.')" class="btn yellow span12 ttip" data-toggle="tooltip" title="The company was added in portfolio post the record date for the meeting. Click to allow users record votes for this meeting" style="max-width:100px; margin:5px 0 0 0" >Allow</a>';
+				if($type == 1)
+					return 'The company was added post record date';
+				else
+					return '<a href="#stack1" data-toggle="modal" role="button" onclick="proxy_allow_ui('.$this->id.')" class="btn yellow span12 ttip" data-toggle="tooltip" title="The company was added in portfolio post the record date for the meeting. Click to allow users record votes for this meeting" style="max-width:100px; margin:5px 0 0 0" >Allow</a>';
+			}
 		}
 	}
 

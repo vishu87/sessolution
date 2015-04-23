@@ -57,6 +57,8 @@ class SesVoting {
 		}
 
 		$pa_report = new PA($report_id);
+		if($pa_report->meeting_type_id == 5) die('No voting facility available for these meetings');
+
 		$users_auth = $pa_report->fetch_all_users();
 
 		$flag_auth = (in_array($parent_id, $users_auth))?true:false;
@@ -100,13 +102,15 @@ class SesVoting {
 
                               <select id="an_ses_id" onchange="select_ses_voting(<?php echo $report_id ?>)" class="m-wrap">
                               	<option value="0">Copy Data From..</option>
-                              	<option value="<?php echo $parent_id ?>"> Self Portfolio</option>
                               	<?php 
-                              	foreach ($check_auth as $usr_id) {
-                              		$name_sql = mysql_query("SELECT name from users where id='$usr_id' limit 1");
-									$row_name = mysql_fetch_array($name_sql);
-									echo '<option value="'.$usr_id.'">'.$row_name["name"].'</option>';
-                              	}
+                              	$query_sql_all = mysql_query("SELECT users.id, users.name, users.user_admin_name from users inner join user_voting_proxy_reports on users.id = user_voting_proxy_reports.user_id where (users.created_by_prim='$parent_id' || users.id='$parent_id') && user_voting_proxy_reports.report_id = $report_id  ");
+								while ($row_u = mysql_fetch_array($query_sql_all)) {
+									echo '<option value="'.$row_u["id"].'">';
+									if($row_u["id"] == $parent_id){
+										echo ($row_u["user_admin_name"]!='')?$row_u["user_admin_name"]:$row_u["name"];
+									} else echo $row_u["name"];
+									echo '</option>';
+								}
 
                               	?>
                               	<option value="-1"> None</option>

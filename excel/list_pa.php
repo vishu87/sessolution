@@ -112,7 +112,7 @@ $seq++;
 
 
 $count_student = 0;
-$meeting_types = array("","AGM", "EGM", "PB");
+
 foreach($proxy_ids as $proxy_id)
 {
  	
@@ -281,7 +281,7 @@ $objPHPExcel->getActiveSheet()->freezePane('D3');
 $objPHPExcel->getActiveSheet()->mergeCells('A1:'.$val_chr.'1');
 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', 'Proxy Advisory');
 $objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()->setWrapText(true);
-$objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.($seq-1).'')->applyFromArray($styleArrayl);
+$objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.'1')->applyFromArray($styleArray1);
 /*
 
 

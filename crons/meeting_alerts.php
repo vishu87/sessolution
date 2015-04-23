@@ -33,15 +33,14 @@ while ($row = mysql_fetch_array($query)) {
 }
 
 function createmessage( $report_id){
-	$meeting_types = array("","AGM", "EGM", "PB","CCM");
-			$query_rep = mysql_query("SELECT companies.com_name, proxy_ad.meeting_date, proxy_ad.meeting_type from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where id='$report_id' limit 1");
+			$query_rep = mysql_query("SELECT companies.com_name, proxy_ad.meeting_date, met_type.type from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id join met_type on proxy_ad.meeting_type = met_type.id where proxy_ad.id='$report_id' limit 1");
 			$row_rep = mysql_fetch_array($query_rep);
 		
 	$str = '<p>
 				This is an alert for upcoming meeting:
 			</p>
 			<p>
-				Meeting Type: <b>'.$meeting_types[$row_rep["meeting_type"]].'</b>
+				Meeting Type: <b>'.$row_rep["type"].'</b>
 			</p>
 			<p>
 				Company Name: <b>'.$row_rep["com_name"].'</b>

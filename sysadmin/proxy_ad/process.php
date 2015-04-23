@@ -109,6 +109,9 @@ if($_GET["cat"] == 1){
 								case 'CCM':
 									$met_type = 4;
 									break;
+								case 'CCMC':
+									$met_type = 5;
+									break;
 							}
 							$sql_check_dup = mysql_query("SELECT id from proxy_ad where com_id='$com_id' and meeting_date='$meeting_on' and meeting_type='$met_type' ");
 							if(mysql_num_rows($sql_check_dup) == 0){
@@ -166,7 +169,7 @@ if($_GET["cat"] == 2)
 {
 	$table = 'proxy_ad';
 	$rid = $_GET["rid"];
-	$ar_fields = array("meeting_date", "meeting_type","notice_link","teasor","annual_report","meeting_outcome","meeting_minutes","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","an_id","meeting_results");
+	$ar_fields = array("meeting_date", "ccm_type", "meeting_type","notice_link","teasor","annual_report","meeting_outcome","meeting_minutes","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","an_id","meeting_results");
 	$update = array();
 	
 	foreach($ar_fields as $ar){
@@ -176,6 +179,7 @@ if($_GET["cat"] == 2)
 	$report = $_FILES["report"]["name"];
 	$notice = $_FILES["notice"]["name"];
 	$proxy_slip = $_FILES["proxy_slip"]["name"];
+	$attendance_slip = $_FILES["attendance_slip"]["name"];
 
 	if($report != '')	{
 
@@ -209,6 +213,18 @@ if($_GET["cat"] == 2)
 		$proxy_slip = substr(str_shuffle(strtotime("now")), 0, 10).$proxy_slip;
 		move_uploaded_file($_FILES["proxy_slip"]["tmp_name"],"../../proxy_slips/".$proxy_slip);
 		$update["proxy_slip"] = $proxy_slip;
+	}
+
+	if($attendance_slip != ''){
+
+		$exten = explode('.',$attendance_slip);
+	    $last_val = sizeof($exten) - 1;
+	    $ext=$exten[$last_val];
+	    if(!in_array($ext, $file_types)) die('Please input a valid file');
+
+		$attendance_slip = substr(str_shuffle(strtotime("now")), 0, 10).$attendance_slip;
+		move_uploaded_file($_FILES["attendance_slip"]["tmp_name"],"../../attendance_slips/".$attendance_slip);
+		$update["attendance_slip"] = $attendance_slip;
 	}
 		
 
@@ -386,6 +402,17 @@ if($_GET["cat"] == 8){
 		}
 
 		
+}
+
+//Remove Notice
+if($_GET["cat"] == 9){
+	$report_id = $_GET["rid"];
+	
+
+	$query = "UPDATE proxy_ad set attendance_slip='' where id='$report_id' ";
+	//echo $query1.$query2.$query3;
+	if(mysql_query($query)) header("Location: edit.php?cat=5&success=2&id=".$report_id);
+	else header("Location: edit.php?cat=5&success=0&id=".$report_id);
 }
 
 ?>

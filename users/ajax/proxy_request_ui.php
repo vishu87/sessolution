@@ -5,10 +5,8 @@ require_once('../../classes/UserClass.php');
 $user = new User($_SESSION["MEM_ID"]);
 $report_id = $_POST["report_id"];
 
-
-  $meeting_types = array("","AGM", "EGM", "PB");
-  $report_types  = array("","Proxy Advisory","CGS","Research");
-  $task_type=array("","Data","Analysis","Review");
+$report_types  = array("","Proxy Advisory","CGS","Research");
+$task_type=array("","Data","Analysis","Review");
 
 	
 

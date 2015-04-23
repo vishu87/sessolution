@@ -14,7 +14,7 @@ if(!$db) {
 }
 
 $base_font_size='15';
-$meeting_types_full = array("","AGM", "EGM", "Postal Ballot","CCM");
+$meeting_types_full = array("","AGM", "EGM", "Postal Ballot","CCM (Equity Shareholders)","CCM (Creditors)");
 
 $types_res_os_short = array("","O","S");
 

@@ -13,6 +13,10 @@ if(!isset($title)) {
       margin-bottom: 1px;
 
    }
+   .meet4_big, .meet5_big{
+    margin-top:6px !important;
+   }
+
    .meet1, .meet1_big{
      background: #6576C2;
    }
@@ -24,6 +28,9 @@ if(!isset($title)) {
    }
    .meet4, .meet4_big{
      background: #CC3300;
+   }
+   .meet5, .meet5_big{
+     background: #A12A85;
    }
    .meet1:hover, .meet1_big:hover{
      background: #002AFF;
@@ -37,6 +44,9 @@ if(!isset($title)) {
    .meet4:hover, .meet4_big:hover{
      background: #FF3300;
    }
+   .meet5:hover, .meet5_big:hover, .meet5_big:active{
+     background: #C745A8 !important;
+   }
    .big2{
     /*padding-top:2px;
     padding-bottom:2px;*/
@@ -47,22 +57,25 @@ if(!isset($title)) {
 <?php
     if(isset($_GET["type"])){
       $type = decrypt($_GET["type"]);
-      if($type < 0 || $type > 4) die("You are not playing well");
+      if($type < 0 || $type > 5) die("You are not playing well");
       else {
         echo '<style type="text/css">';
          switch ($type) {
           case '1':
-            echo '.meet2,.meet3,.meet4{display:none;}';
+            echo '.meet2,.meet3,.meet4,.meet5{display:none;}';
             break;
           
            case '2':
-            echo '.meet1,.meet3,.meet4{display:none;}';
+            echo '.meet1,.meet3,.meet4,.meet5{display:none;}';
             break;
              case '3':
-            echo '.meet2,.meet1,.meet4{display:none;}';
+            echo '.meet2,.meet1,.meet4,.meet5{display:none;}';
             break;
              case '4':
-            echo '.meet2,.meet3,.meet1{display:none;}';
+            echo '.meet2,.meet3,.meet1,.meet5{display:none;}';
+            break;
+            case '5':
+            echo '.meet2,.meet3,.meet1,.meet4{display:none;}';
             break;
         }
         echo '</style>';
@@ -133,15 +146,16 @@ if(!isset($title)) {
   </div>
 
    <div class="row-fluid" style="margin-bottom:20px;">
-    <div class="span4"> 
+    <div class="span5"> 
       <a class="btn <?php echo (!isset($type) || $type == 0)?'big2':''; ?>" style="" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year;?>&amp;com_type=<?php echo encrypt($com_type); ?>">All</a>
       <a class="btn meet1_big <?php echo ($type == 1)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('1') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">AGM</a>
       <a class="btn meet2_big <?php echo ($type == 2)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('2') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">EGM</a>
-      <a class="btn meet3_big <?php echo ($type == 3)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('3') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">PB</a>
-      <a class="btn meet4_big <?php echo ($type == 4)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('4') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">CCM</a>
+      <a class="btn meet3_big <?php echo ($type == 3)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('3') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">Postal Ballot</a>
+      <a class="btn meet4_big <?php echo ($type == 4)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('4') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">CCM (Equity Shareholders)</a>
+      <a class="btn meet5_big <?php echo ($type == 5)?'big2':''; ?>" style="color:#fff;" data-toggle="modal" href="#myModalCompact" onclick="ccm_types()">CCM (Creditors)</a>
 
     </div>
-        <div class="span4" align="center"> 
+        <div class="span3" align="center"> 
           <div class="btn-group">
             
             <a class="btn blue <?php echo ($com_type == 6)?'active':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt($type) ?>&amp;com_type=<?php echo encrypt('6') ?>">Subscribed</a>
@@ -229,11 +243,15 @@ if(!isset($title)) {
 
                               if(sizeof($proxy_ids) < 5 || ( isset($type) && $type != 0 )){
                                  foreach ($proxy_ids as $proxy_id) {
-                                    $sql_p = mysql_query("SELECT companies.com_name, proxy_ad.meeting_type, proxy_ad.meeting_date from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$proxy_id' limit 1 ");
+                                    $sql_p = mysql_query("SELECT companies.com_name, proxy_ad.meeting_type, proxy_ad.ccm_type, proxy_ad.meeting_date from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$proxy_id' limit 1 ");
                                     $row_p = mysql_fetch_array($sql_p);
+                                    if($type == 5){
+                                      if($_GET["ccm_type"] != $row_p["ccm_type"])
+                                        continue;
+                                    }
                                     $com_name_clr = name_filter($row_p["com_name"]);
                                     $tooltip_check = ($row_p["meeting_type"] == 3)?'':'ttip';
-                                    echo '<div class="meet meet'.$row_p["meeting_type"].' '.$tooltip_check.'" data-html="true" data-toggle="modal" href="#stack1" onclick="view_report(\''.$com_name_clr.'\','.$proxy_id.',1);" data-toggle="tooltip" title="Meeting Date: '.date("d-M-y",$row_p["meeting_date"]).'">'.$row_p["com_name"].'</div>';
+                                    echo '<div class="meet meet'.$row_p["meeting_type"].' '.$tooltip_check.'" data-html="true" data-toggle="modal" href="#stack1" onclick="view_report(\''.$com_name_clr.'\','.$proxy_id.',1,'.$row_p["meeting_type"].');" data-toggle="tooltip" title="Meeting Date: '.date("d-M-y",$row_p["meeting_date"]).'">'.$row_p["com_name"].'</div>';
                                  }
                               } else {
                                  $str_proxy = implode(',', $proxy_ids);
@@ -252,7 +270,8 @@ if(!isset($title)) {
                                   $sql_p = mysql_query("SELECT id from proxy_ad  where meeting_type='4' and id IN (".$str_proxy.") ");
                                  if(mysql_num_rows($sql_p)>0) echo '<div class="meet meet4">'.mysql_num_rows($sql_p).' CCM</div>';
 
-
+                                 $sql_p = mysql_query("SELECT id from proxy_ad  where meeting_type='5' and id IN (".$str_proxy.") ");
+                                 if(mysql_num_rows($sql_p) > 0) echo '<div class="meet meet5">'.mysql_num_rows($sql_p).' CCM (C)</div>';
                                  echo '</div>';
 
                               }
@@ -350,15 +369,22 @@ if(!isset($title)) {
 
 <script type="text/javascript">
 
-function view_report(company_name, proxy_id, report_type){
-   $("#stack1 .modal-header").html('<div class="row-fluid"><div class="span6"><h3>'+company_name+'</h3></div><div class="span6" style="text-align:right"><a href="javascript:;" role="button" class="btn blue" onclick="view_vote_upcoming(\''+company_name+'\',' + proxy_id +' )" >Vote</a>&nbsp;<a href="javascript:;" role="button" class="btn yellow" onclick="view_report(\''+company_name+'\',' + proxy_id +',1 )" >Details</a></div></div>'); 
+function view_report(company_name, proxy_id, report_type, meeting_type){
+  var str = '';
+  str += '<div class="row-fluid"><div class="span6"><h3>'+company_name+'</h3></div><div class="span6" style="text-align:right">';
+  if(meeting_type != 5)
+    str += '<a href="javascript:;" role="button" class="btn blue" onclick="view_vote_upcoming(\''+company_name+'\',' + proxy_id +' )" >Vote</a>&nbsp;';
+  str += '<a href="javascript:;" role="button" class="btn yellow" onclick="view_report(\''+company_name+'\',' + proxy_id +',1 )" >Details</a></div></div>';
+
+
+   $("#stack1 .modal-header").html(str); 
       $("#stack1 .modal-body").html("<p>Loading...</p>");
         var file = 'view_report';
          $.post("ajax/"+ file +".php", {report_id:proxy_id, report_type:report_type}, function(data) {
              $("#stack1 .modal-body").html(data);
        });
 }
-//<a href="javascript:;" role="button" class="btn blue" onclick="view_request(\''+company_name+'\',' + proxy_id +' )" >Proxy Request</a>&nbsp;
+
 
 function view_compact(date, day_id){
    $("#myModalLabel").text(date); 
@@ -370,6 +396,11 @@ function view_compact(date, day_id){
        });
 }
 
+function ccm_types(){
+  $("#myModalLabel").text('CCM (Creditors)');
+  var str = '<a class="btn meet5_big" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('5') ?>&amp;ccm_type=1&amp;com_type=<?php echo encrypt($com_type); ?>">Secured</a>&nbsp;&nbsp;<a class="btn meet5_big" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('5') ?>&amp;ccm_type=2&amp;com_type=<?php echo encrypt($com_type); ?>">Unsecured</a>'
+  $("#modal-body").html(str);
+}
 
 function view_request(company_name,proxy_id){
        $("#stack1 .modal-body").html("<p>Loading...</p>");

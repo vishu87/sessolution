@@ -11,7 +11,7 @@ foreach ($proxy_ids as $proxy_id) {
 	$row_p = mysql_fetch_array($sql_p);
   $com_name_clr = name_filter($row_p["com_name"]);
   $tooltip_check = ($row_p["meeting_type"] == 3)?'':'ttip';
-	echo '<div class="meet meet'.$row_p["meeting_type"].' '.$tooltip_check.'" data-toggle="modal" href="#stack1" onclick="view_report(\''.$com_name_clr.'\','.$proxy_id.',1);" data-toggle="tooltip" title="Meeting Date: '.date("d-M-y",$row_p["meeting_date"]).'">'.$row_p["com_name"].'</div>';
+	echo '<div class="meet meet'.$row_p["meeting_type"].' '.$tooltip_check.'" data-toggle="modal" href="#stack1" onclick="view_report(\''.$com_name_clr.'\','.$proxy_id.',1,'.$row_p["meeting_type"].');" data-toggle="tooltip" title="Meeting Date: '.date("d-M-y",$row_p["meeting_date"]).'">'.$row_p["com_name"].'</div>';
 }
 
 ?>
@@ -19,7 +19,8 @@ foreach ($proxy_ids as $proxy_id) {
     <div class="span12">
       <button class="btn meet1" style="color:#fff;">AGM</button>
       <button class="btn meet2" style="color:#fff;">EGM</button>
-      <button class="btn meet3" style="color:#fff;">PB</button>
-      <button class="btn meet4" style="color:#fff;">CCM</button>
+      <button class="btn meet3" style="color:#fff;">Postal Ballot</button>
+      <button class="btn meet4" style="color:#fff; margin-top:6px;">CCM (Equity Shareholders)</button>
+      <button class="btn meet5" style="color:#fff;  margin-top:6px;">CCM (Creditors)</button>
     </div>
-</div>
+  </div>

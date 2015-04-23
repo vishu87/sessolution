@@ -146,20 +146,22 @@ class PA_admin{
 	public $meeting_type;
 
 	public function __construct($id) {
-		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id  where proxy_ad.id='$id' ";
+		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, met_type.type as meeting_type_name from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id join met_type on proxy_ad.meeting_type = met_type.id  where proxy_ad.id='$id' ";
 
 		$query = mysql_query($sql);
 		$result = mysql_fetch_array($query);
-
-		$meeting_types = array("","AGM", "EGM", "PB","CCM");
 
 		$this->id = $id;
 		$this->company_id = stripslashes($result["com_id"]);
 		$this->company_name = stripslashes($result["com_name"]);
 		$this->meeting_date = ($result["meeting_date"])?date("d M Y",$result["meeting_date"]):'';
+		$this->evoting_start = ($result["evoting_start"])?date("d M Y",$result["evoting_start"]):'';
 		$this->evoting_end = ($result["evoting_end"])?date("d M Y",$result["evoting_end"]):'';
+		$this->evoting_plateform = $result["evoting_plateform"];
+		
 		$this->meeting_timestamp = $result["meeting_date"];
-		$this->meeting_type = $meeting_types[$result["meeting_type"]];
+		$this->meeting_type = $result["meeting_type_name"];
+		$this->meeting_type_id = $result["meeting_type"];
 		$this->year = $result["year"];
 		$this->gen_report = $result["report"];
 		$this->teasor = $result["teasor"];
@@ -279,14 +281,16 @@ class PA_admin{
 	}
 
 	public function ses_voting($count){
-		if($this->check_freeze()){
-			$class_add = 'green';
-		} else if($this->check_resolutions()) {
-			$class_add = 'yellow';
-		}
-		?>
-		<button class="btn <?php echo $class_add ?>" data-toggle="modal" href="#stack1" onclick="ses_voting(<?php echo $count?>,'<?php echo $this->company_name; ?>',<?php echo $this->id?>)">Voting</button>
-		<?php
+		if($this->meeting_type_id != 5){
+			if($this->check_freeze()){
+				$class_add = 'green';
+			} else if($this->check_resolutions()) {
+				$class_add = 'yellow';
+			}
+			?>
+			<button class="btn <?php echo $class_add ?>" data-toggle="modal" href="#stack1" onclick="ses_voting(<?php echo $count?>,'<?php echo $this->company_name; ?>',<?php echo $this->id?>)">Voting</button>
+			<?php
+		}	
 	}
 
 	public function edit_button($count){

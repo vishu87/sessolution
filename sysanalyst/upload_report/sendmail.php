@@ -1,10 +1,9 @@
   function send_email($proxy_id){
 
-  $rep_sql = mysql_query("SELECT companies.com_name, proxy_ad.* from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id='$proxy_id' ");
+  $rep_sql = mysql_query("SELECT companies.com_name, proxy_ad.*, met_type.type from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id join met_type on proxy_ad.meeting_type = met_type.id where proxy_ad.id='$proxy_id' ");
   $row_rep = mysql_fetch_array($rep_sql);
   $com_name = $row_rep["com_name"];
   $com_id = $row_rep["com_id"];
-  $meeting_types = array("","AGM", "EGM", "PB","CCM");
   
   $mail = new PHPMailer();
   $mail->IsSMTP();
@@ -61,7 +60,7 @@
               
             }
             if($count_user > 0){
-              $body_in = '<p> Report has been uploaded for <b>'.$com_name.'</b> / <b>'.$meeting_types[$row_rep["meeting_type"]].'</b> / <b>'.date("d-M-y",$row_rep["meeting_date"]).'</b>. Please check the attached file.</p><hr>
+              $body_in = '<p> Report has been uploaded for <b>'.$com_name.'</b> / <b>'.$row_rep[type"].'</b> / <b>'.date("d-M-y",$row_rep["meeting_date"]).'</b>. Please check the attached file.</p><hr>
             <i>This is an auto generated email. Please do not reply.</i>';
             //echo $body_in;
               $mail->Subject = "Meeting Report Update Alert";
@@ -101,7 +100,7 @@ $users = array();
         $query_send = mysql_query($sql_send);
         if(mysql_num_rows($query_send) > 0) {
           
-          $body_in = '<p> Report has been uploaded for <b>'.$com_name.'</b> / <b>'.$meeting_types[$row_yr["meeting_type"]].'</b> / <b>'.date("d-M-y",$row_yr["meeting_date"]).'</b>. Please check the attached file.</p><hr>
+          $body_in = '<p> Report has been uploaded for <b>'.$com_name.'</b> / <b>'.$row_yr["type"].'</b> / <b>'.date("d-M-y",$row_yr["meeting_date"]).'</b>. Please check the attached file.</p><hr>
         <i>This is an auto generated email. Please do not reply.</i>';
           $mail->addAttachment('../../custom_reports/'.$name); 
         $mail->IsHTML(true);
