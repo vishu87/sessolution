@@ -210,7 +210,7 @@ if($row_sec["com_sec_email"] != ''){
   $body = mysql_real_escape_string($body_in);
   $at_folder = 'proxy_reports';
   $at_file = $pa_report->gen_report;
-  $sql = "INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$email_string','','','','$subject', '$body','$at_folder','$at_file') ";
+  $sql = "INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$email_string','info@sesgovernance.com','','','$subject', '$body','$at_folder','$at_file') ";
   mysql_query($sql);
 
 }

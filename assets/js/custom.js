@@ -208,6 +208,7 @@ function load_edit(count,report_id, company_name, meeting_date){
    $("#myModal").css('margin-left','-490px');
    $("#modal-body").css('min-height','405px');
    $("#modal-body").html('<iframe src="proxy_ad/edit.php?id=' +report_id+ '" style="border:0; width:100%; height:400px;"></iframe>');
+   
 }
 function load_custom(count, report_id, company_name, meeting_date, company_id){
      $("#close_button").attr('onclick','refresh_tr('+count+','+report_id+')');

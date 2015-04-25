@@ -12,3 +12,7 @@ PA Schedule Upload -> CCMC for type 5 CCM(Creditors)
 Database change proxy_ad ccm_type INT 1 : 1-> Secured 2->Unsecured attendance_slip VARCHAR 200
 
 root attendance_slips folder
+
+//
+
+proxy_ad key_issues TEXT

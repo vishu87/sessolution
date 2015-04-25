@@ -19,10 +19,16 @@ if(!$db) {
 <head>
   <meta charset="utf-8" />
   <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../../assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" rel="stylesheet" />
+
   <link href="../../assets/css/metro.css" rel="stylesheet" />
   <script src="../../assets/js/jquery-1.8.3.min.js"></script>
   <link href="../../assets/datepicker/css/datepicker.css" rel="stylesheet" />
   <script type="text/javascript" src="../../assets/datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="../../assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+  <script src="../../assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+
+
   <style type="text/css">.page-title {
     padding: 0px;
     font-size: 30px;
@@ -362,6 +368,19 @@ if(!$db) {
 </div>
 <!--/row-->
 
+<div class="row-fluid">
+ <div class="span12 ">
+   <div class="control-group">
+     <label class="control-label">Key Issues</label>
+     <div class="controls">
+       <textarea name="key_issues" class="textareahtml" style="height:150px; width:90%">
+        <?php echo $report["key_issues"] ?>
+       </textarea>
+    </div>
+  </div>
+</div>
+</div>
+
 
 <!--/row-->
 
@@ -390,6 +409,16 @@ jQuery(document).ready(function() {
 
       $('.datepicker_month_top').datepicker({orientation: "top auto",format:'dd-mm-yyyy', minViewMode:'1',}).on('changeDate', function(ev){
         $(this).datepicker('hide');
+      });
+
+      $('.textareahtml').wysihtml5({
+        "font-styles": false, //Font styling, e.g. h1, h2, etc. Default true
+        "emphasis": true, //Italics, bold, etc. Default true
+        "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+        "html": false, //Button which allows you to edit the generated HTML. Default false
+        "link": false, //Button to insert a link. Default true
+        "image": false, //Button to insert an image. Default true,
+        "color": false //Button to change color of font  
       });
 
       $("select[name=meeting_type]").change(function(){

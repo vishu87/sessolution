@@ -169,7 +169,7 @@ if($_GET["cat"] == 2)
 {
 	$table = 'proxy_ad';
 	$rid = $_GET["rid"];
-	$ar_fields = array("meeting_date", "ccm_type", "meeting_type","notice_link","teasor","annual_report","meeting_outcome","meeting_minutes","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","an_id","meeting_results");
+	$ar_fields = array("meeting_date", "ccm_type", "meeting_type","notice_link","teasor","annual_report","meeting_outcome","meeting_minutes","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","an_id","meeting_results","key_issues");
 	$update = array();
 	
 	foreach($ar_fields as $ar){
