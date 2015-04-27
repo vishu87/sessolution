@@ -187,7 +187,7 @@ class SesVoting {
 		         if($count_n > 0) $pre = mysql_fetch_array($sql_vote_pre);
 
 		         if($user_pa->can_change && $user_pa->freeze == 0) {
-			         $str .= '<select name="vote[]" class="small m-wrap" id="vote_'.$count.'" ><option value="0">Select</option> ';
+			         $str .= '<select name="vote[]" class="small m-wrap vote" id="vote_'.$count.'" ><option value="0">Select</option> ';
 			         $sql_reso = mysql_query("Select * from votes");
 			         while ($row_reso = mysql_fetch_array($sql_reso)) {
 			            $str .= '<option value="'.$row_reso["id"].'" ';
@@ -221,7 +221,7 @@ class SesVoting {
 		         $str .= '</td><td>';
 
 		         if($user_pa->can_change && $user_pa->freeze == 0){
-		         	 $str .= '<textarea name="comment[]" id="comment_'.$count.'">';
+		         	 $str .= '<textarea name="comment[]" class="comment" id="comment_'.$count.'">';
 		          	if($count_n > 0){
 		                $str .= stripcslashes($pre["comment"]);
 		            }
@@ -422,7 +422,7 @@ class SesVoting {
 												} else {
 													$value_put = '';
 												}
-												
+												$value_put .= '<button class="mini btn pull-right cp_btn_'.$row_reso["id"].'" style="font-size:10px; padding:0 10px; margin:5px 0" id="cp_btn_'.$usr_id.'_'.$row_reso["id"].'" onclick="copy_voting('.$usr_id.','.$row_reso["id"].')">Copy</button>';
 												break;
 											
 											case 1:

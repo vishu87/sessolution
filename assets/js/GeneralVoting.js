@@ -289,6 +289,29 @@ function select_ses_voting(report_id){
      });
 }
 
+function copy_voting(user_id, vote_id){
+  $("#cp_btn_"+user_id+"_"+vote_id).html('Copying');
+        var file = "copy_voting";
+       $.post("ajax/"+ file +".php", {user_id:user_id,vote_id:vote_id}, function(data) {
+            data = $.parseJSON(data);
+          if(data.success == 1){
+            $('.cp_btn_'+vote_id).html('Copy').removeClass('green');
+            $("#cp_btn_"+user_id+"_"+vote_id).html('Copied').addClass('green');
+              var vote_select = $("#tr_vote_"+vote_id+' .vote');
+              var comment_select = $("#tr_vote_"+vote_id+' .comment');
+
+              vote_select.find('option').each(function(){
+                if($(this).val() == data.vote){
+                  $(this).attr('selected','selected');
+                }
+              });
+              comment_select.val(data.comment);
+          } else {
+            $("#cp_btn_"+user_id+"_"+vote_id).html('Copy');
+          }
+     });
+}
+
 
 function select_self_voting(report_id,parent_id){
   $("#VotingFormTable").html('Loading.. Please Wait');
