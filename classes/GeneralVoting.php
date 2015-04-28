@@ -280,7 +280,7 @@ class SesVoting {
 		}
 
 		if($_SESSION["MEM_ID"] == $parent_id && $type == 2){
-			if($user_pa->marked == 0){
+			if($user_pa->marked == 0 || $user_pa->marked < strtotime("today")){
 				?>
 					<a href="javascript:;" class="btn span4 yellow" id="set_mark" onclick="set_mark(<?php echo $proxy_id; ?>)">Mark for Proxy Committee Approval</a>
 				<?php
