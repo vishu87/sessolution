@@ -16,3 +16,5 @@ root attendance_slips folder
 //
 
 proxy_ad key_issues TEXT
+
+customized_reports check_id INT(1) custom_reco TEXT

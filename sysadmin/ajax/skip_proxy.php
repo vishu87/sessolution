@@ -17,6 +17,7 @@ if(!isset($_POST["id"])  || $_SESSION["MEM_ID"] == '' || $_SESSION["PRIV"] != 1)
 
 
 if(mysql_query("UPDATE proxy_ad set skipped_on='".strtotime("now")."' , skipped_by = '$_SESSION[MEM_ID]' where id = '$_POST[id]' ")){
+	mysql_query("DELETE from report_analyst where report_id = '$_POST[id]' and rep_type = 1 ");
 	echo 'success';
 } else {
 	echo 'fail';

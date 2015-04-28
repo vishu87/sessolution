@@ -182,6 +182,7 @@ class PA_admin{
 		$this->abridged_report = $result["abridged_report"];
 		$this->vote_completed_on = $result["vote_completed_on"];
 		$this->template_release = $result["template_release"];
+		$this->custom_report_freeze = $result["custom_report_freeze"];
 		
 	}
 
@@ -253,7 +254,7 @@ class PA_admin{
 	}
 
 	public function release($count){
-		if($this->check_status() == 0){
+		if($this->check_status() == 0 && $this->custom_report_freeze != 0){
 			if($this->released_on == 0){
 		?>
 		 <a href="javascript:;" role="button" class="btn blue" id="release_<?php echo $this->id ?>" onclick="release_reports(<?php echo $count?>,<?php echo $this->company_id;?>,<?php echo $this->id;?>,<?php echo $this->year; ?>);">Release<br>Reports</a> 
@@ -330,16 +331,7 @@ class PA_admin{
     	if($this->flag_users == 1){
     		$users = fetch_customized_users($this->company_id, $this->year);
             if(sizeof($users) > 0){
-		    foreach ($users as $user) {
-		       $query_custom = mysql_query("SELECT report_upload from customized_reports where user_id='$user' and report_id='".$this->id."' ");
-		       if(mysql_num_rows($query_custom) > 0){
-		         $row_custom = mysql_fetch_array($query_custom);
-		        if($row_custom["report_upload"] == '') $flag_check = 1;
-		       } else {
-		        $flag_check = 1;
-		     }
-		    }	
-		    $color = ($flag_check == 1)?'':'green';
+		    $color = ($this->custom_report_freeze == 0)?'':'green';
     	?>
 		  <a href="#myModal" role="button" class="btn <?php echo $color; ?>" data-toggle="modal" data-backdrop="static" data-keyboard="false"  onclick="load_custom(<?php echo $count;?>,<?php echo $this->id;?>,'<?php echo $this->company_name?>','<?php echo $this->meeting_date?>',<?php echo $this->company_id?>)">Custom Reports</a>
 		 <?php
@@ -389,10 +381,13 @@ class PA_admin{
 		  $users = fetch_customized_users($this->company_id, $this->year);
 		  if(sizeof($users) > 0){
 		    foreach ($users as $user) {
-		       $query_custom = mysql_query("SELECT report_upload from customized_reports where user_id='$user' and report_id='".$this->id."' ");
+		       $query_custom = mysql_query("SELECT check_id, custom_reco, report_upload from customized_reports where user_id='$user' and report_id='".$this->id."' ");
 		       if(mysql_num_rows($query_custom) > 0){
-		         $row_custom = mysql_fetch_array($query_custom);
-		        if($row_custom["report_upload"] == '') $flag_check = 1;
+		         	$row_custom = mysql_fetch_array($query_custom);
+		        	if($row_custom["report_upload"] == '') $flag_check = 1;
+		        	if($row_custom["check_id"] == 1 && $row_custom["custom_reco"] == ''){
+		        		$flag_check = 1;
+		        	}
 		       } else {
 		        $flag_check = 1;
 		     }
