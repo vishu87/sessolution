@@ -230,7 +230,10 @@ if($_GET["cat"] == 4){
 			 			$com_count = mysql_num_rows($query_com_check);
 			 		} else $com_count = 0;
 			 		
-			 	}
+			 	}else {
+				 		$query_com_check = mysql_query("SELECT com_id, com_name from companies where com_bse_code='$bse' and com_isin='$isin' limit 1");
+				 		$com_count = mysql_num_rows($query_com_check);
+				 	}
 				
 				if($com_count > 0 ){
 					$check_user = mysql_query("SELECT id from users where username = '$pm_email' and ( id = $user_id OR created_by_prim = $user_id  ) limit 1");
