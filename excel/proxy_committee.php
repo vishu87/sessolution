@@ -231,7 +231,7 @@ $objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()
 $objPHPExcel->getActiveSheet()->setTitle('MIS Report');
 
 
-$name = $name.'_ProxyCommitteeAproval_'.date("dMy",strtotime("today"));
+$name = $name.'_VotingCommitteeAproval_'.date("dMy",strtotime("today"));
 
 header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment;filename="'.$name.'.xls"');

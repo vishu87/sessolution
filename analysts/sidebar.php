@@ -21,7 +21,7 @@
 				<li class="<?php echo ($sidebar=='voting_records')?'active open':'';?> has-sub">
 					<a href="javascript:;">
 					<i class="icon-legal"></i> 
-					<span class="title">My Portfolio</span>
+					<span class="title">Portfolio Management</span>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					</a>

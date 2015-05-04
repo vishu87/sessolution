@@ -127,10 +127,14 @@ if(!isset($title)) {
                                        <label class="control-label">Meeting Type</label>
                                        <div class="controls">
                                            <select name="meeting_type" id="meeting_type">
-                                              <option value="1">AGM</option>
-                                              <option value="2">EGM</option>
-                                              <option value="3">PB</option>
-                                              <option value="4">CCM</option>
+                                             <?php
+                                                $sql_type = mysql_query("SELECT * from met_type");
+                                                while ($type = mysql_fetch_array($sql_type)) {
+                                                  echo '<option value="'.$type["id"].'" ';
+                                                  if($type["id"] == $report["meeting_type"]) echo 'selected';
+                                                  echo '>'.$type["type"].'</option>';
+                                                }
+                                                ?>
                                            </select>
                                           <span class="help-block" ></span>
                                        </div>

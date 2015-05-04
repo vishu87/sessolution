@@ -612,10 +612,10 @@ function set_mark(report_id){
     var file = 'set_mark';
      $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
       if(data == 'success'){
-        item.html("Unmark for Proxy Committee Approval");
+        item.html("Unmark for Voting Committee Approval");
         item.attr('onclick','set_unmark('+report_id+')');
       } else {
-        item.html("Mark for Proxy Committee Approval");
+        item.html("Mark for Voting Committee Approval");
         bootbox.alert('Failure');
       }
   }); 
@@ -627,10 +627,10 @@ function set_unmark(report_id){
     var file = 'set_unmark';
      $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
       if(data == 'success'){
-        item.html("Mark for Proxy Committee Approval");
+        item.html("Mark for Voting Committee Approval");
         item.attr('onclick','set_unmark('+report_id+')');
       } else {
-        item.html("Unmark for Proxy Committee Approval");
+        item.html("Unmark for Voting Committee Approval");
         bootbox.alert('Failure');
       }
   }); 

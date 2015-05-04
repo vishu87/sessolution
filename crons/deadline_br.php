@@ -15,6 +15,10 @@ if(!$db) {
 }
 
 $today = strtotime("today");
+// Delete Skipped proxy reports 
+
+
+
 
 $query = "SELECT analysts.name, analysts.email, report_analyst.* from report_analyst inner join analysts on report_analyst.an_id = analysts.an_id where deadline < '$today'  and completed_on='' ";
 //echo $query.'<br>';
@@ -24,9 +28,9 @@ $sql = mysql_query($query);
 $subject = "Deadline Breached"; 
 	
 while ($row = mysql_fetch_array($sql)) {
-	
+
 	$body = createmessage($row["rep_type"],$row["report_id"],$task_types[$row["type"]],$row["deadline"]);	
-	echo $body;
+	
 
 	mysql_query("INSERT into pending_email (an_id, report_analyst_id, num_days) values ('$row[an_id]','$row[id]','-1') ");
   	
@@ -37,10 +41,10 @@ while ($row = mysql_fetch_array($sql)) {
 
 function createmessage($rep_type, $report_id, $task_type,$seven_day){
 	$analysts = array();
- $sql_an = mysql_query("SELECT an_id, name from analysts ");
- while ($row_an = mysql_fetch_array($sql_an)) {
-   $analysts[$row_an["an_id"]] = $row_an["name"];
- }
+	 $sql_an = mysql_query("SELECT an_id, name from analysts ");
+	 while ($row_an = mysql_fetch_array($sql_an)) {
+	   $analysts[$row_an["an_id"]] = $row_an["name"];
+	 }
 
 	switch ($rep_type) {
 		case 1:

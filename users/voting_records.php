@@ -13,7 +13,7 @@
 		$id=1;
 	}
 
-	$title = 'My Portfolio';
+	$title = 'Portfolio Management';
 
 	if(isset($_GET["type"])){
 		$type= mysql_real_escape_string($_GET["type"]);
