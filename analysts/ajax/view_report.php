@@ -19,8 +19,8 @@ $update = array();
 echo '<table class="table table-bordered table-hover">';
 switch ($report_type) {
 	case '1':
-		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","Evoting Platform","Vote Record Date","Meeting Type","Report","Notice","Proxy Slips","Annual Report","Meeting Outcome","Meeting Minutes");
-		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","VoteRecordDate","MeetingType","Report","Notice","ProxySlips","AnnualReport","MeetingOutcome","MeetingMinutes");
+		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","Evoting Platform","Vote Record Date","Meeting Type","Report","Notice","Proxy Slips","Attendance Slip","Annual Report","Meeting Outcome","Meeting Minutes");
+		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","VoteRecordDate","MeetingType","Report","Notice","ProxySlips","AttendanceSlips","AnnualReport","MeetingOutcome","MeetingMinutes");
 		$pa_view = new PA($report_id);
 		
 		$user->pa_subscribed_comapnies_year($user->parent,$pa_view->year);
@@ -47,6 +47,8 @@ switch ($report_type) {
 
 		$update["Notice"] = $pa_view->notice_final();
 		$update["ProxySlips"] = $pa_view->slip();
+		$update["AttendanceSlips"] = $pa_view->attendance();
+
 
 		$update["Teasor"] = $pa_view->teasor;
 		$update["AnnualReport"] = $pa_view->annual_report;

@@ -229,6 +229,7 @@ class PA{
 		$this->notice = $result["notice"];
 		$this->notice_link = '<a target="_blank" href="'.$result["notice_link"].'">'.$result["notice_link"].'</a>';
 		$this->proxy_slip = $result["proxy_slip"];
+		$this->attendance_slip = $result["attendance_slip"];
 		$this->is_skipped = ($result["skipped_on"] == 0)?0:1;
 		$this->is_released = ($result["released_on"] == 0)?false:true;
 		
@@ -346,6 +347,14 @@ class PA{
 	public function slip(){
 		if($this->proxy_slip != ''){
          	return '<a href="../proxy_slips/'.$this->proxy_slip.'" target="_blank">View<a>';
+        } else {
+        	return '';
+        }
+
+	}
+	public function attendance(){
+		if($this->attendance_slip != ''){
+         	return '<a href="../attendance_slips/'.$this->attendance_slip.'" target="_blank">View<a>';
         } else {
         	return '';
         }
