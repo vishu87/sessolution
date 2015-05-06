@@ -19,8 +19,8 @@ $mail->IsSMTP();
 $mail->SMTPAuth   = true; 
 $mail->SMTPSecure = "tls"; 
 $mail->Host       = "email-smtp.us-east-1.amazonaws.com";
-$mail->Username   = "AKIAID7CBUQKCREFMSBQ";
-$mail->Password   = "AvphiYmJWkhaQDvZsGEn6Jla1AFBmdVOqi4WnDf6wKdH";
+$mail->Username   = "AKIAI6EAGU5WVD3FKOYA";
+$mail->Password   = "Av+Zj3bh5tu5sVo9D4wOCAB4D2NHnpwPa2x6zTtxSBxu";
 $mail->SetFrom('info@sesgovernance.com', 'SES Governance'); //from (verified email address)
 $mail->IsHTML(true);
 
