@@ -61,9 +61,10 @@ while ($row = mysql_fetch_array($sql)) {
 	}
 
 	if($row["more_attach"] != ''){
-		$more_attach = unserialize($more_attach);
+		$more_attach = unserialize($row["more_attach"]);
 		foreach ($more_attach as $attach) {
-			$mail->addAttachment(ROOT_PATH.'../'.$attach["folder"].'/'.$attach["file"], substr($row["at_file"], 10));
+			echo $attach["folder"];
+			$mail->addAttachment(ROOT_PATH.'../'.$attach["folder"].'/'.$attach["file"], substr($attach["file"], 10));
 		}
 	}
 
