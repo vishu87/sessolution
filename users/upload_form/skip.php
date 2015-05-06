@@ -52,6 +52,8 @@ if($proxy_module == 1){
 }
 
 $res = mysql_fetch_array($sql);
+$holdings_file = $res["hodlings_file"];
+
 $report_id = $res["proxy_id"];
 $user_id = $res["user_id"];
 $voter_email = $res["email"];
@@ -76,13 +78,15 @@ $body = '';
             
             $body = '<table class="table table-bordered table-hover">';
 
-                $ar_fields_name = array("Company","Meeting Details","Client Details","Proxy Appointed");
-                $ar_fields_type = array("Company","MetDet","ProxyRequest","ProxyAppointed");
+                $ar_fields_name = array("Company","Meeting Details","Notice","Client Details","Proxy Appointed");
+                $ar_fields_type = array("Company","MetDet","Notice","ProxyRequest","ProxyAppointed");
                 
-                $query_data = mysql_query("SELECT $table.*, companies.com_name, proxy_ad.* from $table inner join proxy_ad on $table.proxy_id = proxy_ad.id inner join companies on proxy_ad.com_id = companies.com_id where $table.id='$request_id' ");
+                $query_data = mysql_query("SELECT $table.*, companies.com_name, proxy_ad.meeting_type, proxy_ad.meeting_date,proxy_ad.meeting_date, proxy_ad.meeting_time, proxy_ad.notice_link, proxy_ad.attendance_slip from $table inner join proxy_ad on $table.proxy_id = proxy_ad.id inner join companies on proxy_ad.com_id = companies.com_id where $table.id='$request_id' ");
                 $data = mysql_fetch_array($query_data);
                 $update["Company"] = $data["com_name"].' / '.$meeting_types[$data["meeting_type"]].' / '.date("d-M-Y",$data["meeting_date"]);
                 $update["MetDet"] = $data["meeting_time"].' at '.$data["meeting_venue"];
+                $update["Notice"] = '<a href="'.$data["notice_link"].'">'.$data["notice_link"].'</a>';
+
                 $client_sql = mysql_query("SELECT name from users where id='$user_id' ");
                 $row_client = mysql_fetch_array($client_sql);
                 $update["ProxyRequest"] = $row_client["name"];
@@ -114,6 +118,21 @@ $body = '';
 
             $subject = "Proxy Voting Notification";
 
-            mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$voter_email','$row_user[email]','$row_user[other_email]','','$subject', '$body','','') ");
+             $more_attach = array();
+            if($data["attendance_slip"] != ''){
+              array_push($more_attach, array( "folder" => "attendance_slips" , "file" => $data["attendance_slip"] ));
+            }
+
+            if($holdings_file != ''){
+              array_push($more_attach, array( "folder" => "holdings" , "file" => $holdings_file ));
+            }
+
+            if(sizeof($more_attach)>0){
+              $more_attach = serialize($more_attach);
+            } else {
+              $more_attach = '';
+            }
+
+            mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file, more_attach) values ('$voter_email','$row_user[email]','$row_user[other_email]','','$subject', '$body','','','$more_attach') ");
 
 ?>

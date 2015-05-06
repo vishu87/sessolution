@@ -27,7 +27,7 @@ $user = new User($_SESSION["MEM_ID"]);
 		  $table = 'self_proxies';
 		}
 
-		$sql = mysql_query("SELECT proxy_id, form from $table where id='$id' ");
+		$sql = mysql_query("SELECT proxy_id, form from $table where id='$id' limit 1");
 		$row = mysql_fetch_array($sql);
 
 		if($row["form"] != '' ) die("Form has been already uploaded for this proxy advisory. Please reset proxy to upload again");
@@ -43,17 +43,9 @@ $user = new User($_SESSION["MEM_ID"]);
 		}
 
 		if($flag_final_freeze == 0){
-			die("Please freeze your votes first");
+			die("<h4>Please freeze your votes first</h4>");
 		}
 
-		/*
-		if($proxy_module == 1){
-			if($user->proxy_module != 0) header("Location: ".STRSITE."access-denied.php");
-		} elseif($proxy_module == 2){
-			if($user->proxy_module != 1) header("Location: ".STRSITE."access-denied.php");
-		} else {
-			header("Location: ".STRSITE."access-denied.php");
-		}*/
 	?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
@@ -76,9 +68,9 @@ $user = new User($_SESSION["MEM_ID"]);
     <div class="controls">
       <input type="file" id="attachfile" name="attachfile">
       <br><br>
-      <button type="button" onclick="check_submit()" class="btn">Upload</button>
+      <button type="button" id="uploadbtn" onclick="check_submit(<?php echo $row["proxy_id"] ?>, <?php echo $id ?>)" class="btn">Upload</button>
 
-      <a href="skip.php?id=<?php echo $id; ?>&amp;proxy_module=<?php echo $proxy_module; ?>" class="btn">Skip Upload</a>
+      <a href="javascript:;" onclick="skip_upload(<?php echo $row["proxy_id"] ?>, <?php echo $id ?>, <?php echo $proxy_module; ?>)" class="btn yellow" id="skipbtn">Skip Upload</a>
 
     </div>
   </div>
@@ -87,13 +79,37 @@ $user = new User($_SESSION["MEM_ID"]);
 </form>
 </body>
 <script type="text/javascript">
-function check_submit(){
+function check_submit(report_id, self_proxy_id){
 	var ext = $("#attachfile").val().split('.').pop().toLowerCase();
 	if($.inArray(ext, ['pdf','doc','docx','xls','xlsx']) == -1) {
 		alert("Please select a valid file");
 	} else {
-		$("#submit_form").submit();
+		$("#uploadbtn").html('Creating Holding Report..');
+    	var file = 'create_holding';
+		$.post("../ajax/"+ file +".php", {report_id:report_id, self_proxy_id:self_proxy_id}, function(data) {
+	      if(data == 'success'){
+				$("#uploadbtn").html('Uploading Form..');
+				$("#submit_form").submit();
+		      } else {
+		       	$("#uploadbtn").html('Upload');
+		      }
+		  });
 	}
+}
+
+function skip_upload(report_id, self_proxy_id, module_type){
+
+		$("#skipbtn").html('Creating Holding Report..');
+    	var file = 'create_holding';
+		$.post("../ajax/"+ file +".php", {report_id:report_id, self_proxy_id:self_proxy_id}, function(data) {
+	      if(data == 'success'){
+				$("#skipbtn").html('Processing..');
+				location.replace('skip.php?id='+self_proxy_id+'&proxy_module='+module_type);
+		      } else {
+		       	$("#skipbtn").html('Skip Upload');
+		      }
+		  });
+
 }
 </script>
 </html>

@@ -18,3 +18,10 @@ root attendance_slips folder
 proxy_ad key_issues TEXT
 
 customized_reports check_id INT(1) custom_reco TEXT
+
+
+----> 06-05
+
+holdings folder
+hodlings_file varchar 200 in self_proxies 
+mail_queue more_attach text

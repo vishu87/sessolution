@@ -60,6 +60,13 @@ while ($row = mysql_fetch_array($sql)) {
 		}
 	}
 
+	if($row["more_attach"] != ''){
+		$more_attach = unserialize($more_attach);
+		foreach ($more_attach as $attach) {
+			$mail->addAttachment(ROOT_PATH.'../'.$attach["folder"].'/'.$attach["file"], substr($row["at_file"], 10));
+		}
+	}
+
 	if($mail->Send()){
 		mysql_query("UPDATE mail_queue set solved=1 where id='$row[id]' ");
 	}

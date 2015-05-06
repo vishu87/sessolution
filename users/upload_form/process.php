@@ -48,6 +48,7 @@ if($proxy_module == 1){
   header("Location: ".STRSITE."access-denied.php");
 }
 $res = mysql_fetch_array($sql);
+$holdings_file = $res["hodlings_file"];
 $report_id = $res["proxy_id"];
 $user_id = $res["user_id"];
 $voter_email = $res["email"];
@@ -90,13 +91,14 @@ $body = '';
             
             $body = '<table class="table table-bordered table-hover">';
 
-                $ar_fields_name = array("Company","Meeting Details","Client Details","Proxy Appointed","Proxy Form");
-                $ar_fields_type = array("Company","MetDet","ProxyRequest","ProxyAppointed","ProxyForm");
+                $ar_fields_name = array("Company","Meeting Details","Notice","Client Details","Proxy Appointed","Proxy Form");
+                $ar_fields_type = array("Company","MetDet","Notice","ProxyRequest","ProxyAppointed","ProxyForm");
                 
-                $query_data = mysql_query("SELECT $table.*, companies.com_name, proxy_ad.* from $table inner join proxy_ad on $table.proxy_id = proxy_ad.id inner join companies on proxy_ad.com_id = companies.com_id where $table.id='$request_id' ");
+                $query_data = mysql_query("SELECT $table.*, companies.com_name, proxy_ad.meeting_type, proxy_ad.meeting_date,proxy_ad.meeting_date, proxy_ad.meeting_time, proxy_ad.notice_link, proxy_ad.attendance_slip  from $table inner join proxy_ad on $table.proxy_id = proxy_ad.id inner join companies on proxy_ad.com_id = companies.com_id where $table.id='$request_id' limit 1");
                 $data = mysql_fetch_array($query_data);
                 $update["Company"] = $data["com_name"].' / '.$meeting_types[$data["meeting_type"]].' / '.date("d-M-Y",$data["meeting_date"]);
                 $update["MetDet"] = $data["meeting_time"].' at '.$data["meeting_venue"];
+                $update["Notice"] = '<a href="'.$data["notice_link"].'">'.$data["notice_link"].'</a>';
                 $client_sql = mysql_query("SELECT name from users where id='$user_id' ");
                 $row_client = mysql_fetch_array($client_sql);
                 $update["ProxyRequest"] = $row_client["name"];
@@ -123,8 +125,8 @@ $body = '';
              $sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by resolution_number asc");
              if(mysql_num_rows($sql_vote) > 0){
                 $flag_self = 1;
-                 $body .= '<h3>Agenda Items: SES</h3>';
-                 $str = '<table class="table table-striped table-bordered table-advance table-hover"><tr><th>#</th><th>Resolution Name</th><th>Type</th><th>SES Recommendation</th><th>Management Recommendation</th></tr>';
+                 $str = '<h3>Agenda Items: SES</h3>';
+                 $str .= '<table class="table table-striped table-bordered table-advance table-hover"><tr><th>#</th><th>Resolution Name</th><th>Type</th><th>SES Recommendation</th><th>Management Recommendation</th></tr>';
                  $count =1;
                  while($row_vote = mysql_fetch_array($sql_vote)) {
                   $str .= '<tr id="tr_vote_'.$row_vote["id"].'"><td>'.$row_vote["resolution_number"].'</td>';
@@ -138,7 +140,8 @@ $body = '';
                      $str .= '</tr>';
                      $count++;
                  }
-            $body .= $str.'</table><br><br>';
+            //$body .= $str.'</table>';
+                 $body .= '<br><br>';
             $voting = new SesVoting();
             } else {
                 $sql = "SELECT * from user_resolution where report_id='$report_id' and user_id='$user_id' order by resolution_number asc";
@@ -158,17 +161,13 @@ $body = '';
                     }
                     $voting = new SelfVoting();
             }
-           // $body;
+
             ob_start();
-            $voting->user_votes_final($report_id, $user_id); 
+            $voting->user_votes_final($report_id, $user_id,2); 
             $votes = ob_get_clean();
            
             $body .= $votes;
             $body = preg_replace('/table /', 'table cellpadding=5 cellspacing =0 border=1 ', $body);
-            // $body = preg_replace('/class="btn green disabled"/', 'class="btn green disabled" style="background:#0f0"', $body);
-            // $body = preg_replace('/class="btn green mini"/', 'class="btn green mini" style="background:#0f0"', $body);
-            // $body = preg_replace('/class="btn yellow disabled"/', 'class="btn yellow disabled" style="background:#ff0"', $body);
-            // $body = preg_replace('/class="btn yellow mini"/', 'class="btn yellow mini" style="background:#ff0"', $body);
 
             $sql_user = mysql_query("SELECT email,other_email from users where id='$_SESSION[MEM_ID]' ");
             $row_user = mysql_fetch_array($sql_user);
@@ -176,7 +175,22 @@ $body = '';
             $subject = "Proxy Voting Notification";
             $at_folder = 'user_proxy_forms';
             $at_file = $new_filename;
-            mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$voter_email','$row_user[email]','$row_user[other_email]','','$subject', '$body','$at_folder','$at_file') ");
+
+            $more_attach = array();
+            if($data["attendance_slip"] != ''){
+              array_push($more_attach, array( "folder" => "attendance_slips" , "file" => $data["attendance_slip"] ));
+            }
+
+            if($holdings_file != ''){
+              array_push($more_attach, array( "folder" => "holdings" , "file" => $holdings_file ));
+            }
+
+            if(sizeof($more_attach)>0){
+              $more_attach = serialize($more_attach);
+            } else {
+              $more_attach = '';
+            }
+            mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file, more_attach) values ('$voter_email','$row_user[email]','$row_user[other_email]','','$subject', '$body','$at_folder','$at_file','$more_attach' ) ");
   }
 
 ?>
