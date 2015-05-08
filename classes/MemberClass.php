@@ -332,10 +332,10 @@ class PA_admin{
     		$users = fetch_customized_users($this->company_id, $this->year);
             if(sizeof($users) > 0){
 		    $color = ($this->custom_report_freeze == 0)?'':'green';
-    	?>
-		  <a href="#myModal" role="button" class="btn <?php echo $color; ?>" data-toggle="modal" data-backdrop="static" data-keyboard="false"  onclick="load_custom(<?php echo $count;?>,<?php echo $this->id;?>,'<?php echo $this->company_name?>','<?php echo $this->meeting_date?>',<?php echo $this->company_id?>)">Custom Reports</a>
-		 <?php
-		}
+	    	?>
+			  <a href="#myModal" role="button" class="btn <?php echo $color; ?>" data-toggle="modal" data-backdrop="static" data-keyboard="false"  onclick="load_custom(<?php echo $count;?>,<?php echo $this->id;?>,'<?php echo $this->company_name?>','<?php echo $this->meeting_date?>',<?php echo $this->company_id?>)">Custom Reports</a>
+			 <?php
+			}
 		}
 	}
 	public function skip($count){
