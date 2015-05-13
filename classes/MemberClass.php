@@ -254,16 +254,17 @@ class PA_admin{
 	}
 
 	public function release($count){
-		if($this->check_status() == 0 && $this->custom_report_freeze != 0){
+
+		if($this->check_status() == 0 ){
 			if($this->released_on == 0){
 		?>
-		 <a href="javascript:;" role="button" class="btn blue" id="release_<?php echo $this->id ?>" onclick="release_reports(<?php echo $count?>,<?php echo $this->company_id;?>,<?php echo $this->id;?>,<?php echo $this->year; ?>);">Release<br>Reports</a> 
-		 <?php
-		} else {
+		 	<a href="javascript:;" role="button" class="btn blue" id="release_<?php echo $this->id ?>" onclick="release_reports(<?php echo $count?>,<?php echo $this->company_id;?>,<?php echo $this->id;?>,<?php echo $this->year; ?>);">Release<br>Reports</a> 
+			 <?php
+			} else {
 			?>
 			<a href="javascript:;" role="button" class="btn red" id="release_<?php echo $this->id ?>" onclick="unrelease_reports(<?php echo $count?>,<?php echo $this->company_id;?>,<?php echo $this->id;?>,<?php echo $this->year; ?>);">Unrelease<br>Reports</a> 
 			<?php
-		}
+			}
 		}
 	}
 
@@ -392,6 +393,7 @@ class PA_admin{
 		        $flag_check = 1;
 		     }
 		    }
+		    if($this->custom_report_freeze == 0 ) $flag_check = 1;
 		  }
 		  return $flag_check;
 	}
