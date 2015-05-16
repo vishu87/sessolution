@@ -27,7 +27,7 @@ if($_GET["cat"] == 1){
 		$file_path = '../../Temp/'.$temp_filename;
 		//echo $file_path;
 
-		$ar_fields = array( "com_name","meeting_date","meeting_type","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform" );
+		$ar_fields = array( "com_name","meeting_date","meeting_type","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","even" );
 		//$ar_fields_all = array("com_name","com_bse_code","com_bse_srcip","com_nse_sym","com_reuters","com_bloomberg","com_isin","add_date");
 		//echo sizeof($ar_fields) == 25 right now + 1 password at the end (always);
 
@@ -115,7 +115,7 @@ if($_GET["cat"] == 1){
 							}
 							$sql_check_dup = mysql_query("SELECT id from proxy_ad where com_id='$com_id' and meeting_date='$meeting_on' and meeting_type='$met_type' ");
 							if(mysql_num_rows($sql_check_dup) == 0){
-								$sql = "INSERT into proxy_ad (com_id, meeting_date, meeting_time, meeting_venue, meeting_type, record_date, evoting_start, evoting_end, evoting_plateform, year,add_date ) VALUES ('$com_id','$meeting_on', '$update[meeting_time]', '$update[meeting_venue]','$met_type', '$record_date', '$evoting_start', '$evoting_end', '$update[evoting_plateform]', $update[year],'$update[add_date]')";
+								$sql = "INSERT into proxy_ad (com_id, meeting_date, meeting_time, meeting_venue, meeting_type, record_date, evoting_start, evoting_end, evoting_plateform, even, year,add_date ) VALUES ('$com_id','$meeting_on', '$update[meeting_time]', '$update[meeting_venue]','$met_type', '$record_date', '$evoting_start', '$evoting_end', '$update[evoting_plateform]', '$update[even]', '$update[year]','$update[add_date]')";
 								$success = 'success';
 								// echo $sql;
 								mysql_query($sql);
@@ -169,7 +169,7 @@ if($_GET["cat"] == 2)
 {
 	$table = 'proxy_ad';
 	$rid = $_GET["rid"];
-	$ar_fields = array("meeting_date", "ccm_type", "meeting_type","notice_link","teasor","annual_report","meeting_outcome","meeting_minutes","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","an_id","meeting_results","key_issues");
+	$ar_fields = array("meeting_date", "ccm_type", "meeting_type","notice_link","teasor","annual_report","meeting_outcome","meeting_minutes","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","an_id","meeting_results","key_issues","even");
 	$update = array();
 	
 	foreach($ar_fields as $ar){

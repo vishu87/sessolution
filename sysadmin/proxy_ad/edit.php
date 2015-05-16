@@ -168,6 +168,24 @@ if(!$db) {
    <!--/span-->
  </div>
  <!--/row-->
+  <!--/row-->
+    <div class="row-fluid">
+     <div class="span6 ">
+       <div class="control-group">
+         <label class="control-label">EVEN</label>
+         <div class="controls">
+           <input type="text" class=""  name="even" placeholder="EVEN" value="<?php echo $report["even"]; ?>">
+           <span class="help-block" ></span>
+         </div>
+       </div>
+     </div>
+     <!--/span-->
+     <div class="span6 ">
+      
+   </div>
+   <!--/span-->
+ </div>
+ <!--/row-->
 
  <div class="row-fluid">
    <div class="span6 ">

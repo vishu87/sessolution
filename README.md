@@ -25,3 +25,6 @@ customized_reports check_id INT(1) custom_reco TEXT
 holdings folder
 hodlings_file varchar 200 in self_proxies 
 mail_queue more_attach text
+
+------>
+add even varchar 50 in proxy_ad
