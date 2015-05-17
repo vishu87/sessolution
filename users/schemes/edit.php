@@ -86,7 +86,21 @@ if(!isset($title)) {
                                        </div>
                                        <!--/span-->
                                        <div class="span6 ">
-                                        
+                                         <div class="control-group">
+                                             <label class="control-label">Depository
+                                             <div class="controls">
+                                              <select name="depository" class="m-wrap">
+                                                <option value="0">Select</option>
+                                                <?php
+                                                  foreach ($depositories as $key => $value) {
+                                                    ?>
+                                                    <option value="<?php echo $key; ?>" <?php echo ($key == $update["depository"])?'selected':'' ?> ><?php echo $value; ?></option>
+                                                    <?php
+                                                  }
+                                                ?>
+                                              </select>
+                                             </div>
+                                          </div>
                                        </div>
                                        <!--/span-->
                                     </div>

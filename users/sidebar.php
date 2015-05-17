@@ -63,7 +63,7 @@
 					</ul>
 				</li>
 								
-				<li class="<?php echo ($sidebar=='my_profile' || $sidebar=='sub_users' || $sidebar=='ch_password' || $sidebar == 'schemes')?'active open':'';?> has-sub">
+				<li class="<?php echo ($sidebar=='my_profile' || $sidebar=='sub_users' || $sidebar=='ch_password' || $sidebar == 'schemes' || $sidebar == 'evoting_info')?'active open':'';?> has-sub">
 					<a href="javascript:;">
 					<i class="icon-user"></i> 
 					<span class="title">Account Management</span>
@@ -74,6 +74,7 @@
 						<li <?php echo ($sub_sidebar=='1' && $sidebar=='my_profile')?'class="active"':'';?>><a href="my_profile.php?cat=1">Profile</a></li>
 						<li <?php echo ($sub_sidebar=='2' && $sidebar=='my_profile')?'class="active"':'';?>><a href="my_profile.php?cat=2">Subscriptions</a></li>
 						<li <?php echo ($sidebar =='schemes')?'class="active"':'';?>><a href="schemes.php">Scheme Management</a></li>
+						<li <?php echo ($sidebar =='evoting_info')?'class="active"':'';?>><a href="evoting_info.php">eVoting Information</a></li>
 						<li <?php echo ($sidebar =='sub_users')?'class="active"':'';?>><a href="sub_users.php">User Management</a></li>
 						<li <?php echo ($sidebar=='ch_password')?'class="active"':'';?>><a href="ch_password.php">Change Password</a></li>
 					</ul>
