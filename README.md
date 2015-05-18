@@ -29,3 +29,4 @@ mail_queue more_attach text
 ------>
 add even varchar 50 in proxy_ad
 add depository INT in schemes
+new table evoting_info

@@ -15,20 +15,14 @@
 	}
 
 	$sub_sidebar=$id;
-	if($_GET["update"]){
-		$update_id = decrypt($_GET["update"]);
-		if(is_numeric($update_id)) {
-			$query = mysql_query("SELECT * from schemes where id = $update_id and user_id  = $_SESSION[MEM_ID] limit 1 ");
-			if(mysql_num_rows($query) == 0){
-				header("location: ".STRSITE."access-denied.php");
-			} else {
-				$update = mysql_fetch_array($query);
-			}
-		} else header("location: ".STRSITE."access-denied.php");
-	}
 
-	if($id>2 || $id<1) {
-		header("location: ".STRSITE."access-denied.php");
+	$query = mysql_query("SELECT * from evoting_info where user_id = '$_SESSION[MEM_ID]' limit 1 ");
+	if(mysql_num_rows($query) > 0){
+		$value = mysql_fetch_array($query);
+	} else {
+		mysql_query("INSERT into evoting_info (user_id) values ('$_SESSION[MEM_ID]') ");
+		$query_repeat = mysql_query("SELECT * from evoting_info where user_id = '$_SESSION[MEM_ID]' limit 1 ");
+		$value = mysql_fetch_array($query_repeat);
 	}
 
 	require_once('header.php');?>
