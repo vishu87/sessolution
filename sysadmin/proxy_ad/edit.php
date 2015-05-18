@@ -70,6 +70,7 @@ if(!$db) {
 
            <div class="row-fluid">
             <div class="span6">
+              SES Event ID : <?php echo $rid ?>
              <?php
              if(isset($_GET["success"]))
              {

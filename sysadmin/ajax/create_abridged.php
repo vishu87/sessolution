@@ -13,17 +13,19 @@ if(!$db) {
 	die("Unable to select database");
 }
 
-$base_font_size='15';
+$base_font_size='12';
 $meeting_types_full = array("","AGM", "EGM", "Postal Ballot","CCM (Equity Shareholders)","CCM (Creditors)");
 
 $types_res_os_short = array("","O","S");
 $focus_short = array(" ","C","F", "G", "T");
 
-$line_height='1.5';
+$line_height='1.2';
 
 $report_id = mysql_real_escape_string($_POST["report_id"]);
-$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, proxy_ad.key_issues, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website, analysts.name as analyst_name, evoting.link  from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join analysts on proxy_ad.an_id = analysts.an_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter where proxy_ad.id='$report_id' limit 1 ");
+$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, companies.com_full_name, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, proxy_ad.key_issues, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website, analysts.name as analyst_name, evoting.link  from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join analysts on proxy_ad.an_id = analysts.an_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
+
+if(substr($row_comp["com_website"],0,7) == 'http://') $row_comp["com_website"] = substr($row_comp["com_website"], 7);
 
 $str ='';
 	$str = $str.'<html>
@@ -41,9 +43,9 @@ $str ='';
 
 	body {
 	
-		font-family:Arial;
+		font-family:Calibri;
 		font-size:'.$base_font_size.'px;
-		line-height:1.5;
+		line-height:1.2;
 			
 	}
 	
@@ -98,6 +100,7 @@ $str ='';
 	}
 	a {
 		color:#ff8119;
+		text-decoration:none;
 	}
 	#firstpage{
 		margin-top: -140px;
@@ -134,15 +137,15 @@ $str ='';
 			<table style=" border-bottom:2px solid #eee">
 				<tr>
 					<td><img src="../../logo.jpg" style="opacity:0.7"></td>
-					<td style="text-align:right; color:#888">
-						<h1>'.$row_comp["com_name"].'</h1>
+					<td style="text-align:right; color:#888;">
+						<h1>'.$row_comp["com_full_name"].'</h1>
 						<span>'.$row_comp["com_website"].'</span>
 					</td>
 				</tr>
 			</table>
 			<table style=" ">
 				<tr>
-					<td style="color:#888">Meeting Type: '.$meeting_types[$row_comp["meeting_type"]].'</td>
+					<td style="color:#888">Meeting Type: '.$meeting_types_full[$row_comp["meeting_type"]].'</td>
 					<td style="text-align:right; color:#888">Meeting Date: '.date("d M y", $row_comp["meeting_date"]).'</td>
 				</tr>
 			</table>	
@@ -171,7 +174,7 @@ $str ='';
 				</tr>
 				<tr>
 					<td style="width:500px;">
-						<div style="height:600px; width:500px; padding:5px; line-height: 1.7; font-size:16px" align="right">
+						<div style="height:600px; width:500px; padding:5px; line-height: 1.4; font-size:14px" align="right">
 							BSE Code: '.$row_comp["com_bse_code"].' | NSE Code: '.$row_comp["com_nse_sym"].'<br>ISIN : '.$row_comp["com_isin"].'<br>
 							Type: '.$meeting_types_full[$row_comp["meeting_type"]].' | Notice:  <a href="'.$row_comp["notice_link"].'">Click Here</a> | Annual Report:  <a href="'.$row_comp["annual_report"].'">Click Here</a><br>
 							e-Voting Platform: <a href="'.$row_comp["link"].'">'.$row_comp["evoting_plateform"].'</a><br>';
@@ -194,14 +197,14 @@ $str ='';
 					<td style="text-align:right; color:#888; background:#EB641B"></td>
 				</tr>
 			</table>
-			<div style="position:absolute; top:290px; width:600px; background:#7F7F7F; padding:0px 40px; height:140px; color:#FFF; font-size:40px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
-				Proxy Advisory Report<br>'.$row_comp["com_name"].'
+			<div style="position:absolute; top:290px; width:600px; background:#7F7F7F; font-family:Arial; padding:0px 40px; height:140px; color:#FFF; font-size:40px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
+				Proxy Advisory Report<br>'.$row_comp["com_full_name"].'
 				
 			</div>
 			<div style="position:absolute; top:950px; width:500px; height:140px; font-size:14px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
 				<table style="width:500px; color:#888">
 					<tr>
-						<td style="padding:0 30px; border-right:3px solid #888; width:200px; line-height:1.2; font-weight:bold;">
+						<td style="padding:0 30px; border-right:3px solid #888; width:200px; line-height:1; font-weight:bold;">
 							Proxy Advisory<br>
 							Corporate Governance Research<br>
 							Corporate Governance Scores<br>
@@ -220,14 +223,14 @@ $str ='';
 
 $str .= '<div class="rest_page">
 <div style="width:400px; background:#EB641B; padding:10px 40px; color:#FFF; font-size:24px; line-height:1; margin-left:420px; text-transform:uppercase">
-	<span style="font-size:30px">SES R</span>ecommendations
+	<span style="font-size:30px; font-family:Arial">SES R</span>ecommendations
 </div>
 <div style="margin:10px 0 0 0; padding:10px 0 0 0; border-top:1px solid #000; font-size:14px; line-height:1; text-transform:uppercase">
-	<span style="font-size:16px">T</span>ABLE 1 - <span style="font-size:16px">A</span>GENDA <span style="font-size:16px">I</span>TEMS AND <span style="font-size:16px">R</span>ECOMMENDATIONS
+	<span style="font-size:16px">T</span>ABLE 1 - <span style="font-size:16px">A</span>GENDA <span style="font-size:16px">I</span>TEMS AND <span style="font-size:16px; ">R</span>ECOMMENDATIONS
 </div>
 
 <table style="">
-	<tr style="background:#464646; color:#fff"><td class="center">S. No.</td><td>Resolution</td><td class="center"></td><td class="center">Recommendation</td><td class="center">Focus</td></tr>
+	<tr style="background:#464646; color:#fff"><td class="center">S. No.</td><td>Resolution</td><td class="center">Type</td><td class="center">Recommendation</td><td class="center">Focus</td></tr>
 ';
 $count =0;
 $query = mysql_query("SELECT voting.resolution_number, voting.resolution_name, ses_recos.reco, voting.type_res_os, voting.focus from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$report_id' order by voting.resolution_number asc ");
@@ -239,37 +242,37 @@ while ($row = mysql_fetch_array($query)) {
 		<td>'.$row["resolution_name"].'</td>
 		<td class="center" style="width:50px">'.$types_res_os_short[$row["type_res_os"]].'</td>
 		<td class="center" style="width:100px">'.$row["reco"].'</td>
-		<td class="center" style="width:80px">'.$focus_short[$row["focus"]].'</td>
+		<td class="center" style="width:80px; color:#f00; font-weight:bold;">'.$focus_short[$row["focus"]].'</td>
 	</tr>';
 	$count++;
 }
 $str .= '</table>
-	<div style="margin:5px 0 0 60px; font-size:14px; line-height:1;">
+	<div style="margin:5px 0 0 60px; line-height:1;">
 		<i>O - Ordinary Resolution; S - Special Resolution</i>
 	</div>
 	<div style="margin:5px 0; padding:5px 0; border-top:1px solid #000; border-bottom:1px solid #000; font-size:16px; line-height:1.5; text-align:justify; text-transform:uppercase">
 		<span style="font-size:18px">R</span>esearch <span style="font-size:18px">A</span>nalyst: '.$row_comp["analyst_name"].'
 	</div>
-	<div style="margin:15px 0 0 0px; font-size:14px; line-height:1.5; text-align:justify">
+	<div style="margin:15px 0 0 0px; line-height:1.2; text-align:justify">
 		<b><i>C - Compliance:</i></b> The Company has not met statutory compliance requirements.<br>
 		<b><i>F - Fairness: </i></b> The Company has proposed steps which may lead to undue advantage of a particular class of shareholders and can have adverse impact on non-controlling shareholders including minority shareholders<br>
 		<b><i>G - Governance: </i></b> SES questions the governance practices of the Company. The Company may have complied with the statutory requirements in letter. However, SES finds governance issues as per its standards.<br>
 		<b><i>T- Disclosures & Transparency: </i></b> The Company has not made adequate disclosures necessary for shareholders to make an informed decision. The Company has intentionally or unintentionally kept the shareholders in dark.<br>
 	</div>
-	<div style="margin:15px 0 0 0px; font-size:14px; line-height:1.5; text-align:justify">
+	<div style="margin:15px 0 0 0px; line-height:1.2; text-align:justify">
 		<b>EXPLANATION</b><br>
 		In view of the fact that E-Voting neither has any scope of interaction of shareholders with the management, nor there is any possibility for amendment of resolution and management cannot explain its rationale any further than what is provided in Notice, therefore to ease decision making and e-voting process for the users of the reports SES has discontinued using recommendations such as -MODIFY, SPLIT, WITHDRAW and CONDITIONAL FOR/ AGAINST. Henceforth SES will give only FOR or AGAINST recommendation. However in Analysis section of the Report, SES will continue to analyse and indicate any of the discontinued recommendations subject to further disclosures etc. This will enable the companies to draft the future notices in a manner which will give relevant information to shareholders to take a considered decision.
 
 	</div>
-	<div style="margin:10px 0 0 0px; font-size:14px; line-height:1.5; text-align:justify">
+	<div style="margin:10px 0 0 0px; line-height:1.2; text-align:justify">
 		<b>KEY ISSUES</b><br>'.$row_comp["key_issues"].'
 	</div>
 	<p style="page-break-before: always;"></p>
 
 ';
 
-$str .= '<div style="width:300px; background:#EB641B; padding:10px 40px; color:#FFF; font-size:24px; line-height:1; margin-left:520px; text-transform:uppercase">
-	<span style="font-size:30px">SES C</span>omments
+$str .= '<div style="width:400px; background:#EB641B; padding:10px 40px; color:#FFF; font-size:24px; line-height:1; margin-left:420px; text-transform:uppercase">
+	<span style="font-size:30px; font-family:Arial;">SES C</span>omments
 </div>';
 
 $query = mysql_query("SELECT resolution_number, resolution_name, detail from voting where report_id='$report_id' order by resolution_number asc ");
