@@ -21,7 +21,8 @@ $focus_short = array(" ","C","F", "G", "T");
 
 $line_height='1.2';
 
-$report_id = mysql_real_escape_string($_POST["report_id"]);
+// $report_id = mysql_real_escape_string($_POST["report_id"]);
+$report_id = mysql_real_escape_string($_GET["report_id"]);
 $query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, companies.com_full_name, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, proxy_ad.key_issues, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website, analysts.name as analyst_name, evoting.link  from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join analysts on proxy_ad.an_id = analysts.an_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
 
@@ -342,9 +343,13 @@ require_once("../../dompdf/dompdf_config.inc.php");
   if ( get_magic_quotes_gpc() )
     $str= stripslashes($str);
   
-  $str = utf8_decode($str);
+  //$str = utf8_encode($str);
+  $str = preg_replace('/â/', '\'', $str);
+  $str = preg_replace('/¹/', ' <span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span>', $str);
+  $str = preg_replace('/\'<span>/', '<span>', $str);
+  //echo $str;
   $dompdf = new DOMPDF();
-  $dompdf->load_html($str);
+  $dompdf->load_html($str,'UTF-8');
   $dompdf->set_paper('letter', 'portrait');
   $dompdf->render();
   $pdf = $dompdf->output();

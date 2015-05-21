@@ -358,15 +358,16 @@ if(!$db) {
    <div class="control-group">
      <label class="control-label">Abridged Analyst</label>
      <div class="controls">
-       <select name="an_id" value="<?php echo $report["an_id"]?>">
+      <?php $an_ids = explode(',', $report["an_id"]);?>
+       <select name="an_id[]" multiple style="min-height:100px">
         <option value="0">Select</option>
         <?php
-        $sql_an = mysql_query("SELECT an_id, name from  analysts where active=0 order by name asc ");
-        while ($row_an = mysql_fetch_array($sql_an)) {
-          echo '<option value="'.$row_an["an_id"].'" ';
-          echo ($row_an["an_id"] == $report["an_id"])?'selected':'';
-          echo '>'.$row_an["name"].'</option>';
-        }
+          $sql_an = mysql_query("SELECT an_id, name from  analysts where active=0 order by name asc ");
+          while ($row_an = mysql_fetch_array($sql_an)) {
+            echo '<option value="'.$row_an["an_id"].'" ';
+            echo in_array($row_an["an_id"], $an_ids)?'selected':'';
+            echo '>'.$row_an["name"].'</option>';
+          }
         ?>
       </select>
       <span class="help-block" ></span>

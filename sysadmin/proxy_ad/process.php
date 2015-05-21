@@ -173,7 +173,15 @@ if($_GET["cat"] == 2)
 	$update = array();
 	
 	foreach($ar_fields as $ar){
-		$update[$ar] = mysql_real_escape_string($_POST[$ar]);
+		if($ar != "an_id"){
+			$update[$ar] = mysql_real_escape_string($_POST[$ar]);
+		} else {
+			if(sizeof($_POST[$ar]) > 0){
+				$update[$ar] = implode(',',$_POST[$ar]);
+			} else {
+				$update[$ar] = 0;
+			}
+		}
 	}
 
 	$report = $_FILES["report"]["name"];
