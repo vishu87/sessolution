@@ -29,8 +29,17 @@ if(!isset($title)) {
    .meet4, .meet4_big{
      background: #CC3300;
    }
+   .small_pad{
+    padding: 7px 8px;
+   }
+   .big2.meet4_big{
+    padding: 7px 4px;
+   }
    .meet5, .meet5_big{
      background: #A12A85;
+   }
+   .big2.meet5_big{
+    padding: 7px 10px;
    }
    .meet1:hover, .meet1_big:hover{
      background: #002AFF;
@@ -146,16 +155,16 @@ if(!isset($title)) {
   </div>
 
    <div class="row-fluid" style="margin-bottom:20px;">
-    <div class="span5"> 
+    <div class="span4"> 
       <a class="btn <?php echo (!isset($type) || $type == 0)?'big2':''; ?>" style="" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year;?>&amp;com_type=<?php echo encrypt($com_type); ?>">All</a>
       <a class="btn meet1_big <?php echo ($type == 1)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('1') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">AGM</a>
       <a class="btn meet2_big <?php echo ($type == 2)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('2') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">EGM</a>
       <a class="btn meet3_big <?php echo ($type == 3)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('3') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">Postal Ballot</a>
-      <a class="btn meet4_big <?php echo ($type == 4)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('4') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">CCM (Equity Shareholders)</a>
+      <a class="btn meet4_big small_pad <?php echo ($type == 4)?'big2':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt('4') ?>&amp;com_type=<?php echo encrypt($com_type); ?>">CCM (Equity Holders)</a>
       <a class="btn meet5_big <?php echo ($type == 5)?'big2':''; ?>" style="color:#fff;" data-toggle="modal" href="#myModalCompact" onclick="ccm_types()">CCM (Creditors)</a>
 
     </div>
-        <div class="span3" align="center"> 
+        <div class="span4" align="center"> 
           <div class="btn-group">
             
             <a class="btn blue <?php echo ($com_type == 6)?'active':''; ?>" style="color:#fff;" href="?mon=<?php echo $month;?>&amp;yr=<?php echo $year; ?>&amp;type=<?php echo encrypt($type) ?>&amp;com_type=<?php echo encrypt('6') ?>">Subscribed</a>

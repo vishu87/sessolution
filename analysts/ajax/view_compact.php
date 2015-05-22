@@ -20,7 +20,7 @@ foreach ($proxy_ids as $proxy_id) {
       <button class="btn meet1" style="color:#fff;">AGM</button>
       <button class="btn meet2" style="color:#fff;">EGM</button>
       <button class="btn meet3" style="color:#fff;">Postal Ballot</button>
-      <button class="btn meet4" style="color:#fff; margin-top:6px;">CCM (Equity Shareholders)</button>
+      <button class="btn meet4" style="color:#fff; margin-top:6px;">CCM (Equity Holders)</button>
       <button class="btn meet5" style="color:#fff;  margin-top:6px;">CCM (Creditors)</button>
     </div>
   </div>
