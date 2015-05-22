@@ -238,11 +238,10 @@ if(!$flag){
                                          <div class="control-group">
                                        <label class="control-label">Focus</label>
                                        <div class="controls">
-                                           <select name="focus" id="focus"><option value="0">Select</option>
+                                           <select name="focus[]" id="focus" multiple><option value="0">Select</option>
                                               <?php
                                               for ($i = 1; $i< sizeof($focus); $i++ ) {
                                                 echo '<option value="'.$i.'" ';
-                                                if($i == $vote["focus"]) echo 'selected';
                                                 echo '>'.$focus[$i].'</option>';
                                               }
                                               ?>
@@ -308,7 +307,16 @@ while ($row_reco = mysql_fetch_array($sql_reco)) {
     } ?>
         </td>
         <?php echo '<td>'.$types_business[$row_vote["type_business"]].' / '.$types_res_os[$row_vote["type_res_os"]].'</td>'; ?>
-        <?php echo '<td>'.$focus[$row_vote["focus"]].'</td>'; ?>
+        <td>
+          <?php if($row_vote["focus"] != 0){ 
+            $focs = explode(',', $row_vote["focus"]);
+            $final_focs = array();
+            foreach ($focs as $foc) {
+              array_push($final_focs, $focus[$foc]);
+            }
+            echo implode('/', $final_focs);
+            } ?>
+        </td>
         <td>
         <?php 
         if(!$flag){ ?>

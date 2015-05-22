@@ -197,11 +197,11 @@ echo '
                <div class="control-group">
              <label class="control-label">Focus</label>
              <div class="controls">
-                 <select name="focus" id="focus_pop"><option value="0">Select</option>';
-                    
-                    for ($i = 1; $i< sizeof($focus); $i++ ) {
+                 <select name="focus[]" id="focus_pop" multiple><option value="0">Select</option>';
+                    $vote_focus = explode(',', $vote["focus"]);
+                    for ($i = 1; $i < sizeof($focus); $i++ ) {
                       echo '<option value="'.$i.'" ';
-                      if($i == $vote["focus"]) echo 'selected';
+                      if(in_array($i, $vote_focus)) echo 'selected';
                       echo '>'.$focus[$i].'</option>';
                     }
                   echo '

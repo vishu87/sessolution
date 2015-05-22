@@ -21,9 +21,9 @@ $focus_short = array(" ","C","F", "G", "T");
 
 $line_height='1.2';
 
-// $report_id = mysql_real_escape_string($_POST["report_id"]);
-$report_id = mysql_real_escape_string($_GET["report_id"]);
-$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, companies.com_full_name, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, proxy_ad.key_issues, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website, analysts.name as analyst_name, evoting.link  from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join analysts on proxy_ad.an_id = analysts.an_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter where proxy_ad.id='$report_id' limit 1 ");
+$report_id = mysql_real_escape_string($_POST["report_id"]);
+
+$query = mysql_query("SELECT companies.com_name,companies.com_bse_code, companies.com_nse_sym, companies.com_isin, companies.com_id, companies.com_full_name, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.year, proxy_ad.evoting_plateform, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.meeting_time, proxy_ad.meeting_venue, proxy_ad.notice, proxy_ad.notice_link, proxy_ad.annual_report, proxy_ad.key_issues, proxy_ad.an_id, companies.com_address, companies.com_telephone, companies.com_sec_email, companies.com_website, evoting.link  from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter where proxy_ad.id='$report_id' limit 1 ");
 $row_comp = mysql_fetch_array($query);
 
 if(substr($row_comp["com_website"],0,7) == 'http://') $row_comp["com_website"] = substr($row_comp["com_website"], 7);
@@ -243,18 +243,34 @@ while ($row = mysql_fetch_array($query)) {
 		<td>'.$row["resolution_name"].'</td>
 		<td class="center" style="width:50px">'.$types_res_os_short[$row["type_res_os"]].'</td>
 		<td class="center" style="width:100px">'.$row["reco"].'</td>
-		<td class="center" style="width:80px; color:#f00; font-weight:bold;">'.$focus_short[$row["focus"]].'</td>
+		<td class="center" style="width:80px; color:#f00; font-weight:bold;">';
+		if($row["focus"] != 0){ 
+	        $focs = explode(',', $row["focus"]);
+	        $final_focs = array();
+	        foreach ($focs as $foc) {
+	          array_push($final_focs, $focus_short[$foc]);
+	    }
+	    	$str .= implode('/', $final_focs);
+	    }
+	$str .= '</td>
 	</tr>';
 	$count++;
 }
 $str .= '</table>
 	<div style="margin:5px 0 0 60px; line-height:1;">
 		<i>O - Ordinary Resolution; S - Special Resolution</i>
-	</div>
-	<div style="margin:5px 0; padding:5px 0; border-top:1px solid #000; border-bottom:1px solid #000; font-size:16px; line-height:1.5; text-align:justify; text-transform:uppercase">
-		<span style="font-size:18px">R</span>esearch <span style="font-size:18px">A</span>nalyst: '.$row_comp["analyst_name"].'
-	</div>
-	<div style="margin:15px 0 0 0px; line-height:1.2; text-align:justify">
+	</div>';
+if($row_comp["an_id"] != 0){
+	$str .= '<div style="margin:5px 0; padding:5px 0; border-top:1px solid #000; border-bottom:1px solid #000; font-size:16px; line-height:1.5; text-align:justify; text-transform:uppercase">
+		<span style="font-size:18px">R</span>esearch <span style="font-size:18px">A</span>nalyst: ';
+	$final_an = array();
+	$analysts = mysql_query("SELECT name from analysts where an_id IN (".$row_comp["an_id"].") ");
+	while ($row_an = mysql_fetch_array($analysts)) {
+		array_push($final_an, $row_an["name"]);
+	}
+	$str .= implode(' | ', $final_an).'</div>';
+}
+$str .= '<div style="margin:15px 0 0 0px; line-height:1.2; text-align:justify">
 		<b><i>C - Compliance:</i></b> The Company has not met statutory compliance requirements.<br>
 		<b><i>F - Fairness: </i></b> The Company has proposed steps which may lead to undue advantage of a particular class of shareholders and can have adverse impact on non-controlling shareholders including minority shareholders<br>
 		<b><i>G - Governance: </i></b> SES questions the governance practices of the Company. The Company may have complied with the statutory requirements in letter. However, SES finds governance issues as per its standards.<br>
@@ -264,13 +280,12 @@ $str .= '</table>
 		<b>EXPLANATION</b><br>
 		In view of the fact that E-Voting neither has any scope of interaction of shareholders with the management, nor there is any possibility for amendment of resolution and management cannot explain its rationale any further than what is provided in Notice, therefore to ease decision making and e-voting process for the users of the reports SES has discontinued using recommendations such as -MODIFY, SPLIT, WITHDRAW and CONDITIONAL FOR/ AGAINST. Henceforth SES will give only FOR or AGAINST recommendation. However in Analysis section of the Report, SES will continue to analyse and indicate any of the discontinued recommendations subject to further disclosures etc. This will enable the companies to draft the future notices in a manner which will give relevant information to shareholders to take a considered decision.
 
-	</div>
-	<div style="margin:10px 0 0 0px; line-height:1.2; text-align:justify">
-		<b>KEY ISSUES</b><br>'.$row_comp["key_issues"].'
-	</div>
-	<p style="page-break-before: always;"></p>
-
-';
+	</div>';
+	if($row_comp["key_issues"] != ''){
+		$str .=	'<div style="margin:10px 0 0 0px; line-height:1.2; text-align:justify">'.$row_comp["key_issues"].'
+		</div>';	
+	}
+	$str .='<p style="page-break-before: always;"></p>';
 
 $str .= '<div style="width:400px; background:#EB641B; padding:10px 40px; color:#FFF; font-size:24px; line-height:1; margin-left:420px; text-transform:uppercase">
 	<span style="font-size:30px; font-family:Arial;">SES C</span>omments

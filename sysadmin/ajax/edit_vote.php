@@ -22,7 +22,11 @@ $resolution = $_POST["res"];
 $ses_reco = $_POST["ses_reco"];
 $man_reco = $_POST["man_reco"];
 $man_share_reco = $_POST["man_share_reco"];
-$focus_on = $_POST["focus"];
+if($_POST["focus"]){
+  $focus_on = implode(',',$_POST["focus"]);
+} else{
+  $focus_on = 0;
+}
 $type_business = mysql_real_escape_string($_POST["type_business"]);
 $type_res_os = mysql_real_escape_string($_POST["type_res_os"]);
 $detail = mysql_real_escape_string($_POST["detail"]);
@@ -65,7 +69,16 @@ while ($row_reco = mysql_fetch_array($sql_reco)) {
     } ?>
         </td>
         <?php echo '<td>'.$types_business[$row_vote["type_business"]].' / '.$types_res_os[$row_vote["type_res_os"]].'</td>'; ?>
-         <?php echo '<td>'.$focus[$row_vote["focus"]].'</td>'; ?>
+                <td>
+          <?php if($row_vote["focus"] != 0){ 
+            $focs = explode(',', $row_vote["focus"]);
+            $final_focs = array();
+            foreach ($focs as $foc) {
+              array_push($final_focs, $focus[$foc]);
+            }
+            echo implode('/', $final_focs);
+            } ?>
+        </td>
         <td>
          
            <button class="btn" data-toggle="modal" href="#stack2" onclick="voting('<?php echo name_filter($row_vote["resolution_name"]);  ?>','<?php echo $row_vote["id"]; ?>');">Edit</button>
