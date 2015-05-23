@@ -638,15 +638,15 @@ function set_unmark(report_id){
 
 function meeting_results(report_id){
 
-   $("#stack1 h3").text("Meeting Results");
-   $("#stack1").css('width','98%');
-   $("#stack1").css('margin-left','-49%');
-   $("#stack1 .modal-body").css('min-height','500px');
-   $("#stack1 .modal-body").html('Loading');
+   $("#stack3 h3").text("Meeting Results");
+   $("#stack3").css('width','98%');
+   $("#stack3").css('margin-left','-49%');
+   $("#stack3 .modal-body").css('min-height','500px');
+   $("#stack3 .modal-body").html('Loading');
    
    var file = 'meeting_results';
    $.post("ajax/"+ file +".php", {id:report_id}, function(data) {
-      $("#stack1 .modal-body").html(data);
+      $("#stack3 .modal-body").html(data);
    });
 }
 

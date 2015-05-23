@@ -225,6 +225,7 @@ class PA{
 		$this->teasor = '<a target="_blank" href="'.$result["teasor"].'">'.$result["teasor"].'</a>';
 		$this->annual_report = '<a target="_blank" href="'.$result["annual_report"].'">'.$result["annual_report"].'</a>';
 		$this->meeting_outcome = '<a target="_blank" href="'.$result["meeting_outcome"].'">'.$result["meeting_outcome"].'</a>';
+
 		$this->meeting_minutes = '<a target="_blank" href="'.$result["meeting_minutes"].'">'.$result["meeting_minutes"].'</a>';
 		$this->notice = $result["notice"];
 		$this->notice_link = '<a target="_blank" href="'.$result["notice_link"].'">'.$result["notice_link"].'</a>';
@@ -420,7 +421,7 @@ class PA{
 		if(mysql_num_rows($check) == 0){
 			return '';
 		} else {
-			return '<a href="#stack1" data-toggle="modal" role="button" class="btn span12" style="max-width:100px" onclick="meeting_results('.$this->id.')" >View</a>';
+			return '<a href="#stack3" data-toggle="modal" role="button" class="btn span12" style="max-width:100px" onclick="meeting_results('.$this->id.')" >View</a>';
 		}
 	}
 

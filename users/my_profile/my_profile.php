@@ -145,6 +145,24 @@ if(!isset($title)) {
                                        <!--/span-->
                                     </div>
                                     <!--/row-->
+
+                                    <!--/row-->
+                                    <div class="row-fluid">
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                             <label class="control-label" for="name">Self Portfolio</label>
+                                             <div class="controls">
+                                              <select name="self_portfolio" class="m-wrap span12">
+                                                <option value="1">No</option>
+                                                <option value="0" <?php echo ($row_sub["self_portfolio"] == 0)?'selected':''; ?>>Yes</option>
+                                              </select>
+                                              <span class="help-block" ></span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+                                    <!--/row-->
                                     
                                  
                                     <div class="form-actions" style="padding: 19px 10px 20px;">

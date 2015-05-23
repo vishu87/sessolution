@@ -30,8 +30,8 @@ $update = array();
 echo '<table class="table table-bordered table-hover">';
 switch ($report_type) {
 	case '1':
-		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","e-Voting Platform","Meeting Type","Report","Notice","Proxy Slip","Attendance Slip","Annual Report","Meeting Outcome","Meeting Minutes","Proxy Request/Initiated","Proxy Appointed","Proxy Form","Proxy Slip/ Confirmation");
-		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","MeetingType","Report","Notice","ProxySlips","AttendanceSlips","AnnualReport","MeetingOutcome","MeetingMinutes","ProxyRequest","ProxyAppointed","ProxyForm","ProxySlip");
+		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","e-Voting Platform","Meeting Type","Report","Notice","Proxy Slip","Attendance Slip","Annual Report","Meeting Outcome","Voting Results (Clause 35A)","Meeting Minutes","Proxy Request/Initiated","Proxy Appointed","Proxy Form","Proxy Slip/ Confirmation");
+		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","MeetingType","Report","Notice","ProxySlips","AttendanceSlips","AnnualReport","MeetingOutcome","VotingResults","MeetingMinutes","ProxyRequest","ProxyAppointed","ProxyForm","ProxySlip");
 		$pa_view = new PA($report_id);
 		
 		$user->pa_subscribed_comapnies_year($_SESSION["MEM_ID"],$pa_view->year);
@@ -62,6 +62,7 @@ switch ($report_type) {
 		$update["AnnualReport"] = $pa_view->annual_report;
 		$update["MeetingOutcome"] = $pa_view->meeting_outcome;
 		$update["MeetingMinutes"] = $pa_view->meeting_minutes;
+		$update["VotingResults"] = $pa_view->meeting_results();
 		
 		$query_data = mysql_query("SELECT * from proxies where proxy_id='$report_id' and user_id='$_SESSION[MEM_ID]' ");
 		$data = mysql_fetch_array($query_data);

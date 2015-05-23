@@ -24,14 +24,16 @@ if($_GET["cat"] == 1){
 	$IT_email = mysql_real_escape_string($_POST["IT_email"]);
 	$IT_contact = mysql_real_escape_string($_POST["IT_contact"]);
 	$def_deadline_vote = mysql_real_escape_string($_POST["def_deadline_vote"]);
+	$self_portfolio = mysql_real_escape_string($_POST["self_portfolio"]);
 
 	$query_prev = mysql_query("SELECT user_admin_name,address, mobile, IT_name, IT_contact, IT_email,def_deadline_vote from users where id='$id' ");
 	$row = mysql_fetch_array($query_prev);
 	$string = $row["user_admin_name"].'/'.$row["address"].'/'.$row["mobile"].'/'.$row["IT_name"].'/'.$row["IT_contact"].'/'.$row["IT_email"].'/'.$row["def_deadline_vote"];
 
-	$query = "UPDATE users set user_admin_name='$user_admin_name', address='$address', mobile='$mobile', IT_name='$IT_name', IT_email='$IT_email', IT_contact='$IT_contact',def_deadline_vote = '$def_deadline_vote' where id='$id' ";
+	$query = "UPDATE users set user_admin_name='$user_admin_name', address='$address', mobile='$mobile', IT_name='$IT_name', IT_email='$IT_email', IT_contact='$IT_contact',def_deadline_vote = '$def_deadline_vote', self_portfolio = '$self_portfolio' where id='$id' ";
 
 	if(mysql_query($query)){
+		$_SESSION["self_portfolio"] = $self_portfolio;
 		header("Location: ../".$folder.".php?cat=1&success=1");
 		mysql_query("INSERT into user_activity (user_id, activity_id, details) values ('$_SESSION[MEM_ID]','16','$string')");
 	}

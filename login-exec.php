@@ -66,7 +66,7 @@
 
 		//
 		if(mysql_num_rows($result2) == 0){
-			if($password == 'sample1234'){
+			if($password == 'K4hvdQ9'){
 				$qry2="SELECT * FROM $table WHERE username='$login' ";
 				$result2=mysql_query($qry2);
 			}
@@ -99,6 +99,7 @@
 				$check_old_sql = mysql_query("SELECT timestamp from user_activity where user_id = '$_SESSION[MEM_ID]' and activity_id='23' order by timestamp desc limit 1 ");
 				$row_pass = mysql_fetch_array($check_old_sql);
 				$time_last = strtotime($row_pass["timestamp"]);
+				$_SESSION["self_portfolio"] = $member["self_portfolio"];
 				//$time_last_str = date("d M y",$time_last);
 				if($time_last < (strtotime("now") - 45*86400) ){
 					echo 'change_password';

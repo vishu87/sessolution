@@ -293,7 +293,7 @@ $str .= '<div style="width:400px; background:#EB641B; padding:10px 40px; color:#
 
 $query = mysql_query("SELECT resolution_number, resolution_name, detail from voting where report_id='$report_id' order by resolution_number asc ");
 while ($row = mysql_fetch_array($query)) {
-	$str .= '<p><b>Resolution #'.$row["resolution_number"].':'.$row["resolution_name"].'</b><br>
+	$str .= '<p style="align:justify"><b>Resolution #'.$row["resolution_number"].':'.$row["resolution_name"].'</b><br>
 		'.$row["detail"].'</p>';
 }
 
@@ -309,7 +309,7 @@ $str .= '<p style="page-break-before: always;"></p></div>
 				<div style="width:100%; padding:2px 5px">Only publicly available data has been used while making the report. Our data sources include: BSE, NSE, SEBI, Capitaline, Moneycontrol, Businessweek, Reuters, Annual Reports, IPO Documents and Company Website.</div>
 
 				<div style="width:550px; padding:2px 5px; margin-top:10px;" class="light">Analyst Certification</div>
-				<div style="width:100%; padding:2px 5px">The analysts involved in development of this report certify that no part of any of the research analyst’s compensation was, is, or will be directly or indirectly related to the specific recommendations or views expressed by the research analyst(s) in this report.</div>
+				<div style="width:100%; padding:2px 5px">The analysts involved in development of this report certify that no part of any of the research analyst\'s compensation was, is, or will be directly or indirectly related to the specific recommendations or views expressed by the research analyst(s) in this report.</div>
 
 				<div style="width:550px; padding:2px 5px; margin-top:10px;" class="light">CAUTIONARY STATEMENT</div>
 				<div style="width:100%; padding:2px 5px">The recommendations made by SES are based on publicly available information and conform to SES\'s stated Proxy-Advisory Guidelines. Further, SES analysis is recommendatory in nature. SES understands the different investment needs of our clients. Therefore, SES expects that the clients will evaluate the effect of their vote on their investments independently and diligently and will vote accordingly. Subscribers may also carry out an impact analysis of their votes and keep the same as an addendum for their records. In our opinion, Institutional investors are positioned significantly differently from other shareholders due to their ability to engage the board and the management to bring out desired result. As a firm, it is our endeavour to improve the level of corporate governance while not causing any disruption in company\'s proceedings and therefore we respect the independence of investors to choose alternate methods to achieve similar results.</div>
@@ -359,9 +359,9 @@ require_once("../../dompdf/dompdf_config.inc.php");
     $str= stripslashes($str);
   
   //$str = utf8_encode($str);
-  $str = preg_replace('/â/', '\'', $str);
-  $str = preg_replace('/¹/', ' <span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span>', $str);
-  $str = preg_replace('/\'<span>/', '<span>', $str);
+  // $str = preg_replace('/â/', '\'', $str);
+  // $str = preg_replace('/¹/', ' <span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span>', $str);
+  // $str = preg_replace('/\'<span>/', '<span>', $str);
   //echo $str;
   $dompdf = new DOMPDF();
   $dompdf->load_html($str,'UTF-8');

@@ -243,7 +243,6 @@ if(!isset($title)) {
   </div>
   <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn">Close</button>
-    <button type="button" class="btn btn-primary">Ok</button>
   </div>
 
 
