@@ -26,7 +26,7 @@
 					</a>
 					<ul class="sub">
 						<li <?php echo ($sub_sidebar=='1' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=1">Create Portfolio</a></li>
-						<?php if($_SESSION["self_portfolio"] == 0){ ?>
+						<?php if($_SESSION["self_portfolio"] == 1){ ?>
 							<li <?php echo ($sub_sidebar=='2' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=2">Upcoming Meetings</a></li>
 							<li <?php echo ($sub_sidebar=='3' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=3">Set Email Alerts</a></li>
 							<li <?php echo ($sub_sidebar=='5' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=5">View Past Votings</a></li>

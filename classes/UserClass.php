@@ -225,6 +225,7 @@ class PA{
 		$this->teasor = '<a target="_blank" href="'.$result["teasor"].'">'.$result["teasor"].'</a>';
 		$this->annual_report = '<a target="_blank" href="'.$result["annual_report"].'">'.$result["annual_report"].'</a>';
 		$this->meeting_outcome = '<a target="_blank" href="'.$result["meeting_outcome"].'">'.$result["meeting_outcome"].'</a>';
+		$this->voting_results = '<a target="_blank" href="'.$result["meeting_results"].'">'.$result["meeting_results"].'</a>';
 
 		$this->meeting_minutes = '<a target="_blank" href="'.$result["meeting_minutes"].'">'.$result["meeting_minutes"].'</a>';
 		$this->notice = $result["notice"];

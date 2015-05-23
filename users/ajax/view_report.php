@@ -62,7 +62,7 @@ switch ($report_type) {
 		$update["AnnualReport"] = $pa_view->annual_report;
 		$update["MeetingOutcome"] = $pa_view->meeting_outcome;
 		$update["MeetingMinutes"] = $pa_view->meeting_minutes;
-		$update["VotingResults"] = $pa_view->meeting_results();
+		$update["VotingResults"] = $pa_view->voting_results;
 		
 		$query_data = mysql_query("SELECT * from proxies where proxy_id='$report_id' and user_id='$_SESSION[MEM_ID]' ");
 		$data = mysql_fetch_array($query_data);

@@ -51,7 +51,7 @@ if(!isset($title)  || !isset($user_id)) {
    ?>
 	
 
-  <?php if($_SESSION["self_portfolio"] == 0) { ?>
+  <?php if($_SESSION["self_portfolio"] == 1) { ?>
     <div class="row-fluid ">
                <div class="span6">
                   <div class="portlet box blue">

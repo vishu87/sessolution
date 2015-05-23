@@ -153,8 +153,8 @@ if(!isset($title)) {
                                              <label class="control-label" for="name">Self Portfolio</label>
                                              <div class="controls">
                                               <select name="self_portfolio" class="m-wrap span12">
-                                                <option value="1">No</option>
-                                                <option value="0" <?php echo ($row_sub["self_portfolio"] == 0)?'selected':''; ?>>Yes</option>
+                                                <option value="0">No</option>
+                                                <option value="1" <?php echo ($row_sub["self_portfolio"] == 1)?'selected':''; ?>>Yes</option>
                                               </select>
                                               <span class="help-block" ></span>
                                              </div>

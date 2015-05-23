@@ -19,8 +19,8 @@ $update = array();
 echo '<table class="table table-bordered table-hover">';
 switch ($report_type) {
 	case '1':
-		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","Evoting Platform","Vote Record Date","Meeting Type","Report","Notice","Proxy Slips","Attendance Slip","Annual Report","Meeting Outcome","Meeting Minutes");
-		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","VoteRecordDate","MeetingType","Report","Notice","ProxySlips","AttendanceSlips","AnnualReport","MeetingOutcome","MeetingMinutes");
+		$ar_fields_name = array("Report Type","Meeting Date","Record Date","e-Voting Start Date","e-Voting Deadline","Evoting Platform","Vote Record Date","Meeting Type","Report","Notice","Proxy Slips","Attendance Slip","Annual Report","Meeting Outcome","Voting Results (Clause 35A)","Meeting Minutes");
+		$ar_fields_type = array("ReportType","MeetingDate","RecordDate","EvotingStart","EvotingEnd","EvotingPlatform","VoteRecordDate","MeetingType","Report","Notice","ProxySlips","AttendanceSlips","AnnualReport","MeetingOutcome","VotingResults","MeetingMinutes");
 		$pa_view = new PA($report_id);
 		
 		$user->pa_subscribed_comapnies_year($user->parent,$pa_view->year);
@@ -34,6 +34,7 @@ switch ($report_type) {
 		$update["EvotingEnd"] = $pa_view->evoting_end;
 				$update["EvotingPlatform"] = ($pa_view->evoting_name == NULL)?$pa_view->evoting_plateform:'<a href="'.$pa_view->evoting_link.'" target="_blank">'.$pa_view->evoting_name.'</a>';
 		$update["MeetingType"] = $pa_view->meeting_type;
+		$update["VotingResults"] = $pa_view->voting_results;
 		//print_r($user->companies_subscribed_year);
 
 		if($pa_view->subscribed($user->companies_report_subscribed_year)){
