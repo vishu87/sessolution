@@ -31,7 +31,10 @@ $pa_report = new PA_admin($rid);
     max-width: 80px;
   }
   </style>
-<br>
+
+<div style="color:#F00; font-weight:bold">
+  Please use -1 to display NA
+</div><br>
 <form class="meetingResultsForm">
 <?php
 $recos = array();

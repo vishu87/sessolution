@@ -155,7 +155,7 @@ if(!isset($title)  || !isset($user_id)) {
                <div class="span6">
                   <div class="portlet box blue">
                           <div class="portlet-title">
-                                 <h4><i class="icon-reorder"></i>Upload List (PM)</h4>
+                                 <h4><i class="icon-reorder"></i>Upload List (Portfolio Manager)</h4>
                                  <div class="tools">
                                     <a href="javascript:;" class="collapse"></a>
                                  </div>
@@ -211,7 +211,7 @@ if(!isset($title)  || !isset($user_id)) {
                </div>
             </div>
             <?php
-              if(!isset($_POST["pm_id"])) $pm_id = $user_id;
+              if(!isset($_POST["pm_id"])) $pm_id = 0;
               else $pm_id = mysql_real_escape_string($_POST["pm_id"]);
             ?>
 
@@ -225,7 +225,10 @@ if(!isset($title)  || !isset($user_id)) {
                               <div class="portlet-body">
                                 <form class="form-horizontal" action="" method="POST">
                                   <select class="control" name="pm_id">
+                                    <option value="0">Firm Wide</option>
+                                    <?php if($_SESSION["self_portfolio"] != 0) { ?>
                                     <option value="<?php echo $user_id; ?>" <?php echo ($user_id == $pm_id)?'selected':''; ?> >Self</option>
+                                    <?php } ?>
                                     <?php
                                       $query_pm = mysql_query("SELECT id, name from users where created_by_prim = $user_id order by name asc");
                                       while ($row_pm = mysql_fetch_array($query_pm)) {
@@ -277,9 +280,12 @@ if(!isset($title)  || !isset($user_id)) {
                             </tfoot>
                            <tbody>
                               <?php
-                              
+                                if($pm_id == 0){
+                                   $sql = mysql_query("SELECT distinct( companies.com_id), companies.com_name,  companies.com_bse_code from user_voting_company inner join companies on user_voting_company.com_id = companies.com_id inner join users on user_voting_company.user_id = users.id where users.id='$user_id' OR users.created_by_prim = '$user_id' order by companies.com_name asc");
+                                 } else {
 
-                                $sql = mysql_query("SELECT companies.com_name, companies.com_id, companies.com_bse_code from user_voting_company inner join companies on user_voting_company.com_id = companies.com_id where user_voting_company.user_id='$pm_id' order by companies.com_name asc");
+                                    $sql = mysql_query("SELECT companies.com_name, companies.com_id, companies.com_bse_code from user_voting_company inner join companies on user_voting_company.com_id = companies.com_id where user_voting_company.user_id='$pm_id' order by companies.com_name asc");
+                                  }
                                 $count =1;
                                 while ($row = mysql_fetch_array($sql)) {
                                  echo '<tr id="tr_'.$row["com_id"].'">';

@@ -6,14 +6,18 @@ if(!isset($title)) {
 <div class="container-fluid">
    <!-- BEGIN PAGE HEADER-->
    <div class="row-fluid">
-    <div class="span6">
+    <div class="span3">
       <h3 class="page-title">
       Execute Vote
       <small></small>
     </h3>
     </div>
-    <div class="span6">
-      <a href="../excel/proxy_committee.php" class="btn green pull-right" style="margin-top:20px">Generate Voting Committee Approval File</a>
+    <div class="span9">
+      <div  style="margin:20px 0; text-align:right">
+        <a href="../excel/proxy_committee.php" class="btn green">Generate Voting<br>Committee Approval File</a>
+        <a href="#myModal" data-toggle="modal" onclick="view_marked_companies()" class="btn blue" style="margin-right:5px">View Marked<br>Companies</a>
+        <a href="../excel/download_upcoming.php" class="btn blue" style="margin-right:5px">Download Upcoming<br>Meetings List</a>
+      </div>
     </div>
     
   </div>
@@ -264,6 +268,15 @@ function view_report(company_name, proxy_id){
        $("#modal-body").html("<p>Loading...</p>");
         var file = 'view_report';
          $.post("ajax/"+ file +".php", {report_id:proxy_id, report_type:'1'}, function(data) {
+             $("#modal-body").html(data);
+       });
+}
+
+function view_marked_companies(){
+   $("#myModalLabel").text("View Marked Companies for Voting Committee Approval"); 
+       $("#modal-body").html("<p>Loading...</p>");
+        var file = 'view_marked_companies';
+         $.post("ajax/"+ file +".php", {}, function(data) {
              $("#modal-body").html(data);
        });
 }
