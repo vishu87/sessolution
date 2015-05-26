@@ -86,10 +86,10 @@ if(!isset($title)) {
                            <?php
                            $count =1;
                            
+                           $member->voting_records_firm($member->parent,1);
 
                            foreach ($years as $yr) {
 
-                            $member->voting_records_firm($member->parent,1);
                             $member->pa_total_comapnies_year($yr);
                             $member->pa_subscribed_comapnies_year($user_id,$yr);
 
