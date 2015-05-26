@@ -200,7 +200,7 @@ class PA{
 	public $meeting_type;
 
 	public function __construct($id) {
-		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, companies.com_isin, evoting.name, evoting.link, met_type.type as meeting_type_name from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter join met_type on proxy_ad.meeting_type = met_type.id  where proxy_ad.id='$id' ";
+		$sql = "SELECT proxy_ad.*, companies.com_name, companies.com_id, companies.com_isin, evoting.name, evoting.id as evoting_id, evoting.link, met_type.type as meeting_type_name from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id left join evoting on LOWER(proxy_ad.evoting_plateform) = evoting.evoter join met_type on proxy_ad.meeting_type = met_type.id  where proxy_ad.id='$id' ";
 
 		$query = mysql_query($sql);
 		$result = mysql_fetch_array($query);
@@ -215,6 +215,7 @@ class PA{
 		$this->evoting_end = ($result["evoting_end"])?date("d M Y",$result["evoting_end"]):'';
 		$this->evoting_plateform = $result["evoting_plateform"];
 		$this->evoting_name = $result["name"];
+		$this->evoting_id = $result["evoting_id"];
 		$this->evoting_link = $result["link"];
 
 		$this->old_meeting = ($result["meeting_date"] < strtotime("today"))?true:false;

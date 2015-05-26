@@ -380,4 +380,12 @@ function reset_proxy(report_id){
     });     
 }
 
+function nsdl_voting_screen(report_id, company_name){
+  $("#stack3 .modal-header h3").html(company_name+' - NSDL Voting');
+  $("#stack3 .modal-body").html('Loading..');
+   var file = 'nsdl_voting_screen';
+       $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
+        $("#stack3 .modal-body").html(data);
+  });
+}
 </script>

@@ -8,7 +8,12 @@ if(!isset($_POST["report_id"])  || $_SESSION["MEM_ID"] == '' || $_SESSION["PRIV"
 $pa_report = new PA($report_id);
 
 if($pa_report->evoting_name != NULL){
-  $link = '<a href="'.$pa_report->evoting_link.'" target="_blank" class="btn blue span3">e-Vote ('.$pa_report->evoting_name.')</a>';
+	if($pa_report->evoting_id == 1){
+
+		$link = '<a href="#stack3" data-toggle="modal" role="button" class="btn blue span3" onclick="nsdl_voting_screen('.$report_id.',\''.$_POST["company_name"].'\')">e-Vote ('.$pa_report->evoting_name.')</a>';
+	} else {
+		 $link = '<a href="'.$pa_report->evoting_link.'" target="_blank" class="btn blue span3">e-Vote ('.$pa_report->evoting_name.')</a>';
+	}
 } else {
   $link = '<div class="span4">e-Voting Plateform: '.$pa_report->evoting_plateform.'</div>';
 }
