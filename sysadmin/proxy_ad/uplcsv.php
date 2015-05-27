@@ -45,13 +45,24 @@ if(!isset($title)) {
                                  <!-- BEGIN FORM-->
                                   <form id="attachment_form" action="<?php echo $folder?>process.php?cat=1" class="form-horizontal form-bordered" method="post" enctype="multipart/form-data" target="_blank">
                                     <div class="row-fluid">
-                                       <div class="span6 ">
+                                       <div class="span12 ">
                                          <div class="control-group">
                                        <label class="control-label">Upload file</label>
                                        <div class="controls">
-                                           <input type="hidden" name="cv_req" value="1"/>
+                                        <div class="row" style="margin-left:30px">
+                                          <div class="span6"> 
+                                            <input type="hidden" name="cv_req" value="1"/>
                                           <input type="file" name="attach_file" id="attach_file"/>
+                                          
                                           <span class="help-block" id="fileInfo"></span>
+                                          </div>
+                                          <div class="span6" style="text-align:right">
+                                            <a type="button" href="<?php echo STRSITE ?>PAShedule.csv" class="btn icn-only ttip" rel="tooltip" title="" target="_blank" data-original-title="Download Format">
+                                                <i class="icon-download-alt"></i> Download Format
+                                              </a>
+                                          </div>
+                                        </div>
+                                          
                                        </div>
                                        </div>
                                        </div>
@@ -136,6 +147,16 @@ if(!isset($title)) {
                                                 }
                                                 ?>
                                            </select>
+                                             <select name="ccm_type" class="ccm_type" style="display:none" >
+                                                <option value="0">None</option>
+                                                <?php
+                                                foreach ($ccm_types as $key => $ccm_type) {
+                                                  ?>
+                                                  <option value="<?php echo $key ?>" ><?php  echo $ccm_type ?></option>
+                                                  <?php
+                                                }
+                                                ?>
+                                              </select>
                                           <span class="help-block" ></span>
                                        </div>
                                        </div>
@@ -210,4 +231,5 @@ function submit_add(){
    else
       return false;   
 }
+
 </script>

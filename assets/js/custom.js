@@ -432,3 +432,13 @@ function custom_report_freeze(report_id){
       }
   });
 }
+
+$(document).ready(function(){
+  $("select[name=meeting_type]").change(function(){
+        if($(this).val() == 5){
+          $(".ccm_type").show();
+        } else {
+          $(".ccm_type").hide();
+        }
+      });
+});

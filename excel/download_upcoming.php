@@ -4,7 +4,7 @@ require_once '../auth.php';
 
 /** PHPExcel */
 require_once 'Classes/PHPExcel.php';
-require_once '../classes/UserClass.php';
+include('../classes/UserClass.php');
 
 $member = new User($_SESSION["MEM_ID"]);
 $member->voting_records_firm($member->parent,1); 
@@ -18,9 +18,7 @@ $query .= " order by proxy_ad.meeting_date asc";
 $objPHPExcel = new PHPExcel();
 
 // Set properties
-$objPHPExcel->getProperties()->setCreator("SES")
-->setLastModifiedBy("SES");
- 
+$objPHPExcel->getProperties()->setCreator("SES")->setLastModifiedBy("SES");
 
 include ('styles.php');
 
@@ -40,7 +38,7 @@ $ar_fields = array("sn","com_name","com_isin","meeting_date","meeting_type","evo
 
 $ar_names = array("SN","Company Name","ISIN","Meeting Date","Meeting Type","e-Voting Start Date","e-Voting Deadline","e-Voting Platform");
 
-$ar_width = array("6","10","20","10","12","12","15","12","12","12","12","12","12","20","20","10","20","20");
+$ar_width = array("6","25","15","15","15","20","20","20","12","12","12","12","12","20","20","10","20","20");
 
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
 $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(25);
@@ -50,14 +48,14 @@ $count =0;
 $i=0;
 foreach ($ar_fields as $ar) {
  
-$cell_val = $i+$offset;
-$cell_val = getNameFromNumber($cell_val);
+    $cell_val = $i+$offset;
+    $cell_val = getNameFromNumber($cell_val);
 
-$objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell_val.$seq, $ar_names[$count]);
-$objPHPExcel->getActiveSheet()->getColumnDimension($cell_val)->setWidth($ar_width[$count]);
-$i++;
-$objPHPExcel->getActiveSheet(0)->getStyle($cell_val.$seq)->applyFromArray($styleArrayborder);
-$count++;
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell_val.$seq, $ar_names[$count]);
+    $objPHPExcel->getActiveSheet()->getColumnDimension($cell_val)->setWidth($ar_width[$count]);
+    $i++;
+    $objPHPExcel->getActiveSheet(0)->getStyle($cell_val.$seq)->applyFromArray($styleArrayborder);
+    $count++;
 
 }
 
@@ -68,30 +66,37 @@ $seq++;
 
 $count = 0;
 
-while($row = mysql_fetch_array($query)){
+$fetch_query = mysql_query($query);
+
+while($row = mysql_fetch_array($fetch_query)){
 	++$count;
-	$pa_report = new PA($row["id"]);
     $cell_val = 0;
     foreach ($ar_fields as $ar) {
     	$var = '';
     	if($ar == 'sn'){
     		$var = $count;
-    	} else {
-    		$var = $row[$ar];
-    	}
-		$cell_val = getNameFromNumber($cell_val);
-    	$objPHPExcel->getActiveSheet()->setCellValue($cell_val.$seq, $var);
+    	} else if($ar == 'meeting_date' || $ar == 'evoting_start' || $ar == 'evoting_end' ) {
+    		if($row[$ar]) $var = date("d-M-y",$row[$ar]);
+    	}else if($ar == 'meeting_type' ) {
+            if($row[$ar]) $var = $meeting_types[$row[$ar]];
+        } else {
+            $var = $row[$ar];
+        }
+		$cell = getNameFromNumber($cell_val);
+    	$objPHPExcel->getActiveSheet()->setCellValue($cell.$seq, $var);
+        $cell_val++;
     }
-	$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':J'.$seq)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+	$objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.getNameFromNumber($cell_val - 1).$seq)->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 		
 	$seq++;
 
 }
-$objPHPExcel->getActiveSheet()->freezePane('D3');
-$objPHPExcel->getActiveSheet()->mergeCells('A1:'.$val_chr.'1');
-$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', 'Proxy Advisory');
-$objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()->setWrapText(true);
-$objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.'1')->applyFromArray($styleArray1);
+
+$objPHPExcel->getActiveSheet()->freezePane('B2');
+$objPHPExcel->getActiveSheet()->mergeCells('A1:'.getNameFromNumber($cell_val - 1).'1');
+$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', 'Upcoming Meetings');
+$objPHPExcel->getActiveSheet()->getStyle('A1:'.getNameFromNumber($cell_val - 1).$seq.'')->getAlignment()->setWrapText(true);
+$objPHPExcel->getActiveSheet()->getStyle('A1:'.getNameFromNumber($cell_val - 1).'1')->applyFromArray($styleArray1);
 /*
 
 
@@ -100,7 +105,7 @@ $objPHPExcel->getActiveSheet()->getStyle('A1:'.$val_chr.$seq.'')->getAlignment()
 */
 $objPHPExcel->getActiveSheet()->setTitle('Proxy Advisory');
 
-$name = 'PA_'.date("d-M-y",strtotime("now"));
+$name = 'Upcoming_Meetings_'.date("d-M-y",strtotime("now"));
 header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment;filename="'.$name.'.xls"');
 header('Cache-Control: max-age=0');

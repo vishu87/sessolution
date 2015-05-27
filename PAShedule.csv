@@ -1,2 +1,2 @@
-Name,Meeting Date,Meeting Type,Meeting Time ,Venue,Record Date,Evoting Start,Evoting End,Evoting Platform, EVEN
-Bajaj Fin.,19/06/2015,AGM,11:20AM,venue,19/04/2015,19/10/2016,19/10/2017,cdsl,34567
+Name,Meeting Date,Meeting Type,CCM Type 1->Secured 2->Unsecured,Meeting Time ,Venue,Record Date,Evoting Start,Evoting End,Evoting Platform, EVEN
+Bajaj Fin.,20/06/2015,CCMC,1,11:20AM,venue,19/04/2015,19/10/2016,19/10/2017,cdsl,34567

@@ -13,6 +13,7 @@ $db = mysql_select_db(DB_DATABASE);
 if(!$db) {
 	die("Unable to select database");
 }
+$meeting_types_check = array("AGM", "EGM", "PB","CCM","CCMC");
 $folder = "proxy_ad";
 if($_GET["cat"] == 1){	
 	set_time_limit(1200);
@@ -27,7 +28,7 @@ if($_GET["cat"] == 1){
 		$file_path = '../../Temp/'.$temp_filename;
 		//echo $file_path;
 
-		$ar_fields = array( "com_name","meeting_date","meeting_type","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","even" );
+		$ar_fields = array( "com_name","meeting_date","meeting_type","ccm_type","meeting_time","meeting_venue","record_date","evoting_start","evoting_end","evoting_plateform","even" );
 		//$ar_fields_all = array("com_name","com_bse_code","com_bse_srcip","com_nse_sym","com_reuters","com_bloomberg","com_isin","add_date");
 		//echo sizeof($ar_fields) == 25 right now + 1 password at the end (always);
 
@@ -92,7 +93,7 @@ if($_GET["cat"] == 1){
 							$update["year"] =  ($year -1);
 						}
 
-						if(in_array($update["meeting_type"], $meeting_types)){
+						if(in_array($update["meeting_type"], $meeting_types_check)){
 
 							switch ($update["meeting_type"]) {
 								case 'AGM':
@@ -115,7 +116,7 @@ if($_GET["cat"] == 1){
 							}
 							$sql_check_dup = mysql_query("SELECT id from proxy_ad where com_id='$com_id' and meeting_date='$meeting_on' and meeting_type='$met_type' ");
 							if(mysql_num_rows($sql_check_dup) == 0){
-								$sql = "INSERT into proxy_ad (com_id, meeting_date, meeting_time, meeting_venue, meeting_type, record_date, evoting_start, evoting_end, evoting_plateform, even, year,add_date ) VALUES ('$com_id','$meeting_on', '$update[meeting_time]', '$update[meeting_venue]','$met_type', '$record_date', '$evoting_start', '$evoting_end', '$update[evoting_plateform]', '$update[even]', '$update[year]','$update[add_date]')";
+								$sql = "INSERT into proxy_ad (com_id, meeting_date, meeting_time, meeting_venue, meeting_type, ccm_type, record_date, evoting_start, evoting_end, evoting_plateform, even, year,add_date ) VALUES ('$com_id','$meeting_on', '$update[meeting_time]', '$update[meeting_venue]','$met_type','$update[ccm_type]', '$record_date', '$evoting_start', '$evoting_end', '$update[evoting_plateform]', '$update[even]', '$update[year]','$update[add_date]')";
 								$success = 'success';
 								// echo $sql;
 								mysql_query($sql);
@@ -374,7 +375,7 @@ if($_GET["cat"] == 8){
 
 		$update = array();
 
-		$ar_fields = array("com_id","meeting_date","meeting_type","meeting_time","meeting_venue");
+		$ar_fields = array("com_id","meeting_date","meeting_type","ccm_type","meeting_time","meeting_venue");
 		foreach ($ar_fields as $key) {
 			$update[$key] = mysql_real_escape_string($_POST[$key]);
 		}
@@ -392,7 +393,7 @@ if($_GET["cat"] == 8){
 
 		$update["add_date"] = strtotime("now");
 
-		$sql = "INSERT into proxy_ad (com_id, meeting_date, meeting_time, meeting_venue, meeting_type, year,add_date ) VALUES ('$update[com_id]','$update[meeting_date]', '$update[meeting_time]', '$update[meeting_venue]','$update[meeting_type]', $update[year],'$update[add_date]')";
+		$sql = "INSERT into proxy_ad (com_id, meeting_date, meeting_time, meeting_venue, meeting_type, ccm_type, year,add_date ) VALUES ('$update[com_id]','$update[meeting_date]', '$update[meeting_time]', '$update[meeting_venue]','$update[meeting_type]', '$update[ccm_type]', $update[year],'$update[add_date]')";
 
 		if(mysql_query($sql)){
 			$insert_id = mysql_insert_id();

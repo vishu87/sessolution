@@ -48,7 +48,7 @@ function voting_page(type){
         grit("Success!", "Your votes are succefully saved", "gritter-light");
         // var html = '<div class="alert alert-success" id="alert"><strong>Success!</strong> Voting is successfully saved.</div>';
         // $('<div></div>').appendTo("#alertSpan").hide().append(html).fadeIn('slow').delay(500).fadeOut("slow");
-        var text_button = (type == 1)?'Save My Votes':'Save Finale Votes';
+        var text_button = (type == 1)?'Save My Votes':'Save Final Votes';
         $("#voting_button").html(text_button);
         
    });  
@@ -152,7 +152,8 @@ function freeze_vote(report_id,type){
    var file = 'check_freeze_vote';
    $("#freeze_button").html('Checking..');
    $.post("ajax/"+ file +".php", {id:report_id,type:1}, function(data) {
-         if(data == 'success'){
+    data = JSON.parse(data);
+         if(data.success){
             var file = 'freeze_vote';
               $("#freeze_button").html('Freezing..');
              $("#freeze_button").removeAttr('onclick');
@@ -161,8 +162,27 @@ function freeze_vote(report_id,type){
                 grit("Success!","Your votes have been successfully freezed.","gritter-light");
            });    
          } else {
-            bootbox.alert(data);
-             $("#freeze_button").html('Freeze My Votes');
+            if(data.type == 1){
+                bootbox.confirm(data.message, function(result) {
+                if(result) {
+                  var file = 'freeze_vote';
+                  $("#freeze_button").html('Freezing..');
+                     $("#freeze_button").removeAttr('onclick');
+                     $.post("ajax/"+ file +".php", {id:report_id}, function(data) {
+                        refresh_ses_voting(report_id, type);
+                        grit("Success!","Your votes have been successfully freezed.","gritter-light");
+                   });
+
+                }
+                else {
+                  $("#freeze_button").html('Freeze My Votes');
+                }
+              }); 
+            } else {
+               bootbox.alert(data.message);
+              $("#freeze_button").html('Freeze My Votes');
+            }
+           
          }
   });
 }
@@ -230,14 +250,10 @@ function set_freeze(report_id,type){
     //$("#freeze_all").html('Freezing.. Please Wait').removeAttr('onclick');
     $("#freeze_all").html('Freezing.. Please Wait');
         $.post("ajax/"+ file +".php", {id:report_id,type:2}, function(data) {
-         if(data == 'success'){
-           //  var file = 'freeze_all';;
-           //   $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
-           //      $("#stack1 .modal-body").html(data);
-           // });
-
+          data = JSON.parse(data);
+         if(data.success){
            //create a second pop-up for votes
-
+            $("#stack2 .modal-body").html('Loading..');
             var file = 'final_votes_data';;
              $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
                 $("#stack2 .modal-body").html(data);
@@ -247,12 +263,29 @@ function set_freeze(report_id,type){
 
             $('#stack2').modal('show');  
          } else {
-            bootbox.alert(data);
-             $("#freeze_all").html('Freeze All Votes');
+            if(data.type == 1){
+               bootbox.confirm(data.message, function(result) {
+                if(result) {
+                  $('#stack2').modal('show');  
+
+                  $("#stack2 .modal-body").html('Loading..');
+                  var file = 'final_votes_data';;
+                   $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
+                      $("#stack2 .modal-body").html(data);
+                      $("#accept_freeze").attr('onclick','accept_freeze('+report_id+','+type+')');
+                  });
+
+                }
+                else {
+                $("#freeze_all").html('Freeze All Votes');
+                }
+              }); 
+            } else {
+              bootbox.alert(data.message);
+              $("#freeze_all").html('Freeze All Votes');
+            }
          }
   });
-
-
 }
 
 function set_unfreeze(report_id,type){
