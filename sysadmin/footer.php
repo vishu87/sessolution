@@ -27,7 +27,7 @@
 	<script src="../assets/js/jquery.tablesorter.widgets.js"></script>
 	<script src="../assets/js/jquery.tablesorter.pager.js"></script>
 	<script src="../assets/chosen-bootstrap/chosen/chosen.jquery.js"></script>
-	<script src="../assets/js/custom.js?v=1.0.1"></script>
+	<script src="../assets/js/custom.js?v=1.0.2"></script>
 	
 	<!-- ie8 fixes -->
 	<!--[if lt IE 9]>
