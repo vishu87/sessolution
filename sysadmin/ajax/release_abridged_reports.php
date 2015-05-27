@@ -18,10 +18,13 @@ if(!isset($_POST["id"])  || $_SESSION["MEM_ID"] == '' || $_SESSION["PRIV"] != 1)
 $report_id = mysql_real_escape_string($_POST["id"]);
 
 $pa_report = new PA_admin($report_id);
+
 $flag_send = 0;
 
 $subject = "Abridged Report for ".$pa_report->company_name.' '.$pa_report->meeting_type.' '.$pa_report->meeting_date;
 $noreply = 'noreply@sesgovernance.com';
+
+
 
 //******************VOTING EMAIL **********************************************
 
@@ -49,6 +52,13 @@ foreach ($normal_users as $normal_user) {
   while($row = mysql_fetch_array($query)){
     array_push($normal_users_email, $row["email"]);
     array_push($sub_users, $row["id"]);
+  }
+}
+
+if($pa_report->an_id != 0 && $pa_report->an_id != ''){
+  $query_an = mysql_query("SELECT analysts.email from analysts where an_id IN (".$pa_report->an_id.")  ");
+  while ($row_an = mysql_fetch_array($query_an)) {
+    array_push($normal_users_email, $row_an["email"]);
   }
 }
 

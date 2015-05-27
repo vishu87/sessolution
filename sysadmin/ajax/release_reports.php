@@ -53,7 +53,7 @@ $voting_body_wo_comm .= '</table>';
 $normal_users = fetch_normal_users($pa_report->company_id, $pa_report->year);
 
 $sub_users = array();
-
+$count = 0;
 foreach ($normal_users as $normal_user) {
 
     $normal_users_email = array();
@@ -72,6 +72,14 @@ foreach ($normal_users as $normal_user) {
     while($row = mysql_fetch_array($query)){
       array_push($normal_users_email, $row["email"]);
       array_push($sub_users, $row["id"]);
+    }
+    if($count == 0){
+      if($pa_report->an_id != 0 && $pa_report->an_id != ''){
+        $query_an = mysql_query("SELECT analysts.email from analysts where an_id IN (".$pa_report->an_id.")  ");
+        while ($row_an = mysql_fetch_array($query_an)) {
+          array_push($normal_users_email, $row_an["email"]);
+        }
+      }
     }
 
     // mail to that particular user admin settings
@@ -96,6 +104,7 @@ foreach ($normal_users as $normal_user) {
       mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$noreply','','$email_string','','$subject', '$body','$at_folder','$at_file') ");
        
     }
+    $count++;
 
 }
 

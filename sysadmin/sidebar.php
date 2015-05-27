@@ -107,6 +107,9 @@
 						<li class="<?php echo ($sidebar=='proxy_ad' && $sub_sidebar == 1)?'active':'';?>">
 							<a href="proxy_ad.php">Upload Schedule</a>
 						</li>
+						<li class="<?php echo ($sidebar=='proxy_ad' && $sub_sidebar == 8)?'active':'';?>">
+							<a href="proxy_ad.php?cat=8">Upload Resolutions</a>
+						</li>
 						<li class="<?php echo ($sidebar=='proxy_ad' && $sub_sidebar == 2)?'active':'';?>">
 							<a href="proxy_ad.php?cat=2">Upcoming</a>
 						</li>

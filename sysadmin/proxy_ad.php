@@ -21,7 +21,7 @@
 		$rid= preg_replace('/[^(0-9)]*/','', $rid);
 	}
 
-	if($id>7 || $id<1) {
+	if($id>8 || $id<1) {
 		header("location: ".STRSITE."access-denied.php");
 	}
 
@@ -48,6 +48,8 @@
 						break;
 				case 7: include($folder.'skipped.php');
 						break;
+				case 8: include($folder.'uplres.php');
+				break;
 			}
 		?>			
 		</div>

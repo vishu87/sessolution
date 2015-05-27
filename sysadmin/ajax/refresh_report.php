@@ -22,6 +22,7 @@ $proxy_report = new PA_admin($proxy_id);
 
 ?>
    <td><?php echo $count;?></td>
+   <td><?php echo $proxy_report->id;?></td>
    <td><?php echo $proxy_report->company_name; 
     $row["com_name"] = name_filter($proxy_report->company_name);
    ?></td>

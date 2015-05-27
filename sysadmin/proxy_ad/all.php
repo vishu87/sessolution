@@ -81,6 +81,7 @@ if(!isset($title)) {
                            <thead>
                               <tr>
                                  <th>#</th>
+                                 <th>ID</th>
                                  <th>Company Name</th>
                                  <th>Meeting Date</th>
                                  <th>e-Voting Deadline</th>
@@ -95,6 +96,7 @@ if(!isset($title)) {
                            <tfoot>
                               <tr>
                                 <th>#</th>
+                                <th>ID</th>
                                  <th>Company Name</th>
                                  <th>Meeting Date</th>
                                  <th>e-Voting Deadline</th>
@@ -133,6 +135,7 @@ if(!isset($title)) {
                            ?>
                               <tr id="tr_<?php echo $proxy_report->id; ?>">
                                  <td><?php echo $count;?></td>
+                                 <td><?php echo $proxy_report->id;?></td>
                                  <td><?php echo $proxy_report->company_name; 
                                   $row["com_name"] = name_filter($proxy_report->company_name);
                                  ?></td>

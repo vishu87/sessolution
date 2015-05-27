@@ -183,6 +183,7 @@ class PA_admin{
 		$this->vote_completed_on = $result["vote_completed_on"];
 		$this->template_release = $result["template_release"];
 		$this->custom_report_freeze = $result["custom_report_freeze"];
+		$this->an_id = $result["an_id"];
 		
 	}
 
