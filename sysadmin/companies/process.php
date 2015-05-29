@@ -94,14 +94,14 @@ if($_GET["cat"] == 1){
 if($_GET["cat"] == 2)
 {
 	$table = 'companies';
-	$ar_fields = array("name","bse_code","bse_srcip","nse_sym","reuters","bloomberg","isin","address","telephone","website","com_sec_email","com_full_name");
+	$ar_fields = array("name","bse_code","bse_srcip","nse_sym","reuters","bloomberg","isin","address","telephone","website","sec_email","full_name");
 	$update = array();
+
 	foreach($ar_fields as $ar){
 		$update["com_".$ar] = mysql_real_escape_string($_POST[$ar]);
-		//echo $update["com_".$ar].'<br>';
 	}
-	$update["add_date"] = strtotime("now");
 
+	$update["add_date"] = strtotime("now");
 	if($update["com_bse_code"] != ''){
 	$sql = "select com_id from $table where com_bse_code = '".$update["com_bse_code"]."' ";
 	$result = mysql_query($sql);
@@ -135,6 +135,7 @@ if($_GET["cat"] == 2)
 		if($i==1) $query2 = $query2."'".$update[$name]."'";
 		else $query2 = $query2.", '".$update[$name]."'";
 	}
+
 	if(mysql_query($query1.$query2.$query3)) header("Location: ../".$folder.".php?cat=2&success=3");
 	else header("Location: ../".$folder.".php?cat=2&success=0");
 }

@@ -107,7 +107,7 @@ if(!isset($title)) {
                                      <div class="row-fluid">
                                        <div class="span6 ">
                                           <div class="control-group">
-                                             <label class="control-label">Rueters</label>
+                                             <label class="control-label">Reuters</label>
                                              <div class="controls">
                                                 <input id="reuters" name="reuters" class="m-wrap span12" placeholder="eg. ACC.BO" type="text">
                                                 <span class="help-block" id="usernameInfo"></span>
@@ -181,7 +181,7 @@ if(!isset($title)) {
                                           <div class="control-group">
                                              <label class="control-label">Secretary email ID</label>
                                              <div class="controls">
-                                                <input id="com_sec_email" name="com_sec_email" class="m-wrap span12" placeholder="eg. abc@abc.com" type="text">
+                                                <input id="sec_email" name="sec_email" class="m-wrap span12" placeholder="eg. abc@abc.com" type="text">
                                                 <span class="help-block" ></span>
                                              </div>
                                           </div>
@@ -191,7 +191,7 @@ if(!isset($title)) {
                                           <div class="control-group">
                                              <label class="control-label">Full Name</label>
                                              <div class="controls">
-                                                <input id="com_full_name" name="com_full_name" class="m-wrap span12" placeholder="eg. XYZ Limited" type="text">
+                                                <input id="full_name" name="full_name" class="m-wrap span12" placeholder="eg. XYZ Limited" type="text">
                                                 <span class="help-block" ></span>
                                              </div>
                                           </div>

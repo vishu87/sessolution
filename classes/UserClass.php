@@ -222,7 +222,8 @@ class PA{
 		$this->meeting_type = $result["meeting_type_name"];
 		$this->meeting_type_id = $result["meeting_type"];
 		$this->year = $result["year"];
-		$this->gen_report = $result["report"];
+		$this->gen_report = $result["report"]; 
+		$this->abridged_report = $result["abridged_report"]; 
 		$this->teasor = '<a target="_blank" href="'.$result["teasor"].'">'.$result["teasor"].'</a>';
 		$this->annual_report = '<a target="_blank" href="'.$result["annual_report"].'">'.$result["annual_report"].'</a>';
 		$this->meeting_outcome = '<a target="_blank" href="'.$result["meeting_outcome"].'">'.$result["meeting_outcome"].'</a>';
@@ -283,7 +284,7 @@ class PA{
 
 	public function report($user_id,$customized){
 		$this->company_name = name_filter($this->company_name);
-
+		$flag_show = 0;
 		if($this->is_released){
 
 		if($customized == 0){
@@ -295,30 +296,30 @@ class PA{
          			$row_deadline = mysql_fetch_array($query_deadline);
          			$ts = $row_deadline["deadline"] + 86400;
          			if($row_deadline["deadline"] != '') echo 'Available on<br>'.date("d M y", $ts);
-         			else echo 'Pending';
+         			else $flag_show = 1;
          		} else {
-         			echo 'Pending';
+         			$flag_show = 1;
          		}
          	}
         
-        } else {
+	        } else {
 
-          $sql_c = mysql_query("SELECT report_upload from customized_reports where user_id= '$user_id' and report_id='".$this->id."' ");
-          $row_c = mysql_fetch_array($sql_c);
-           if($row_c["report_upload"] != '') {
-           	echo '<a href="../preview/report_preview_user.php?res='.encrypt($this->id).'&amp;type='.encrypt(1).'" role="button" class="btn span12" style="max-width:100px;" data-toggle="modal" target="_blank">View</a>';
-           } else {
-           		$query_deadline = mysql_query("SELECT deadline from report_analyst where report_id='".$this->id."' and rep_type='1' and type = '3' ");
-         		if(mysql_num_rows($query_deadline) > 0){
-         			$row_deadline = mysql_fetch_array($query_deadline);
-         			$ts = $row_deadline["deadline"] + 86400;
-         			if($row_deadline["deadline"] != '') echo 'Available on<br>'.date("d M y", $ts);
-         			else echo 'Pending';
-         		} else {
-         			echo 'Pending';
-         		}
-           }
-        }
+	          $sql_c = mysql_query("SELECT report_upload from customized_reports where user_id= '$user_id' and report_id='".$this->id."' ");
+	          $row_c = mysql_fetch_array($sql_c);
+	           if($row_c["report_upload"] != '') {
+	           	echo '<a href="../preview/report_preview_user.php?res='.encrypt($this->id).'&amp;type='.encrypt(1).'" role="button" class="btn span12" style="max-width:100px;" data-toggle="modal" target="_blank">View</a>';
+	           } else {
+	           		$query_deadline = mysql_query("SELECT deadline from report_analyst where report_id='".$this->id."' and rep_type='1' and type = '3' ");
+	         		if(mysql_num_rows($query_deadline) > 0){
+	         			$row_deadline = mysql_fetch_array($query_deadline);
+	         			$ts = $row_deadline["deadline"] + 86400;
+	         			if($row_deadline["deadline"] != '') echo 'Available on<br>'.date("d M y", $ts);
+	         			else $flag_show = 1;
+	         		} else {
+	         			 $flag_show = 1;
+	         		}
+	           }
+	        }
 
     	} else {
     		$query_deadline = mysql_query("SELECT deadline from report_analyst where report_id='".$this->id."' and rep_type='1' and type = '3' ");
@@ -326,10 +327,22 @@ class PA{
          			$row_deadline = mysql_fetch_array($query_deadline);
          			$ts = $row_deadline["deadline"] + 86400;
          			if($row_deadline["deadline"] != '') echo 'Available on<br>'.date("d M y", $ts);
-         			else echo 'Pending';
+         			else $flag_show = 1;
          		} else {
-         			echo 'Pending';
+         			$flag_show = 1;
          		}
+    	}
+
+    	if($flag_show == 1){
+    		if($this->old_meeting){
+	    		if($this->abridged_report != '') {
+	         		echo '<a href="../preview/abridged_preview_user.php?res='.encrypt($this->id).'" role="button" class="btn span12" style="max-width:100px;" data-toggle="modal" target="_blank">View</a>';
+	         	} else {
+	         		echo '--';
+	         	}
+         	} else {
+         		echo 'Pending';
+         	}
     	}
 
 	}

@@ -28,14 +28,19 @@ $sql = mysql_query($query);
 $subject = "Deadline Breached"; 
 	
 while ($row = mysql_fetch_array($sql)) {
+	$flag = 0;
+	if($row["rep_type"] == 1 ){
+		$check_skipped = mysql_query("SELECT skipped_on from proxy_ad where id = $row[report_id] limit 1");
+		$row_check = mysql_fetch_array($check_skipped);
+		if($row_check["skipped_on"] != 0) $flag = 1;
+	}
 
-	$body = createmessage($row["rep_type"],$row["report_id"],$task_types[$row["type"]],$row["deadline"]);	
-	
-
-	mysql_query("INSERT into pending_email (an_id, report_analyst_id, num_days) values ('$row[an_id]','$row[id]','-1') ");
-  	
-  	$body = mysql_real_escape_string($body);
-	  mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$row[email]','".ADMIN_MAIL."','','','$subject', '$body','','') ");
+	if($flag != 0){
+		$body = createmessage($row["rep_type"],$row["report_id"],$task_types[$row["type"]],$row["deadline"]);	
+		mysql_query("INSERT into pending_email (an_id, report_analyst_id, num_days) values ('$row[an_id]','$row[id]','-1') ");
+	  	$body = mysql_real_escape_string($body);
+		  mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$row[email]','".ADMIN_MAIL."','','','$subject', '$body','','') ");
+	}
    
 }
 

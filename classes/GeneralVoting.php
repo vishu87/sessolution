@@ -263,15 +263,15 @@ class SesVoting {
 				echo '<a href="javascript:;" class="btn yellow span4" id="unfreeze_button" onclick="unfreeze_vote('.$proxy_id.','.$type.')">Un-Freeze My Votes</a>';
 			} else {
 				if($type == 1){
-					echo '<a href="javascript:;" class="btn blue span4" id="voting_button" onclick="voting_page('.$type.')">Save My Votes</a>';
+					echo '<a href="javascript:;" class="btn blue span4" id="voting_button" onclick="voting_page('.$type.','.$proxy_id.',0)">Save My Votes</a>';
 				} else {
 					if($user_pa->ignore_an == 0){
-						echo '<a href="javascript:;" class="btn blue span4" id="voting_button" onclick="voting_page('.$type.')">Save Final Votes</a>';
+						echo '<a href="javascript:;" class="btn blue span4" id="voting_button" onclick="voting_page('.$type.','.$proxy_id.',0)">Save Final Votes</a>';
 					}
 				}
 
 				if($type == 1)
-					echo '<a href="javascript:;" class="btn green span4" id="freeze_button" onclick="freeze_vote('.$proxy_id.','.$type.')">Freeze My Votes</a>';
+					echo '<a href="javascript:;" class="btn green span4" id="freeze_button" onclick="voting_page('.$type.','.$proxy_id.',1)">Freeze My Votes</a>';
 			}
 		} else {
 			
@@ -294,7 +294,7 @@ class SesVoting {
 		if($_SESSION["MEM_ID"] == $parent_id && $type == 2){
 			if($user_pa->final_freeze == 0){
 				?>
-					<a href="javascript:;" class="btn span4 yellow" id="freeze_all" onclick="set_freeze(<?php echo $proxy_id; ?>,<?php echo $type; ?>)">Freeze All Votes</a>
+					<a href="javascript:;" class="btn span4 yellow" id="freeze_all" onclick="voting_page(<?php echo $type; ?>,<?php echo $proxy_id; ?>,1)">Freeze All Votes</a>
 				<?php
 			} else if($user_pa->final_freeze == 1){
 				?>

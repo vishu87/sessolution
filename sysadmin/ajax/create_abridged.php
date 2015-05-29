@@ -139,7 +139,7 @@ $str ='';
 				<tr>
 					<td><img src="../../logo.jpg" style="opacity:0.7"></td>
 					<td style="text-align:right; color:#888;">
-						<h1>'.$row_comp["com_full_name"].'</h1>
+						<h1 style="line-height:0.7">'.$row_comp["com_full_name"].'</h1>
 						<span>'.$row_comp["com_website"].'</span>
 					</td>
 				</tr>
@@ -198,8 +198,8 @@ $str ='';
 					<td style="text-align:right; color:#888; background:#EB641B"></td>
 				</tr>
 			</table>
-			<div style="position:absolute; top:290px; width:600px; background:#7F7F7F; font-family:Arial; padding:0px 40px; height:140px; color:#FFF; font-size:40px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">
-				Proxy Advisory Report<br>'.$row_comp["com_full_name"].'
+			<div style="position:absolute; top:290px; width:600px; background:#7F7F7F; font-family:Arial; padding:20px 40px; min-height:140px; color:#FFF; font-size:40px; line-height:1; border:1px solid #FFF; border-left:0" align="right">
+				Proxy Advisory Report<br><span style="line-height:1">'.$row_comp["com_full_name"].'</span>
 				
 			</div>
 			<div style="position:absolute; top:950px; width:500px; height:140px; font-size:14px; line-height:1.5; border:1px solid #FFF; border-left:0" align="right">

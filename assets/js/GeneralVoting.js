@@ -39,19 +39,34 @@ function hide_user_votes(report_id,parent_id){
    $("#vote_loader").attr('onclick','load_user_votes('+report_id+','+parent_id+')');
 }
 
-function voting_page(type){
+function voting_page(type, report_id, freeze){
+
+  if(freeze == 1){
+    if(type == 1){
+      $("#freeze_button").html('Saving Votes...');
+    } else {
+      $("#freeze_all").html('Saving Votes...');
+    }
+  }
+
 	$("#voting_button").html("Processing...");
      var file = "add_voting";
      var my_data = $("#VotingForm").serialize();
      my_data += '&voting_type='+type;
      $.post("ajax/"+ file +".php", my_data, function(data) {
         grit("Success!", "Your votes are succefully saved", "gritter-light");
-        // var html = '<div class="alert alert-success" id="alert"><strong>Success!</strong> Voting is successfully saved.</div>';
-        // $('<div></div>').appendTo("#alertSpan").hide().append(html).fadeIn('slow').delay(500).fadeOut("slow");
         var text_button = (type == 1)?'Save My Votes':'Save Final Votes';
         $("#voting_button").html(text_button);
-        
-   });  
+
+        if(freeze == 1){
+          if(type == 1){
+            freeze_vote(report_id, type);
+          } else {
+            set_freeze(report_id, type);
+          }
+        }
+
+   });
 }
 
 function view_vote_upcoming(company_name,proxy_id){
@@ -247,7 +262,7 @@ function set_dline(report_id){
 
 function set_freeze(report_id,type){
    var file = 'check_freeze_vote';
-    //$("#freeze_all").html('Freezing.. Please Wait').removeAttr('onclick');
+
     $("#freeze_all").html('Freezing.. Please Wait');
         $.post("ajax/"+ file +".php", {id:report_id,type:2}, function(data) {
           data = JSON.parse(data);
@@ -255,13 +270,12 @@ function set_freeze(report_id,type){
            //create a second pop-up for votes
             $("#stack2 .modal-body").html('Loading..');
             var file = 'final_votes_data';;
-             $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
+              $.post("ajax/"+ file +".php", {report_id:report_id}, function(data) {
                 $("#stack2 .modal-body").html(data);
                 $("#accept_freeze").attr('onclick','accept_freeze('+report_id+','+type+')');
-            });
-
-
+              });
             $('#stack2').modal('show');  
+         
          } else {
             if(data.type == 1){
                bootbox.confirm(data.message, function(result) {

@@ -49,11 +49,11 @@ if(mysql_num_rows($res_sql) > 0){
 	if($flag_check_vote == 1 ){
 		$response["success"] = false;
 		$response["type"] = 0;
-		$response["message"] =  'Please fill all votes before freezing the votes or press Save button first to commit your changes.';
+		$response["message"] =  'Please fill votes for all resolutions before freezing';
 	} else if($flag_check_comment == 1){
 		$response["success"] = false;
 		$response["type"] = 1;
-		$response["message"] =  'Do you want to freeze votes without filling comments for every resolution? If you have filled comments for every resolution and still getting this alert, please press <b>Save</b> button first to commit your changes.';
+		$response["message"] =  'Do you want to freeze votes without adding comments for every resolution?';
 	} else {
 		$response["success"] = true;
 	}

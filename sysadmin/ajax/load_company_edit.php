@@ -16,7 +16,7 @@ if(!isset($_POST["id"])  || $_SESSION["MEM_ID"] == '' || $_SESSION["PRIV"] != 1)
 
 $query_sent = mysql_query("SELECT * from companies where com_id='$_POST[id]' LIMIT 1");
 $ar_fields_all = array("com_name","com_bse_code","com_bse_srcip","com_nse_sym","com_reuters","com_bloomberg","com_isin","com_address","com_telephone","com_website","com_sec_email","com_full_name");
-$ar_fields_name = array("Company Name","BSE Code","BSE Srcip","NSE Symbol","Rueters","Bloomberg","ISIN","Address","Telephone","Website","Secretary email ID","Full Name");
+$ar_fields_name = array("Company Name","BSE Code","BSE Srcip","NSE Symbol","Reuters","Bloomberg","ISIN","Address","Telephone","Website","Secretary email ID","Full Name");
 echo '<form id="update_form" ><table class="table table-bordered table-hover">';
 echo '<button type="button" onclick="check_edit_submit()" class="btn blue" style="margin-bottom:10px;"><i class="icon-ok"></i> Update</button>';
 while($row = mysql_fetch_array($query_sent))  {
