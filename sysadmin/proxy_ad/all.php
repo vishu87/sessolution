@@ -86,7 +86,7 @@ if(!isset($title)) {
                                  <th>Meeting Date</th>
                                  <th>e-Voting Deadline</th>
                                  <th>Type</th>
-                                 <th>Coverage</th>
+                                 <th>Report</th>
                                  <th>Subscribers</th>
                                  <th>Action</th>
                                  
@@ -101,7 +101,7 @@ if(!isset($title)) {
                                  <th>Meeting Date</th>
                                  <th>e-Voting Deadline</th>
                                  <th>Type</th>
-                                 <th>Coverage</th>
+                                 <th>Report</th>
                                  <th>Subscribers</th>
                                  <th>Action</th>
                                  
@@ -156,6 +156,8 @@ if(!isset($title)) {
                                </td>
                                  <td>
                                   <?php 
+                                    $proxy_report->ses_voting($count);
+
                                     $proxy_report->edit_button_all($count);
                                     $proxy_report->delete_all();  
                                   ?>

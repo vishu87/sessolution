@@ -23,10 +23,21 @@ $query = mysql_query("SELECT meeting_alert.*, users.email, users.name, users.oth
 while ($row = mysql_fetch_array($query)) {
 	$meeting_date = $today+ $row["num_days"]*86400;
 
-	$query_rep = mysql_query("SELECT proxy_ad.id from  user_voting_company inner join proxy_ad on user_voting_company.com_id = proxy_ad.com_id where user_voting_company.meeting_alert = 1 and proxy_ad.meeting_date = '$meeting_date' and user_voting_company.user_id='$row[user_id]' ");
-	while ($row_rep = mysql_fetch_array($query_rep) ) {
-		$body = createmessage($row_rep["id"]);
+	$array_reports = array();
 
+	$query_rep1 = mysql_query("SELECT proxy_ad.id from  user_voting_company inner join proxy_ad on user_voting_company.com_id = proxy_ad.com_id where user_voting_company.meeting_alert = 1 and proxy_ad.meeting_date = '$meeting_date' and (proxy_ad.evoting_end = '' || proxy_ad.evoting_end = 0) and user_voting_company.user_id='$row[user_id]' ");
+	while ($row1 = mysql_fetch_array($query_rep1)) {
+		if(!in_array($row1["id"], $array_reports)) array_push($array_reports, $row1["id"]);
+	}
+
+	$query_rep2 = mysql_query("SELECT proxy_ad.id from  user_voting_company inner join proxy_ad on user_voting_company.com_id = proxy_ad.com_id where user_voting_company.meeting_alert = 1 and proxy_ad.evoting_end = '$meeting_date' and user_voting_company.user_id='$row[user_id]' ");
+	while ($row2 = mysql_fetch_array($query_rep2)) {
+		if(!in_array($row2["id"], $array_reports)) array_push($array_reports, $row2["id"]);
+	}
+
+
+	foreach($array_reports as $report_id){
+		$body = createmessage($report_id);
 		$body = mysql_real_escape_string($body);
 		mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$row[email]','$row[other_email]','','','$subject', '$body','','') ");
 	}

@@ -14,8 +14,8 @@ if(!isset($title)) {
     </div>
     <div class="span9">
       <div  style="margin:20px 0; text-align:right">
+        <a href="#myModal" data-toggle="modal" onclick="view_marked_companies()" class="btn blue" style="">View Marked<br>Meetings</a>
         <a href="../excel/proxy_committee.php" class="btn green">Generate Voting<br>Committee Approval File</a>
-        <a href="#myModal" data-toggle="modal" onclick="view_marked_companies()" class="btn blue" style="margin-right:5px">View Marked<br>Companies</a>
         <a href="../excel/download_upcoming.php" class="btn blue" style="margin-right:5px">Download Upcoming<br>Meetings List</a>
       </div>
     </div>

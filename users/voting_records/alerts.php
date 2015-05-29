@@ -51,7 +51,7 @@ if(!isset($title)  || !isset($user_id)) {
       <div class="row-fluid">
        <div class="span12">
           <div class="control-group">
-             <label class="control-label">Alert me for a Meeting before (No. of days)</label>
+             <label class="control-label">Alert me for a Meeting before e-Voting deadline (no. of days)</label>
              <div class="controls">
                   <input type="text" class="m-wrap span4"  id="meeting_alert_add" placeholder="No. of Days" value=""><button class="btn" type="button" onclick="alert_add()" >Add</button>
                   <span class="help-block"></span>   
