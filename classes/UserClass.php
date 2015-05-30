@@ -252,7 +252,7 @@ class PA{
 		else {$content_fill = $content; $type =1; }
 		$check = mysql_query("SELECT id from subscription_request where com_id = '".$this->company_id."' and report_type='1' and user_id='$_SESSION[MEM_ID]' and status='0' limit 1");
 		if(mysql_num_rows($check) > 0) return (!$content)?'Subscription<br>Requested':'Full Report<br>Requested';
-		else return '<a href="javascript:;" class="btn green span12" style="max-width:120px"  onclick="subscribe('.$this->id.','.$this->company_id.',1,'.$type.')">'.$content_fill.'</a>';
+		else return '<a href="javascript:;" class="btn green span12" style="max-width:100px; margin-left:0"  onclick="subscribe('.$this->id.','.$this->company_id.',1,'.$type.')">'.$content_fill.'</a>';
 	}
 
 	public function coverage($companies){
@@ -334,18 +334,21 @@ class PA{
     	}
 
     	if($flag_show == 1){
-    		if($this->old_meeting){
-	    		if($this->abridged_report != '') {
-	         		echo '<a href="../preview/abridged_preview_user.php?res='.encrypt($this->id).'" role="button" class="btn span12" style="max-width:100px;" data-toggle="modal" target="_blank">View</a>';
-	         	} else {
-	         		echo '--';
-	         	}
-         	} else {
-         		echo 'Pending';
-         	}
+    		$this->abridged_report();
     	}
 
 	}
+
+	public function abridged_report(){
+		if($this->abridged_report != '') {
+     		echo '<a href="../preview/abridged_preview_user.php?res='.encrypt($this->id).'" role="button" class="btn span12" style="max-width:100px;" data-toggle="modal" target="_blank">View Abridged</a>';
+     	} else {
+     		if($this->old_meeting){
+     			echo '<div style="text-align:center">--</div>';
+     		} else echo '<div style="text-align:center">Pending</div>';
+     	}
+	}
+
 
 	public function details(){
 		return	'<a  href="#myModal" role="button" class="btn blue span12" style="max-width:100px" data-toggle="modal" onclick="view_report(\''.$this->company_name.' '.$this->isin.'\','.$this->id.')" >Details</a>';

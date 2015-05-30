@@ -7,6 +7,17 @@ if(!isset($_POST["scheme_id"])) header("Location: ".STRSITE."access-denied.php")
 $count = 1;
 $query = "SELECT scheme_companies.id, scheme_companies.com_id, companies.com_name, scheme_companies.shares_held from scheme_companies join schemes on scheme_companies.scheme_id = schemes.id join companies on scheme_companies.com_id = companies.com_id  where scheme_companies.scheme_id = '$_POST[scheme_id]' AND schemes.user_id = '$_SESSION[MEM_ID]' ";
 ?>
+<div class="row" style="margin: 0 0 20px 10px">
+	<div class="span2">
+		<h3>Add Company</h3>
+	</div>
+	<div class="span4">
+		Company Name<br><input class="typehead" name="company_name" class="form-">
+	</div>
+	<div class="span4">
+		Shares Held <input class="typehead" name="shares_held">
+	</div>
+</div>
 <table class="table table-stripped tablesorter ">
 	<thead>
 		<tr>

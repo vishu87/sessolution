@@ -174,7 +174,7 @@ function view_users(report_id, company_id, company_name, year){
 //used
 function edit_cgs(count,cgs_id, company_name){
    $("#myModalLabel").text(company_name); 
-    $("#close_button").attr('onclick','refresh_tr('+count+','+cgs_id+')');
+    $("#close_button").attr('onclick','refresh_tr_cgs('+count+','+cgs_id+')');
   $("#modal-body").html('<iframe src="cgs_reports/edit.php?id=' +cgs_id+ '" style="border:0; width:100%; height:300px;"></iframe>');
    
    /*var file = 'load_cgs_subscribers';
@@ -184,7 +184,7 @@ function edit_cgs(count,cgs_id, company_name){
 
 }
 //used
-function refresh_tr(count,report_id){
+function refresh_tr_cgs(count,report_id){
   var file = 'refresh_cgs';
 
   var c_class = $("#tr_"+report_id).attr('class');
@@ -240,7 +240,7 @@ if($("#user_id_sub").val()){
    $.post("ajax/"+ file +".php", {company_id:company_id, year: year, report_id:report_id, type:type, user_id:$("#user_id_sub").val()}, function(data) {
       if(data == 'success'){
         $("#close_button").trigger('click');
-        refresh_tr(count, report_id);
+        refresh_tr_cgs(count, report_id);
       } else {
           bootbox.alert("This user is already subscribed for this report!");
       }
@@ -261,7 +261,7 @@ function release_cgs(count, cgs_id){
           var file = 'release_cgs';
            $.post("ajax/"+ file +".php", {id:cgs_id}, function(data) {
             if(data == 'success') {
-             refresh_tr(count, cgs_id);
+             refresh_tr_cgs(count, cgs_id);
             } else {
               alert("Database error");
             }
@@ -285,7 +285,7 @@ function unrelease_cgs(count, cgs_id){
           var file = 'unrelease_cgs';
            $.post("ajax/"+ file +".php", {id:cgs_id}, function(data) {
             if(data == 'success') {
-             refresh_tr(count, cgs_id);
+             refresh_tr_cgs(count, cgs_id);
             } else {
               alert("Database error");
             }
