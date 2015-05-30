@@ -451,3 +451,13 @@ $(document).ready(function(){
       });
 });
 
+function submit_custom_form(report_id, user_id){
+  $("#custom_vote_submit").html('Processing..');
+  var val = $("#custom_reso_form").serialize();
+  val = val+'&report_id='+report_id+'&user_id='+user_id;
+  var file = 'save_custom_votes';
+  $.post("ajax/"+ file +".php", {val:val}, function(data) {
+    alert(data);
+  });
+}
+

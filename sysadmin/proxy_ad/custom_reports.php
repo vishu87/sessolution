@@ -27,6 +27,8 @@ require_once('../../classes/MemberClass.php');
   <script src="../../assets/js/custom.js"></script>
   <link href="../../assets/datepicker/css/datepicker.css" rel="stylesheet" />
   <script type="text/javascript" src="../../assets/datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
+
   <style type="text/css">.page-title {
     padding: 0px;
     font-size: 30px;
@@ -98,8 +100,8 @@ require_once('../../classes/MemberClass.php');
               </select>
             </div>
             <div class="span5 ">
-              <label class="control-label"><b>Customized Recommendation</b></label>
-              <textarea name="custom_reco_<?php echo $row["id"]?>" style="width:100%"><?php echo $file["custom_reco"] ?></textarea>
+              <br>
+              <a href="javascript:;" onclick="open_custom_reco('<?php echo name_filter($row["name"]) ?>',<?php echo $pa_report->id ?>,<?php echo $row["id"] ?>)" class="btn blue">Custom Recommendations</a>
             </div>
 
             <div class="span3 ">
@@ -164,9 +166,7 @@ require_once('../../classes/MemberClass.php');
     </div>
   </div>
 </div>
-</div>
-
-
+</div> 
 
 
 </div>
@@ -174,12 +174,21 @@ require_once('../../classes/MemberClass.php');
 <script>
 jQuery(document).ready(function() {     
       // initiate layout and plugins
+    $('.datepicker_month').datepicker({format:'dd-mm-yyyy', minViewMode:'1'});
+    
+  });
 
-      $('.datepicker_month').datepicker({format:'dd-mm-yyyy', minViewMode:'1'});
-      
-    });
+function open_custom_reco(client_name,report_id, user_id){
+  window.parent.$("#stack1").modal('show');
+  var item = window.parent.$("#stack1");
+  item.find(".modal-header h3").text("Customized Resolutions : "+client_name); 
+  item.find(".modal-body").html("<p>Loading...</p>");
 
-
+   var file = 'load_custom_voting_ui';
+   $.post("../ajax/"+ file +".php", {report_id:report_id, user_id:user_id}, function(data) {
+       item.find(".modal-body").html(data);
+   });
+}
 </script>
 <!-- END JAVASCRIPTS -->
 </body>
