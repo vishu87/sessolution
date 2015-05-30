@@ -37,7 +37,7 @@
 	<script src="../assets/js/jquery.tablesorter.widgets.js"></script>
 	<script src="../assets/js/jquery.tablesorter.pager.js"></script>
 	<script src="../assets/chosen-bootstrap/chosen/chosen.jquery.js"></script>
-	<script src="../assets/js/GeneralVoting.js?v=1.2.2"></script>
+	<script src="../assets/js/GeneralVoting.js?v=1.2.3"></script>
 	
 	<!-- ie8 fixes -->
 	<!--[if lt IE 9]>

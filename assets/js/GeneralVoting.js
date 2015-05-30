@@ -710,3 +710,24 @@ function show_hide(voting_id){
     $('.tr_'+voting_id).hide();
   }
 }
+
+function add_company_scheme(scheme_id){
+  $("#btn_add").html('Adding..');
+  var file = 'add_scheme_comp';
+  var company_name = $("#company_name").val();
+  var shares_held = $("#shares_held").val();
+  var count = $(".view_scheme_body").find('tr').length;
+  $.post("ajax/"+ file +".php", {scheme_id:scheme_id, count:count, company_name:company_name, shares_held:shares_held}, function(data) {
+    data = JSON.parse(data);
+    if(data.success){
+      bootbox.alert("Company successfully added");
+      $(".view_scheme_body").append(data.message);
+      $("#btn_add").html('Add Company');
+      $("#company_name").val('');
+      $("#shares_held").val('');
+    } else {
+      bootbox.alert(data.message);
+      $("#btn_add").html('Add Company');
+    }
+  });
+}
