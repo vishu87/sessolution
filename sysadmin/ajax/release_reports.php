@@ -120,7 +120,7 @@ foreach ($customized_users as $customized_user) {
 
   $customized_users_email = array();
 
-  $query = mysql_query("SELECT email,id,other_email,pa_mail_details from users where id='$customized_user' and active=0 limit 1 ");
+  $query = mysql_query("SELECT email, id, other_email, pa_mail_details from users where id='$customized_user' and active=0 limit 1 ");
     while($row = mysql_fetch_array($query)){
     array_push($customized_users_email, $row["email"]);
     if($row["other_email"] != '')array_push($customized_users_email, $row["other_email"]);
@@ -141,17 +141,48 @@ foreach ($customized_users as $customized_user) {
   if(sizeof($customized_users_email) > 0){
          $body_in = '<p> Report has been uploaded for <b>'.$pa_report->company_name.'</b>. Please check the attached file.</p>';
       $body_in .= '<b> Meeting Type: </b>'.$pa_report->meeting_type.'<br><b>Meeting Date: </b>'.$pa_report->meeting_date.'</b><br><b>eVoting Period: </b>'.$pa_report->evoting_start.' to '.$pa_report->evoting_end.'</b><br><b>eVoting Platform: </b>'.$pa_report->evoting_plateform.'</b>';
-    
-    if($pa_mail_details == 1){
-        $body_in .= $voting_body_wo_reco;
-      } else if($pa_mail_details == 2){
-        $body_in .= $voting_body_wo_comm;
-      } else if($pa_mail_details == 3){
-        $body_in .= $voting_body;
-      }
+      
+    //$check_custom_reco = mysql_query("SELECT ")
+    $custom_file = $pa_report->custom_report($customized_user);
+
+    if($pa_report->check_custom == 0){
+      if($pa_mail_details == 1){
+          $body_in .= $voting_body_wo_reco;
+        } else if($pa_mail_details == 2){
+          $body_in .= $voting_body_wo_comm;
+        } else if($pa_mail_details == 3){
+          $body_in .= $voting_body;
+        }
+    } else {
+        $voting_body_custom = '<table cellspacing="0" cellpadding="10" border="1"><tr><th>#</th><th>Resolution Name</th><th>Management/Shareholder Recommendation</th><th>SES Recommendation</th><th>SES Comments</th></tr>';
+        $voting_body_wo_reco_custom = '<table cellspacing="0" cellpadding="10" border="1"><tr><th>#</th><th>Resolution Name</th><th>Management/Shareholder Recommendation</th></tr>';
+        $voting_body_wo_comm_custom = '<table cellspacing="0" cellpadding="10" border="1"><tr><th>#</th><th>Resolution Name</th><th>Management/Shareholder Recommendation</th><th>SES Recommendation</th></tr>';
+
+        
+          $sql_vote = mysql_query("SELECT voting.resolution_number, voting.resolution_name, voting.man_reco, customized_votes.ses_reco, customized_votes.detail from voting left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id='$report_id' order by voting.resolution_number asc");
+             $count =1;
+             while($row_vote = mysql_fetch_array($sql_vote)) {
+              $voting_body_custom .= '<tr><td>'.stripcslashes($row_vote["resolution_number"]).'</td><td>'.stripcslashes($row_vote["resolution_name"]).'</td><td>'.stripcslashes($man_recos[$row_vote["man_reco"]]).'</td><td>'.stripcslashes($recos[$row_vote["ses_reco"]]).'</td><td>'.stripcslashes($row_vote["detail"]).'</td></tr>';
+              
+              $voting_body_wo_reco_custom .= '<tr><td>'.stripcslashes($row_vote["resolution_number"]).'</td><td>'.stripcslashes($row_vote["resolution_name"]).'</td><td>'.stripcslashes($man_recos[$row_vote["man_reco"]]).'</td></tr>';
+              
+              $voting_body_wo_comm_custom .= '<tr><td>'.stripcslashes($row_vote["resolution_number"]).'</td><td>'.stripcslashes($row_vote["resolution_name"]).'</td><td>'.stripcslashes($man_recos[$row_vote["man_reco"]]).'</td><td>'.stripcslashes($recos[$row_vote["ses_reco"]]).'</td></tr>';
+             }
+
+        $voting_body_custom .= '</table>';
+        $voting_body_wo_reco_custom .= '</table>';
+        $voting_body_wo_comm_custom .= '</table>';
+
+         if($pa_mail_details == 1){
+          $body_in .= $voting_body_wo_reco_custom;
+        } else if($pa_mail_details == 2){
+          $body_in .= $voting_body_wo_comm_custom;
+        } else if($pa_mail_details == 3){
+          $body_in .= $voting_body_custom;
+        }
+    }
 
     $body_in .= '<hr><i>This is an auto generated email. Please do not reply.</i>';
-    $custom_file = $pa_report->custom_report($customized_user);
     if($custom_file){
       $at_folder = 'custom_reports';
       $at_file = $custom_file;

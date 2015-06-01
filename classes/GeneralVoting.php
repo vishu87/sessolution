@@ -99,29 +99,24 @@ class SesVoting {
 					<?php  
 
 					if($user_pa->can_change && $user_pa->freeze == 0 && $user_pa->ignore_an == 0){ ?>
+                      <select id="an_ses_id" onchange="select_ses_voting(<?php echo $report_id ?>)" class="m-wrap">
+                      	<option value="0">Copy Data From..</option>
+                      	<?php 
+                      	$query_sql_all = mysql_query("SELECT users.id, users.name, users.user_admin_name from users inner join user_voting_proxy_reports on users.id = user_voting_proxy_reports.user_id where (users.created_by_prim='$parent_id' || users.id='$parent_id') && user_voting_proxy_reports.report_id = $report_id  ");
+						while ($row_u = mysql_fetch_array($query_sql_all)) {
+							echo '<option value="'.$row_u["id"].'">';
+							if($row_u["id"] == $parent_id){
+								echo ($row_u["user_admin_name"]!='')?$row_u["user_admin_name"]:$row_u["name"];
+							} else echo $row_u["name"];
+							echo '</option>';
+						}
 
-                              <select id="an_ses_id" onchange="select_ses_voting(<?php echo $report_id ?>)" class="m-wrap">
-                              	<option value="0">Copy Data From..</option>
-                              	<?php 
-                              	$query_sql_all = mysql_query("SELECT users.id, users.name, users.user_admin_name from users inner join user_voting_proxy_reports on users.id = user_voting_proxy_reports.user_id where (users.created_by_prim='$parent_id' || users.id='$parent_id') && user_voting_proxy_reports.report_id = $report_id  ");
-								while ($row_u = mysql_fetch_array($query_sql_all)) {
-									echo '<option value="'.$row_u["id"].'">';
-									if($row_u["id"] == $parent_id){
-										echo ($row_u["user_admin_name"]!='')?$row_u["user_admin_name"]:$row_u["name"];
-									} else echo $row_u["name"];
-									echo '</option>';
-								}
-
-                              	?>
-                              	<option value="-1"> None</option>
-
-                              </select>
-
-                     <?php
-
-                      } 
-
-                     ?>
+                      	?>
+                      	<option value="-1"> None</option>
+                      </select>
+                    <?php
+                      }
+                    ?>
 				</div>
 				<?php if($user_pa->final_freeze == 0) { ?>
 				<div class="span4" align="right">
@@ -163,8 +158,18 @@ class SesVoting {
 		$man_recos = array("","FOR","AGAINST","ABSTAIN");
 		$man_share_recos = array("","Management","Shareholders");
 
-
-		$sql_vote = mysql_query("SELECT * from voting where report_id='$proxy_id' order by resolution_number asc");
+		$check_custom_vote = mysql_query("SELECT check_id from customized_reports where user_id = '$parent_id' and report_id = '$proxy_id' limit 1 ");
+		if(mysql_num_rows($check_custom_vote) > 0){
+			$row_check_custom = mysql_fetch_array($check_custom_vote);
+			if($row_check_custom["check_id"] == 0){
+				$sql_vote_string = "SELECT * from voting where report_id='$proxy_id' order by resolution_number asc";
+			} else {
+				$sql_vote_string = "SELECT voting.id, voting.resolution_number, voting.resolution_name, customized_votes.ses_reco, customized_votes.detail, voting.man_reco, voting.man_share_reco from voting left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id='$proxy_id' order by voting.resolution_number asc";
+			}
+		} else {
+			$sql_vote_string = "SELECT * from voting where report_id='$proxy_id' order by resolution_number asc";
+		}
+		$sql_vote = mysql_query($sql_vote_string);
 		     $count =1;
 		     while($row_vote = mysql_fetch_array($sql_vote)) {
 		      $str .= '<tr id="tr_vote_'.$row_vote["id"].'">';

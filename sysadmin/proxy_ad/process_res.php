@@ -30,7 +30,7 @@ if(!$db) {
 
 	$file = fopen($file_path, 'r');
 	$count =0;
-	echo '<table cellpadding="5" cellspacing="0" ><tr style="background:#4b8df8"><th>SN</th><th>Name</th><th>BSE Code</th><th>Meeting Date</th><th>Meeting Date</th><th>Success</th><tr>';
+	echo '<table cellpadding="5" cellspacing="0" ><tr style="background:#4b8df8"><th>SN</th><th>Even</th><th>SES ID</th><th>Company</th><th>Meeting Type</th><th>Meeting Date</th><th>Resolution</th><th>Success</th><tr>';
 
 	$old_even = 0;
 	while (($line = fgetcsv($file)) !== FALSE) {
@@ -46,13 +46,12 @@ if(!$db) {
 		 	$report_id = $update["id"];
 		 	
 		 	
-		 	$query = 'SELECT companies.com_id, companies.com_isin from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id = $report_id limit 1';
-		 	
+		 	$query = "SELECT companies.com_id, companies.com_isin, proxy_ad.meeting_type, proxy_ad.meeting_date from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id = $report_id limit 1";
 			$query_com_check = mysql_query($query);
-			$com_bse_code =0;
+
 			if(mysql_num_rows($query_com_check) > 0 ){
 				$row_fetch = mysql_fetch_array($query_com_check);
-				if($row_fetch["com_isin"] != $update["com_isin"]){
+				if($row_fetch["com_isin"] == $update["com_isin"]){
 					
 					if($update["even"] == $old_even ){
 
@@ -66,7 +65,7 @@ if(!$db) {
 					if(mysql_num_rows($check_res) > 0){
 						$success = "Resolution already present";
 					} else {
-						mysql_query("INSERT into voting (report_id, resolution_number, resolution_name) values ('$report_id','$update[resolution_number]','$update[resolution_name]') ");
+						mysql_query("INSERT into voting (report_id, resolution_number, resolution_name) values ('$report_id','$update[resolution_number]','$update[resolution_header]') ");
 						$success = 'success';
 					}
 
@@ -79,7 +78,7 @@ if(!$db) {
 				
 			echo '<tr style="background:#';
 			echo ($success == 'success')?'35aa47':'e02222';
-			echo '"><td>'.$count.'</td><td>'.stripcslashes(stripcslashes($update["com_name"])).'</td><td>'.$com_bse_code.'</td><td>'.$update["meeting_date"].'</td><td>'.$update["meeting_type"].'</td><td>'.$success.'</td></tr>';
+			echo '"><td>'.$count.'</td><td>'.$update["even"].'</td><td>'.$update["id"].'</td><td>'.$update["com_name"].'</td><td>'.$meeting_types[$row_fetch["meeting_type"]].'</td><td>'.date("d M y", $row_fetch["meeting_date"]).'</td><td>'.$update["resolution_name"].'</td><td>'.$success.'</td></tr>';
 		}
 	  	$count++;
 	}

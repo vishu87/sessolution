@@ -33,7 +33,7 @@ $user_id = mysql_real_escape_string($_POST["user_id"]);
       <th>Custom Comment</th>
     </tr>
   <?php
-  $sql_votes = mysql_query("SELECT voting.id, voting.resolution_number, voting.resolution_name, ses_recos.reco from voting join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id = '$report_id' order by voting.resolution_number asc ");
+  $sql_votes = mysql_query("SELECT voting.id, voting.resolution_number, voting.resolution_name, ses_recos.reco, customized_votes.ses_reco as custom_vote, customized_votes.detail as custom_comment from voting join ses_recos on voting.ses_reco = ses_recos.id left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id = '$report_id' order by voting.resolution_number asc ");
   while ($row = mysql_fetch_array($sql_votes)) {
   ?>
     <tr>
@@ -44,13 +44,15 @@ $user_id = mysql_real_escape_string($_POST["user_id"]);
         <select name="votes[]">
         <?php
           foreach ($array_reco as $key => $value) {
-            echo '<option value="'.$key.'">'.$value.'</option>';
+            echo '<option value="'.$key.'" ';
+            if($key == $row["custom_vote"]) echo 'selected';
+            echo '>'.$value.'</option>';
           }
         ?>
         </select>
       </td>
       <td>
-        <textarea name="comments[]"></textarea>
+        <textarea name="comments[]"><?php echo $row["custom_comment"] ?></textarea>
       </td>
     </tr>
   <?php

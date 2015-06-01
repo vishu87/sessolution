@@ -383,16 +383,19 @@ class PA_admin{
 		  $users = fetch_customized_users($this->company_id, $this->year);
 		  if(sizeof($users) > 0){
 		    foreach ($users as $user) {
-		       $query_custom = mysql_query("SELECT check_id, custom_reco, report_upload from customized_reports where user_id='$user' and report_id='".$this->id."' ");
-		       if(mysql_num_rows($query_custom) > 0){
-		         	$row_custom = mysql_fetch_array($query_custom);
-		        	if($row_custom["report_upload"] == '') $flag_check = 1;
-		        	if($row_custom["check_id"] == 1 && $row_custom["custom_reco"] == ''){
-		        		$flag_check = 1;
-		        	}
-		       } else {
-		        $flag_check = 1;
-		     }
+		       $query_custom = mysql_query("SELECT check_id, report_upload, ses_reco, detail from customized_reports left join customized_votes on customized_reports.report_id = customized_votes.report_id where customized_reports.user_id='$user' and customized_reports.report_id='".$this->id."' ");
+			       if(mysql_num_rows($query_custom) > 0){
+			         	while($row_custom = mysql_fetch_array($query_custom)){
+			            if($row_custom["report_upload"] == '') $flag_check = 1;
+			            if($row_custom["check_id"] == 1 ){
+			              if($row_custom["ses_reco"] == NULL || $row_custom["ses_reco"] == 0 || $row_custom["detail"] == '' || $row_custom["detail"] == NULL){
+			                $flag_check = 1;
+			              }
+			            } 
+			          }
+			       } else {
+			        $flag_check = 1;
+			     }
 		    }
 		    if($this->custom_report_freeze == 0 ) $flag_check = 1;
 		  }
@@ -400,8 +403,9 @@ class PA_admin{
 	}
 
 	public function custom_report($customized_user){
-		$query_custom = mysql_query("SELECT report_upload from customized_reports where user_id='$customized_user' and report_id='".$this->id."' ");
+		$query_custom = mysql_query("SELECT check_id, report_upload from customized_reports where user_id='$customized_user' and report_id='".$this->id."' ");
 		$row_custom = mysql_fetch_array($query_custom);
+		$this->check_custom = $row_custom["check_id"];
 		return $row_custom["report_upload"];
 	}
 

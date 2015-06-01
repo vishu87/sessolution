@@ -56,7 +56,11 @@ if(!isset($title)) {
                                           <span class="help-block" id="fileInfo"></span>
                                           </div>
                                           <div class="span6" style="text-align:right">
-                                            
+                                            <div class="span6" style="text-align:right">
+                                            <a type="button" href="<?php echo STRSITE ?>EVEN.csv" class="btn icn-only ttip" rel="tooltip" title="" target="_blank" data-original-title="Download Format">
+                                                <i class="icon-download-alt"></i> Download Format
+                                              </a>
+                                          </div>
                                           </div>
                                         </div>
                                           

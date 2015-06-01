@@ -456,8 +456,15 @@ function submit_custom_form(report_id, user_id){
   var val = $("#custom_reso_form").serialize();
   val = val+'&report_id='+report_id+'&user_id='+user_id;
   var file = 'save_custom_votes';
-  $.post("ajax/"+ file +".php", {val:val}, function(data) {
-    alert(data);
+  //alert(val);
+  $.post("ajax/"+ file +".php", val, function(data) {
+    if(data == 'success'){
+      bootbox.alert('Votes Succefully saved');
+      $("#custom_vote_submit").html('Submit');
+    } else {
+      bootbox.alert('Database Error');
+      $("#custom_vote_submit").html('Submit');
+    }
   });
 }
 

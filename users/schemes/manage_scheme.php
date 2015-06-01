@@ -53,7 +53,7 @@ if(!isset($title)) {
                               </div>              
                               <div class="portlet-body form">
                                  <!-- BEGIN FORM-->
-                                 <form action="<?php echo $folder?>process.php?cat=1" method="post" class="horizontal-form" id="submit_form" target="_blank" enctype="multipart/form-data">
+                                 <form action="<?php echo $folder?>process.php?cat=1" method="post" class="horizontal-form" id="submit_form">
                                     <div class="row-fluid">
                                        <div class="span6 ">
                                           <div class="control-group">
@@ -107,26 +107,7 @@ if(!isset($title)) {
                                        </div>
                                        <!--/span-->
                                     </div>
-                                    <!--/row-->   
-                                    <div class="row-fluid">
-                                       <div class="span6 ">
-                                        <div class="control-group">
-                                             <label class="control-label">Companies List
-                                             <div class="controls">
-                                              <a type="button" href="<?php echo STRSITE ?>Scheme_Comp.csv" class="btn icn-only ttip pull-right" rel="tooltip" title="" target="_blank" data-original-title="Download Format">
-                                                <i class="icon-download-alt"></i>
-                                              </a>
-                                                 <input type="file" name="csv_file" id="csv_file">
-                                              <span class="help-block" id="accesscsvInfo"></span>
-
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <!--/span-->
-                                    </div>
-                                    <!--/row-->  
-                                    
-                                 
+                                    <!--/row-->                                    
                                     <div class="form-actions" style="padding: 19px 10px 20px;">
                                        <button type="button" onclick="check_submit()" class="btn blue"><i class="icon-ok"></i> Create</button>
                                       <button type="button" class="btn" onclick="location.reload()">Cancel</button>
@@ -153,7 +134,16 @@ if(!isset($title)) {
                                  <form action="<?php echo $folder?>process.php?cat=2" method="post" class="horizontal-form" id="accessattachment_form" target="_blank" enctype="multipart/form-data">
                                     <!--/row-->
                                    <div class="row-fluid">
-                                       <div class="span9 ">
+                                        <div class="span4 ">
+                                         <div class="control-group">
+                                           <label class="control-label">Date</label>
+                                           <div class="controls">
+                                              <input type="text" name="upload_date" class="datepicker_month">
+                                              <span class="help-block" id=""></span>
+                                           </div>
+                                          </div>
+                                       </div>
+                                       <div class="span5 ">
                                          <div class="control-group">
                                            <label class="control-label">Upload File (CSV)</label>
                                            <div class="controls">
@@ -259,9 +249,7 @@ var name = '';
 function check_submit(){
   var submit_form = $("#submit_form");
       if(validate_required_name_info($("#scheme_name").val(), 'scheme_name','Please input valid name. Only numbers, alphabates and space.')){
-        if($("#csv_file").val() != ''){
-          if(validateFile('csv_file','accesscsvInfo')) submit_form.submit();
-        } else submit_form.submit();
+        submit_form.submit();
       } else {
          return false;
       }

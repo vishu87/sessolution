@@ -20,24 +20,27 @@ if($type == 1){
 	$users = fetch_customized_users($pa_report->company_id, $pa_report->year);
   if(sizeof($users) > 0){
     foreach ($users as $user) {
-       $query_custom = mysql_query("SELECT check_id, custom_reco, report_upload from customized_reports where user_id='$user' and report_id='".$pa_report->id."' ");
+       $query_custom = mysql_query("SELECT check_id, report_upload, ses_reco, detail from customized_reports left join customized_votes on customized_reports.report_id = customized_votes.report_id where customized_reports.user_id='$user' and customized_reports.report_id='".$pa_report->id."' ");
        if(mysql_num_rows($query_custom) > 0){
-         	$row_custom = mysql_fetch_array($query_custom);
-        	if($row_custom["report_upload"] == '') $flag_check = 1;
-        	if($row_custom["check_id"] == 1 && $row_custom["custom_reco"] == ''){
-        		$flag_check = 1;
-        	}
+         	while($row_custom = mysql_fetch_array($query_custom)){
+            if($row_custom["report_upload"] == '') $flag_check = 1;
+            if($row_custom["check_id"] == 1 ){
+              if($row_custom["ses_reco"] == NULL || $row_custom["ses_reco"] == 0 || $row_custom["detail"] == '' || $row_custom["detail"] == NULL){
+                $flag_check = 1;
+              }
+            } 
+          }
        } else {
         $flag_check = 1;
      }
     }
   }
-  	if($flag_check == 0){
-  		mysql_query("UPDATE proxy_ad set custom_report_freeze = $str where id = $report_id ");
-		echo 'success';
-  	} else {
-  		echo 'Please fill all the details.';
-  	}
+	if($flag_check == 0){
+		mysql_query("UPDATE proxy_ad set custom_report_freeze = $str where id = $report_id ");
+	echo 'success';
+	} else {
+		echo 'Please fill all the details in custom recommendations.';
+	}
 	
 } else if($type == 2) {
 	mysql_query("UPDATE proxy_ad set custom_report_freeze = 0 where id = $report_id ");

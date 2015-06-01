@@ -25,7 +25,7 @@ if($_GET["cat"] == 1){
 		$_POST["client_id"] = mysql_real_escape_string($_POST["client_id"]);
 
 		if(mysql_query("INSERT into schemes (scheme_name, dp_id, client_id, user_id, depository, created_at) values ('$_POST[scheme_name]', '$_POST[dp_id]', '$_POST[client_id]', '$_SESSION[MEM_ID]', '$_POST[depository]', '$id') ")){
-			echo '*************************'.$_POST["scheme_name"].' SUCCESSFULLY CREATED***********************';
+		header("Location: ../".$folder.".php?cat=1&success=1");
 		$scheme_id = mysql_insert_id();
 		if($filename != ''){
 			$today = strtotime("today");
