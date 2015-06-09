@@ -123,7 +123,7 @@ if(!isset($title)) {
                                         if($pa_report->subscribed($member->companies_report_subscribed_year)) echo $pa_report->report($_SESSION["MEM_ID"],$member->customized);
                                         else {
                                           echo $pa_report->abridged_report();
-                                          if(!$pa_report->old_meeting)
+                                          if(!$pa_report->old_meeting  && $pa_report->abridged_report != '')
                                           echo $pa_report->subscription_request("Get Full Report");
                                         }
 

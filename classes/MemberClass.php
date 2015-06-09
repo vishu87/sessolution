@@ -189,7 +189,9 @@ class PA_admin{
 
 	public function report(){
 		$this->company_name = name_filter($this->company_name);
-		return ($this->gen_report)?'<a href="../proxy_reports/'.$this->gen_report.'" target="_blank">View</a>': 'Pending'; 
+		$str = ($this->gen_report)?'<a href="../proxy_reports/'.$this->gen_report.'" target="_blank">View</a>': 'Pending';
+		$str .= ($this->abridged_report)?'<br><a href="../abridged_reports/'.$this->abridged_report.'" target="_blank">View Abridged</a>': '';
+		return $str;
 	}
 
 	public function check_resolutions(){
