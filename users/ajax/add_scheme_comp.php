@@ -6,6 +6,7 @@ if(!isset($_POST["scheme_id"])) header("Location: ".STRSITE."access-denied.php")
 
 $scheme_id = mysql_real_escape_string($_POST["scheme_id"]);
 $shares_held = mysql_real_escape_string($_POST["shares_held"]);
+$held_date = strtotime($_POST["upload_date"]);
 $com_string = $_POST["company_name"];
 $coms = explode('/', $com_string);
 $com_name = addslashes($coms[0]);
@@ -23,19 +24,20 @@ if(mysql_num_rows($sql_com) > 0){
 	$ar = $row_com["com_id"];
 	$com_name = $row_com["com_name"];
 
-	$sql_check = mysql_query("SELECT com_id from scheme_companies where scheme_id='$scheme_id' and com_id = '$ar' ");
+	$sql_check = mysql_query("SELECT id from scheme_companies where scheme_id='$scheme_id' and com_id = '$ar' and held_date = '$held_date' ");
 	if(mysql_num_rows($sql_check) > 0){
 		$response["success"] = false;
-		$response["message"] = "Company already exists in the scheme";
+		$response["message"] = "Company already exists in the scheme for this date";
 	} else {
 	  if($ar != 0){
-	     	mysql_query("INSERT into scheme_companies (scheme_id, com_id, shares_held) values ('$scheme_id','$ar','$shares_held') ");
+	     	mysql_query("INSERT into scheme_companies (scheme_id, com_id, shares_held, held_date, add_date) values ('$scheme_id','$ar','$shares_held', '$held_date', '".strtotime("now")."' ) ");
 	     	$insert_id = mysql_insert_id();
 	     	$response["success"] = true;
 	     	$response["message"] = '<tr id="tr_pop_'.$insert_id.'">
 					<td>'.($_POST["count"] + 1).'</td>
 					<td>'.$com_name.'</td>
 					<td>'.$shares_held.'</td>
+					<td>'.date("d-M-Y",$held_date).'</td>
 					<td>
 						<a href="javascript:;" class="btn red" id="rm_comp_'.$insert_id.'" onclick="remove_scheme_company('.$insert_id.','.$ar.')">Remove</a>
 					</td>

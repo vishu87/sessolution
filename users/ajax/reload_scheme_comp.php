@@ -5,32 +5,11 @@ require_once('../../classes/UserClass.php');
 
 if(!isset($_POST["scheme_id"])) header("Location: ".STRSITE."access-denied.php");
 $count = 1;
-$today = strtotime("today");
+$today = strtotime($_POST["reload_date"]);
 ?>
-<div>
-	<h4 style="pad">Add Company</h4>
-</div>
-<div class="row form-body" style="margin: 0 0 20px 0; border-bottom:1px dashed #CCC">
-	
-	<div class="span3">
-		Company Name<br><input type="text" class="typehead m-wrap" name="company_name" id="company_name">
-	</div>
-	<div class="span3">
-		Date<br><input type="text" class="datepicker_month m-wrap" name="upload_date_pop" id="upload_date_pop">
-	</div>
-	<div class="span3">
-		Shares Held<br><input type="text" name="shares_held" id="shares_held" class="m-wrap">
-	</div>
-	<div class="span3">
-		<br>
-		<button class="btn blue" id="btn_add" onclick="add_company_scheme(<?php echo $_POST["scheme_id"] ?>)">Add Company</button>
-	</div>
-</div>
-
-<div id="scheme_comps">
-	<?php
-		$query = "SELECT scheme_companies.id, scheme_companies.com_id, companies.com_name, scheme_companies.shares_held, scheme_companies.held_date from scheme_companies join schemes on scheme_companies.scheme_id = schemes.id join companies on scheme_companies.com_id = companies.com_id  where scheme_companies.scheme_id = '$_POST[scheme_id]' AND schemes.user_id = '$_SESSION[MEM_ID]' and scheme_companies.held_date <= '$today' order by companies.com_name asc, scheme_companies.held_date desc ";
-	?>
+<?php
+	$query = "SELECT scheme_companies.id, scheme_companies.com_id, companies.com_name, scheme_companies.shares_held, scheme_companies.held_date from scheme_companies join schemes on scheme_companies.scheme_id = schemes.id join companies on scheme_companies.com_id = companies.com_id  where scheme_companies.scheme_id = '$_POST[scheme_id]' AND schemes.user_id = '$_SESSION[MEM_ID]' and scheme_companies.held_date <= '$today' order by companies.com_name asc, scheme_companies.held_date desc ";
+?>
 	<div style="margin:20px 0">
 		<input type="text" id="reload_date" class="m-wrap datepicker_month" value = "<?php echo date("d-m-Y",$today) ?>" style="margin-bottom:0">
 		<input type="button" class="btn blue" value = "Submit" onclick="reload_scheme_comp(<?php echo $_POST["scheme_id"] ?>)">
@@ -70,4 +49,3 @@ $today = strtotime("today");
 		?>
 		</tbody>
 	</table>
-</div>

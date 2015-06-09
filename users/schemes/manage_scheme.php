@@ -138,7 +138,7 @@ if(!isset($title)) {
                                          <div class="control-group">
                                            <label class="control-label">Date</label>
                                            <div class="controls">
-                                              <input type="text" name="upload_date" class="datepicker_month">
+                                              <input type="text" name="upload_date" id="upload_date" class="datepicker_month">
                                               <span class="help-block" id=""></span>
                                            </div>
                                           </div>
@@ -268,6 +268,20 @@ function view_scheme_comp(scheme_id,scheme_name,count){
 
 }
 
+function reload_scheme_comp(scheme_id){
+
+   var file = 'reload_scheme_comp';
+   var reload_date = $("#reload_date").val();
+   $("#scheme_comps").html("<p>Loading...</p>");
+
+   $.post("ajax/"+ file +".php", {scheme_id:scheme_id, reload_date:reload_date}, function(data) {
+      $("#scheme_comps").html(data);
+      initialize();
+   }); 
+
+}
+
+
 function remove_scheme(scheme_id, scheme_name, count){
    var file = "delete_scheme";
       bootbox.confirm("Are you sure to remove "+ scheme_name+ "?", function(result) {
@@ -298,7 +312,7 @@ function remove_scheme_company(id, com_id){
      });      
 }
 function accessattachment_submit(){
-   if( validateFile('accessattach_file','accessfileInfo'))
+   if( validate_date('upload_date','Please select a valid date') && validateFile('accessattach_file','accessfileInfo'))
       $('#accessattachment_form').submit();
    else
       return false;     

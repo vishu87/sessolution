@@ -27,73 +27,6 @@ if($_GET["cat"] == 1){
 		if(mysql_query("INSERT into schemes (scheme_name, dp_id, client_id, user_id, depository, created_at) values ('$_POST[scheme_name]', '$_POST[dp_id]', '$_POST[client_id]', '$_SESSION[MEM_ID]', '$_POST[depository]', '$id') ")){
 		header("Location: ../".$folder.".php?cat=1&success=1");
 		$scheme_id = mysql_insert_id();
-		if($filename != ''){
-			$today = strtotime("today");
-			$id = strtotime("now");
-			$exten = explode('.',$filename);
-			$last_val = sizeof($exten) - 1;
-			$ext=$exten[$last_val];
-			$temp_filename=$id.'.'.$ext;	
-			move_uploaded_file($_FILES["csv_file"]["tmp_name"],"../../Temp/".$temp_filename);
-
-			$file_path = '../../Temp/'.$temp_filename;
-			$timenow = strtotime("now");
-		
-			$file = fopen($file_path, 'r');
-			$count =0;
-			echo '<table cellpadding="5" cellspacing="0" ><tr style="background:#4b8df8"><th>SN</th><th>Company Name</th><th>BSE</th><th>ISIN</th><th>Shares</th><th>Success</th><tr>';
-			while (($line = fgetcsv($file)) !== FALSE) {
-				$com_name = '';
-			 	if($count > 0) {
-
-		 		$isin = $line[0];
-		 		$bse = $line[1];
-		 		$shares = $line[2];
-
-			 	$update["add_date"] = strtotime("now");
-
-			 	//now building the query
-			 	$table = 'proxy_ad'; //name of the table
-			 	
-			 	if(!$bse){
-			 		if($isin){
-			 			
-			 			$query_com_check = mysql_query("SELECT com_id, com_name from companies where com_isin='$isin' limit 1");
-			 			$com_count = mysql_num_rows($query_com_check);
-			 			
-			 		} else $com_count = 0;
-			 		
-			 	}else if(!$isin)  {
-			 		if($bse){
-			 			$query_com_check = mysql_query("SELECT com_id, com_name from companies where com_bse_code='$bse' limit 1");
-			 			$com_count = mysql_num_rows($query_com_check);
-			 		} else $com_count = 0;
-			 	}
-				
-				if($com_count > 0 ){
-							
-					$row = mysql_fetch_array($query_com_check);
-					$com_name = $row["com_name"];
-					$com_id = $row["com_id"];
-
-					mysql_query("INSERT into scheme_companies (scheme_id, com_id, shares_held, add_date) values ('$scheme_id', '$com_id', '$shares', '$update[add_date]') ");
-					$success = 'success';
-				
-				} else {
-					$com_name = '';
-					$success = "Company not found";
-				}
-				echo '<tr style="background:#';
-				echo ($success == 'success')?'35aa47':'e02222';
-				echo '"><td>'.$count.'</td><td>'.$com_name.'</td><td>'.$bse.'</td><td>'.$isin.'</td><td>'.$shares.'</td><td>'.$success.'</td></tr>';
-			}
-		  $count++;
-		}
-		fclose($file);
-		echo '</table>';
-		die();
-			
-		}
 	}
 }
 
@@ -102,6 +35,7 @@ if($_GET["cat"] == 2) {
 
 		$id = strtotime("now");
 		$filename = $_FILES["attach_file"]["name"];
+		$held_date = strtotime($_POST["upload_date"]);
 
 		if($filename != ''){
 			$today = strtotime("today");
@@ -181,7 +115,7 @@ if($_GET["cat"] == 2) {
 						$com_name = $row["com_name"];
 						$com_id = $row["com_id"];
 
-						$check = mysql_query("SELECT * from scheme_companies where scheme_id = '$scheme_id' and com_id = '$com_id' limit 1");
+						$check = mysql_query("SELECT * from scheme_companies where scheme_id = '$scheme_id' and com_id = '$com_id' and held_date = '$held_date' limit 1");
 						if(mysql_num_rows($check) > 0){
 							$row_check = mysql_fetch_array($check);
 							if($row_check["shares_held"] == $shares){
@@ -193,9 +127,9 @@ if($_GET["cat"] == 2) {
 								$note = 'Already Present | No. of shares changed';
 							}
 						} else {
-							mysql_query("INSERT into scheme_companies (scheme_id, com_id, shares_held, add_date) values ('$scheme_id', '$com_id', '$shares', '$update[add_date]') ");
+							mysql_query("INSERT into scheme_companies (scheme_id, com_id, shares_held, held_date, add_date) values ('$scheme_id', '$com_id', '$shares','$held_date', '$update[add_date]') ");
 							$success = 'success';
-							$note = 'New company added';
+							$note = 'New entry added for the company';
 
 						}
 					

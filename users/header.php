@@ -87,6 +87,22 @@
 					return true;
 				}
 		}
+
+		function validate_date(id_info, alttext){
+				
+				var value = $("#"+id_info).val();
+				if (value.match(/^\d{2}-\d{2}-\d{4}$/) == null){
+					$("#"+id_info).parent().find('span').text(alttext);
+					$("#"+id_info).parent().parent().addClass("error");
+					return false;
+				}
+				else {
+					$("#"+id_info).parent().find('span').text("");
+					$("#"+id_info).parent().parent().removeClass("error");
+					return true;
+				}
+		}
+
 		function validate_required_date_info(value, alttext){
 			
 				if(value.match(/^\d{2}-\d{2}-\d{4}$/) == null){
