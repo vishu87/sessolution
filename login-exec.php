@@ -90,22 +90,36 @@
 					$_SESSION['PRIV'] = 3;
 				}
 			}
+
+			//for analysts an_id
 			if($member['priv'] == 2) $_SESSION['MEM_ID'] = $member['an_id'];
 			else $_SESSION['MEM_ID'] = $member['id'];
 			$ip = $_SERVER['REMOTE_ADDR'];
 
+			//check meeting alerts
+			if($_SESSION['PRIV'] == 3){
+				$query_parent = mysql_query("SELECT alerts from users where id = $member[created_by_prim] limit 1 ");
+				$row_parent = mysql_fetch_array($query_parent);
+				$_SESSION["alerts"] = $row_parent["alerts"];
+			} else if($_SESSION['PRIV'] == 0) {
+				$_SESSION["alerts"] = $member["alerts"];
+			}
+
 
 			if($_SESSION['PRIV'] == 0 || $_SESSION["PRIV"] == 3){
+			
 				$check_old_sql = mysql_query("SELECT timestamp from user_activity where user_id = '$_SESSION[MEM_ID]' and activity_id='23' order by timestamp desc limit 1 ");
 				$row_pass = mysql_fetch_array($check_old_sql);
 				$time_last = strtotime($row_pass["timestamp"]);
+			
 				$_SESSION["self_portfolio"] = $member["self_portfolio"];
-				//$time_last_str = date("d M y",$time_last);
+			
 				if($time_last < (strtotime("now") - 45*86400) ){
 					echo 'change_password';
 					exit();
 				} else {
 				}
+
 			}
 
 			//authentication token

@@ -32,7 +32,7 @@ $today = strtotime("today");
 		$query = "SELECT scheme_companies.id, scheme_companies.com_id, companies.com_name, scheme_companies.shares_held, scheme_companies.held_date from scheme_companies join schemes on scheme_companies.scheme_id = schemes.id join companies on scheme_companies.com_id = companies.com_id  where scheme_companies.scheme_id = '$_POST[scheme_id]' AND schemes.user_id = '$_SESSION[MEM_ID]' and scheme_companies.held_date <= '$today' order by companies.com_name asc, scheme_companies.held_date desc ";
 	?>
 	<div style="margin:20px 0">
-		<input type="text" id="reload_date" class="m-wrap datepicker_month" value = "<?php echo date("d-m-Y",$today) ?>" style="margin-bottom:0">
+		Shareholing on <input type="text" id="reload_date" class="m-wrap datepicker_month" value = "<?php echo date("d-m-Y",$today) ?>" style="margin-bottom:0">
 		<input type="button" class="btn blue" value = "Submit" onclick="reload_scheme_comp(<?php echo $_POST["scheme_id"] ?>)">
 	</div>
 	<table class="table table-stripped tablesorter ">

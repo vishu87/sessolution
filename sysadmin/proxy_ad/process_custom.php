@@ -56,7 +56,7 @@ while ($row = mysql_fetch_array($sql_custom)) {
 	} else $name = $report_upload;
 
 	if($flag_new == 1){
-		mysql_query("INSERT into customized_reports (user_id, report_id, report_upload, add_date) values ('$row[id]','$rid','$name','$timenow') ");
+		mysql_query("INSERT into customized_reports (user_id, report_id,check_id, report_upload, add_date) values ('$row[id]','$rid','$check','$name','$timenow') ");
 	} else {
 		$sql = "UPDATE customized_reports set user_id = '$row[id]', report_id = '$rid', report_upload = '$name', add_date = '$timenow', check_id = '$check', custom_reco = '$custom_reco' where custom_id = $custom_id ";
 		mysql_query($sql);

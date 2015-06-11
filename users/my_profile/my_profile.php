@@ -161,6 +161,19 @@ if(!isset($title)) {
                                           </div>
                                        </div>
                                        <!--/span-->
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                             <label class="control-label" for="name">Meeting Alerts</label>
+                                             <div class="controls">
+                                              <select name="alerts" class="m-wrap span12">
+                                                <option value="0">By Portfolio Managers</option>
+                                                <option value="1" <?php echo ($row_sub["alerts"] == 1)?'selected':''; ?>>Centralized by Admin</option>
+                                              </select>
+                                              <span class="help-block" ></span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
                                     </div>
                                     <!--/row-->
                                     

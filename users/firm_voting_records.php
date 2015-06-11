@@ -28,7 +28,7 @@
 	$user_id = $_SESSION["MEM_ID"];
 	
 	$sub_sidebar=$id;
-	if($id>3 || $id<1) {header("location: ".STRSITE."access-denied.php");}
+	if($id>4 || $id<1) {header("location: ".STRSITE."access-denied.php");}
 
 	require_once('header.php');?>
 	<!-- BEGIN CONTAINER -->
@@ -45,6 +45,8 @@
 						break;
 				case 3: include($folder.'mis_report.php');
 						break;
+				case 4: include($folder.'alerts.php');
+					break;
 			}
 		?>			
 		</div>

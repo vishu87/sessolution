@@ -37,7 +37,7 @@ if($type == 1){
   }
 	if($flag_check == 0){
 		mysql_query("UPDATE proxy_ad set custom_report_freeze = $str where id = $report_id ");
-	echo 'success';
+	  echo 'success';
 	} else {
 		echo 'Please fill all the details in custom recommendations.';
 	}

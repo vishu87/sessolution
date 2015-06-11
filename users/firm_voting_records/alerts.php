@@ -124,7 +124,7 @@ if(!isset($title)  || !isset($user_id)) {
                               <?php
 
 
-                                $sql = mysql_query("SELECT user_voting_company.*, companies.com_name, companies.com_id, companies.com_bse_code from user_voting_company inner join companies on user_voting_company.com_id = companies.com_id where user_voting_company.user_id='$user_id' order by companies.com_name asc");
+                                $sql = mysql_query("SELECT distinct(companies.com_id), user_voting_company.*, companies.com_name, companies.com_bse_code from user_voting_company inner join companies on user_voting_company.com_id = companies.com_id inner join users on user_voting_company.user_id = users.id where users.id='$user_id' OR users.created_by_prim = '$user_id' order by companies.com_name asc");
                                 $count =1;
                                 while ($row = mysql_fetch_array($sql)) {
                                  echo '<tr id="tr_'.$row["com_id"].'">';

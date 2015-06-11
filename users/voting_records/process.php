@@ -167,19 +167,25 @@ if($_GET["cat"] == 3){
 	$table = 'user_voting_company';
 	
 	$ar_fields = array("meeting_alert","meeting_schedule","report_upload","notice","annual_report","meeting_outcome","meeting_minutes");
-
-	foreach ($_POST["com_id"] as $com_id) {
-		foreach ($ar_fields as $ar) {
-			if($_POST[$ar.'_'.$com_id] == 'on'){
-				mysql_query("UPDATE $table set $ar = '1' where user_id='$user_id' and com_id='$com_id' ");
-			} else {
-				mysql_query("UPDATE $table set $ar = '0' where user_id='$user_id' and com_id='$com_id' ");
-			}
-			
-		}
-	}
-	mysql_query("INSERT into user_activity (user_id, activity_id) values ('$_SESSION[MEM_ID]','31')" );
-	header("Location: ../".$folder.".php?cat=3&success=1");
+	echo sizeof($_POST["com_id"]);
+	echo '<br>';
+	echo sizeof($_POST["meeting_alert"]);
+	echo '<br>';
+	echo sizeof($_POST["meeting_schedule"]);
+	echo '<br>';
+	echo sizeof($_POST["report_upload"]);
+	echo '<br>';
+	// foreach ($_POST["com_id"] as $com_id) {
+	// 	foreach ($ar_fields as $ar) {
+	// 		if($_POST[$ar.'_'.$com_id] == 'on'){
+	// 			mysql_query("UPDATE $table set $ar = '1' where user_id='$user_id' and com_id='$com_id' ");
+	// 		} else {
+	// 			mysql_query("UPDATE $table set $ar = '0' where user_id='$user_id' and com_id='$com_id' ");
+	// 		}
+	// 	}
+	// }
+	// mysql_query("INSERT into user_activity (user_id, activity_id) values ('$_SESSION[MEM_ID]','31')" );
+	//header("Location: ../".$folder.".php?cat=3&success=1");
 	
 	die();
 	

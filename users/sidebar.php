@@ -28,7 +28,9 @@
 						<li <?php echo ($sub_sidebar=='1' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=1">Create Portfolio</a></li>
 						<?php if($_SESSION["self_portfolio"] == 1){ ?>
 							<li <?php echo ($sub_sidebar=='2' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=2">Upcoming Meetings</a></li>
+							<?php if($_SESSION["alerts"] == 0){ ?>
 							<li <?php echo ($sub_sidebar=='3' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=3">Set Email Alerts</a></li>
+							<?php } ?>
 							<li <?php echo ($sub_sidebar=='5' && $sidebar=='voting_records')?'class="active"':'';?>><a href="voting_records.php?cat=5">View Past Votings</a></li>
 						<?php } ?>
 					</ul>
@@ -45,6 +47,9 @@
 					<ul class="sub">
 						<li <?php echo ($sub_sidebar=='1' && $sidebar=='firm_voting_records')?'class="active"':'';?>><a href="firm_voting_records.php?cat=1">Execute Vote</a></li>
 						<li <?php echo ($sidebar=='proxy_voters')?'class="active"':'';?>><a href="proxy_voters.php">Add Proxy Voters</a></li>
+						<?php if($_SESSION["alerts"] == 1){ ?>
+							<li <?php echo ($sub_sidebar=='4' && $sidebar=='firm_voting_records')?'class="active"':'';?>><a href="firm_voting_records.php?cat=4">Set Email Alerts</a></li>
+						<?php } ?>
 						<li <?php echo ($sub_sidebar=='2' && $sidebar=='firm_voting_records')?'class="active"':'';?>><a href="firm_voting_records.php?cat=2">Edit Voting Records</a></li>
 						<li <?php echo ($sub_sidebar=='3' && $sidebar=='firm_voting_records')?'class="active"':'';?>><a href="firm_voting_records.php?cat=3">MIS Report</a></li>
 					</ul>
