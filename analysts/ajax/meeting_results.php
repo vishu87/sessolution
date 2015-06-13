@@ -78,13 +78,13 @@ foreach ($votings as $voting){
   echo '<td>'.$voting[1].'</td>';
   echo '<td>'.$voting[2].'</td>';
   echo '<td>'.$recos[$voting[3]].'</td>';
-  if($results[$voting[0]][4][0] != 0) echo '<td>'.moneyFormatIndia($results[$voting[0]][4][0]).'</td>';
+  if($results[$voting[0]][4][0] != -1) echo '<td>'.moneyFormatIndia($results[$voting[0]][4][0]).'</td>';
   else echo '<td>NA</td>';
-  if($results[$voting[0]][4][2] != 0) echo '<td>'.moneyFormatIndia($results[$voting[0]][4][2]).'</td>';
+  if($results[$voting[0]][4][2] != -1) echo '<td>'.moneyFormatIndia($results[$voting[0]][4][2]).'</td>';
   else echo '<td>NA</td>';
-  if($results[$voting[0]][4][1] != 0)echo '<td>'.number_format($results[$voting[0]][4][1],'2','.','').'%</td>';
+  if($results[$voting[0]][4][1] != -1)echo '<td>'.number_format($results[$voting[0]][4][1],'2','.','').'%</td>';
   else echo '<td>NA</td>';
-  if($results[$voting[0]][4][3] != 0)echo '<td>'.number_format($results[$voting[0]][4][3],'2','.','').'%</td>';
+  if($results[$voting[0]][4][3] != -1)echo '<td>'.number_format($results[$voting[0]][4][3],'2','.','').'%</td>';
   else echo '<td>NA</td>';
   echo '<td>'.$results[$voting[0]][4][4].'</td>';
   echo '<td><a href="javascript:;" class="btn blue mini show_hide_btn'.$voting[0].'" data-show="0" onclick="show_hide('.$voting[0].')" style="width:50px">Details <i class="icon-chevron-down"></i></a></td>';
@@ -92,14 +92,14 @@ foreach ($votings as $voting){
   foreach ($types as $key => $value) {
     echo '<tr style="display:none" class="tr_'.$voting[0].'">';
     echo '<td colspan="3" align="right">'.$value.'</td>';
-    if($results[$voting[0]][$key][0])echo '<td>'.moneyFormatIndia($results[$voting[0]][$key][0]).'</td>';
+    if($results[$voting[0]][$key][0] != -1)echo '<td>'.moneyFormatIndia($results[$voting[0]][$key][0]).'</td>';
     else echo '<td>NA</td>';
 
-    if($results[$voting[0]][$key][2])echo '<td>'.moneyFormatIndia($results[$voting[0]][$key][2]).'</td>';
+    if($results[$voting[0]][$key][2] != -1 )echo '<td>'.moneyFormatIndia($results[$voting[0]][$key][2]).'</td>';
     else echo '<td>NA</td>';
-    if($results[$voting[0]][$key][1] != 0)echo '<td>'.number_format($results[$voting[0]][$key][1],'2','.','').'%</td>';
+    if($results[$voting[0]][$key][1] != -1)echo '<td>'.number_format($results[$voting[0]][$key][1],'2','.','').'%</td>';
     else echo '<td>NA</td>';
-    if($results[$voting[0]][$key][3] != 0)echo '<td>'.number_format($results[$voting[0]][$key][3],'2','.','').'%</td>';
+    if($results[$voting[0]][$key][3] != -1)echo '<td>'.number_format($results[$voting[0]][$key][3],'2','.','').'%</td>';
     else echo '<td>NA</td>';
     echo '<td colspan="2"></td>';
     echo '</tr>';
