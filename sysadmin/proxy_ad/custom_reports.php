@@ -94,14 +94,16 @@ require_once('../../classes/MemberClass.php');
 
             <div class="span3 ">
               <label class="control-label"><b>Standard Recommendations?</b></label>
-              <select name="check_<?php echo $row["id"]?>">
+              <select name="check_<?php echo $row["id"]?>" class="check" data-id="<?php echo $row["id"]?>">
                 <option value="0">Yes</option>
                 <option value="1" <?php if($file["check_id"] == 1) echo 'selected'; ?> >No</option>
               </select>
             </div>
             <div class="span5 ">
               <br>
-              <a href="javascript:;" onclick="open_custom_reco('<?php echo name_filter($row["name"]) ?>',<?php echo $pa_report->id ?>,<?php echo $row["id"] ?>)" class="btn blue">Custom Recommendations</a>
+              
+              <a href="javascript:;" onclick="open_custom_reco('<?php echo name_filter($row["name"]) ?>',<?php echo $pa_report->id ?>,<?php echo $row["id"] ?>)" class="btn blue reco" <?php if($file["check_id"] == 0){?> style="display:none" <?php } ?> data-id="<?php echo $row["id"]?>">Custom Recommendations</a>
+
             </div>
 
             <div class="span3 ">
@@ -175,6 +177,10 @@ require_once('../../classes/MemberClass.php');
 jQuery(document).ready(function() {     
       // initiate layout and plugins
     $('.datepicker_month').datepicker({format:'dd-mm-yyyy', minViewMode:'1'});
+    $(".check").change(function(){
+      var data = $(this).attr("data-id");
+      $('.reco[data-id='+data+']').toggle();
+    });
     
   });
 

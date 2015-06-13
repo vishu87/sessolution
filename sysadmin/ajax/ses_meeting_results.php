@@ -114,7 +114,7 @@ foreach ($votings as $voting){
     var data = $(this).attr("data-id");
     var sum = 0;
     $(".shares_held[data-id="+data+"]").each(function(){
-      if(parseInt($(this).val())) sum = sum + parseInt($(this).val());
+      if(parseInt($(this).val()) && parseInt($(this).val()) >= 0) sum = sum + parseInt($(this).val());
     });
     $(".total_shares_held[data-id="+data+"]").val(sum);
     if($(".total_shares_held[data-id="+data+"]").hasClass('total_shares_held_main')){
@@ -136,7 +136,7 @@ foreach ($votings as $voting){
     var data = $(this).attr("data-id");
     var sum = 0;
     $(".votes_polled[data-id="+data+"]").each(function(){
-      if(parseInt($(this).val())) sum = sum + parseInt($(this).val());
+      if(parseInt($(this).val()) && parseInt($(this).val()) >= 0) sum = sum + parseInt($(this).val());
     });
     $(".total_votes_polled[data-id="+data+"]").val(sum);
   });
