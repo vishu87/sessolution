@@ -46,12 +46,12 @@ if(!isset($title)  || !isset($user_id)) {
    ?>
   
 <div class="row-fluid">
-  <div class="span4">
+  <div class="span5">
  
       <div class="row-fluid">
        <div class="span12">
           <div class="control-group">
-             <label class="control-label">Alert me for a Meeting before (No. of days)</label>
+             <label class="control-label">Alert me for a Meeting before e-Voting deadline (no. of days)</label>
              <div class="controls">
                   <input type="text" class="m-wrap span4"  id="meeting_alert_add" placeholder="No. of Days" value=""><button class="btn" type="button" onclick="alert_add()" >Add</button>
                   <span class="help-block"></span>   
@@ -63,7 +63,7 @@ if(!isset($title)  || !isset($user_id)) {
   </div>
   <div class="span4">
     <!-- <h5>Meeting Alerts (click to remove)</h5>  -->
-    <label class="control-label">Meeting Alerts (click to remove)</label>
+    <label class="control-label">e-Voting Alerts (click to remove)</label>
     <div id="days_span">
     <?php 
       $alert_query = mysql_query("SELECT id,num_days from meeting_alert where user_id='$_SESSION[MEM_ID]' order by num_days desc");
@@ -75,7 +75,7 @@ if(!isset($title)  || !isset($user_id)) {
     ?>
     </div>
   </div>
-  <div class="span4">
+  <div class="span3">
     <form action="<?php echo $folder; ?>process.php?cat=3" method="post" class="horizontal-form" id="alert_form">
     <label class="control-label">&nbsp;</label>
     <button class="btn green span3 pull-right" type="submit" style="margin-bottom:10px">Save</button>
