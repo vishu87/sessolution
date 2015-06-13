@@ -36,14 +36,17 @@ if(mysql_num_rows($check) > 0){
 }
 
 //sending mail to the user admin
-$report_info_sql = mysql_query("SELECT companies.com_name, proxy_ad.meeting_type, proxy_ad.meeting_date from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id = '$report_id' limit 1 ");
+$report_info_sql = mysql_query("SELECT companies.com_name, proxy_ad.meeting_type, proxy_ad.meeting_date, proxy_ad.evoting_start, proxy_ad.evoting_end, proxy_ad.evoting_plateform from proxy_ad inner join companies on proxy_ad.com_id = companies.com_id where proxy_ad.id = '$report_id' limit 1 ");
 $report_info = mysql_fetch_array($report_info_sql);
 
 $user = new User($_SESSION["MEM_ID"]);
 $email = $user->parent_email;
-$subject = 'Votes Freezed: '.$user->user_admin_name.' for '.$report_info["com_name"].' / '.$meeting_types[$report_info["meeting_type"]].' / '.date("d-M-y", $report_info["meeting_date"]);
+$subject = 'SES Portal: Votes frozen by : '.$user->user_admin_name;
 
-	$body_in = '<p> Votes has been freezed for '.$report_info["com_name"].' / '.$meeting_types[$report_info["meeting_type"]].' / '.date("d-M-y", $report_info["meeting_date"]).' by <b>'.$user->user_admin_name.'</b> <hr><i>This is an auto generated email. Please do not reply.</i>';
+	$body_in = '<p>Dear Admin,</p><p>'.$user->user_admin_name.' has frozen votes for the meeting.<br>Company Name: '.$report_info["com_name"].'<br>Meeting Type: '.$meeting_types[$report_info["meeting_type"]].'<br>Meeting Date: '.date("d-M-y", $report_info["meeting_date"]).'<br>E-Voting Period: ';
+	if($report_info["evoting_start"] != '') $body_in .= date("d-M-y", $report_info["evoting_start"]).' to ';
+	if($report_info["evoting_end"] != '') $body_in .= date("d-M-y", $report_info["evoting_end"]);
+	$body_in .= '<br>E-Voting Platform: '.$report_info["evoting_plateform"].'<br> <hr><i>This is an auto generated email. Please do not reply.</i>';
 
 	$body = mysql_real_escape_string($body_in);
 	mysql_query("INSERT into mail_queue (mailto, mailcc, mailbcc, mailbccmore, subject, content, at_folder, at_file) values ('$email','','','','$subject', '$body','','') ");
