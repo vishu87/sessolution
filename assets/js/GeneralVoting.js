@@ -718,7 +718,7 @@ function add_company_scheme(scheme_id){
   var shares_held = $("#shares_held").val();
   var upload_date= $("#upload_date_pop").val();
   var count = $(".view_scheme_body").find('tr').length;
-  if(company_name && shares_held && upload_date){
+  if(company_name){
 
     $.post("ajax/"+ file +".php", {scheme_id:scheme_id, count:count, company_name:company_name, shares_held:shares_held, upload_date:upload_date}, function(data) {
       data = JSON.parse(data);
