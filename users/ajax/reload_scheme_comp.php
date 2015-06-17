@@ -36,7 +36,7 @@ $today = strtotime($_POST["reload_date"]);
 						<td><?php echo $count ?></td>
 						<td><?php echo $row["com_name"]; ?></td>
 						<td><?php echo $row["shares_held"]; ?></td>
-						<td><?php echo date("d-M-Y",$row["held_date"]); ?></td>
+						<td><?php echo ($row["held_date"])?date("d-M-Y",$row["held_date"]):''; ?></td>
 						<td>
 							<a href="javascript:;" class="btn red" id="rm_comp_<?php echo $row["id"] ?>" onclick="remove_scheme_company(<?php echo $row["id"]?>,<?php echo $row["com_id"]; ?>)">Remove</a>
 						</td>

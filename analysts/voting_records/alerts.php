@@ -62,7 +62,7 @@ if(!isset($title)  || !isset($user_id)) {
     
   </div>
   <div class="span4">
-    <!-- <h5>Meeting Alerts (click to remove)</h5>  -->
+    <!-- <h5>e-Voting Alerts (click to remove)</h5>  -->
     <label class="control-label">e-Voting Alerts (click to remove)</label>
     <div id="days_span">
     <?php 
@@ -95,7 +95,7 @@ if(!isset($title)  || !isset($user_id)) {
                                  <th>#</th>
                                  <th>Company Name</th>
                                  <th>BSE Code</th>
-                                 <th>Meeting Alerts</th>
+                                 <th>e-Voting Alerts</th>
                                  <th>Meeting Schedule Update</th>
                                  <th>Report Upload</th>
                                  <th>Notice</th>
