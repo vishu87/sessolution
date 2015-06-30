@@ -162,12 +162,12 @@ class SesVoting {
 		if(mysql_num_rows($check_custom_vote) > 0){
 			$row_check_custom = mysql_fetch_array($check_custom_vote);
 			if($row_check_custom["check_id"] == 0){
-				$sql_vote_string = "SELECT * from voting where report_id='$proxy_id' order by resolution_number asc";
+				$sql_vote_string = "SELECT * from voting where report_id='$proxy_id' order by priority, resolution_number asc";
 			} else {
-				$sql_vote_string = "SELECT voting.id, voting.resolution_number, voting.resolution_name, customized_votes.ses_reco, customized_votes.detail, voting.man_reco, voting.man_share_reco from voting left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id='$proxy_id' order by voting.resolution_number asc";
+				$sql_vote_string = "SELECT voting.id, voting.resolution_number, voting.resolution_name, customized_votes.ses_reco, customized_votes.detail, voting.man_reco, voting.man_share_reco from voting left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id='$proxy_id' order by voting.priority, voting.resolution_number asc";
 			}
 		} else {
-			$sql_vote_string = "SELECT * from voting where report_id='$proxy_id' order by resolution_number asc";
+			$sql_vote_string = "SELECT * from voting where report_id='$proxy_id' order by priority, resolution_number asc";
 		}
 		$sql_vote = mysql_query($sql_vote_string);
 		     $count =1;
@@ -347,7 +347,7 @@ class SesVoting {
 	public function user_votes($report_id,$parent_id){
 
 		if($parent_id == $_SESSION["MEM_ID"] || $_SESSION["PRIV"] == 1){ //display voting by others
-			$sql = "SELECT * from voting where report_id='$report_id' order by resolution_number asc";
+			$sql = "SELECT * from voting where report_id='$report_id' order by priority, resolution_number asc";
 			$sql_vote = mysql_query($sql);
 			$user_array = $this->get_portfolio_users($parent_id,$report_id);
 			//array_push($user_array, $parent_id);
@@ -459,7 +459,7 @@ class SesVoting {
 
 		if($parent_id == $_SESSION["MEM_ID"] || $_SESSION["PRIV"] == 1){ 
 
-			$sql = "SELECT * from voting where report_id='$report_id' order by resolution_number asc";
+			$sql = "SELECT * from voting where report_id='$report_id' order by priority, resolution_number asc";
 			$sql_vote = mysql_query($sql);
 
 			$sql_an = mysql_query("SELECT ignore_an from user_admin_proxy_ad where user_id='$parent_id' and report_id='$report_id' ");

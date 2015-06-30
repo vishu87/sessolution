@@ -20,7 +20,7 @@ $query_sc = mysql_query("SELECT schemes.dp_id, schemes.client_id, schemes.deposi
 $total_schemes = mysql_num_rows($query_sc);
 
 $array_res = array();
-$qx = "SELECT user_admin_voting.vote_id, user_admin_voting.vote, voting.resolution_number from user_admin_voting join voting on user_admin_voting.vote_id = voting.id where user_admin_voting.proxy_id = $report_id and voting.report_id = $report_id and user_admin_voting.user_id = $user_id and user_admin_voting.vote IN (1,2) order by voting.resolution_number asc ";
+$qx = "SELECT user_admin_voting.vote_id, user_admin_voting.vote, voting.resolution_number from user_admin_voting join voting on user_admin_voting.vote_id = voting.id where user_admin_voting.proxy_id = $report_id and voting.report_id = $report_id and user_admin_voting.user_id = $user_id and user_admin_voting.vote IN (1,2) order by voting.priority, voting.resolution_number asc ";
 //echo $qx.'<br>';
 $query_res = mysql_query($qx);
 $total_resolutions = mysql_num_rows($query_res);

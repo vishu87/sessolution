@@ -124,7 +124,7 @@ $row_com = mysql_fetch_array($sql_com);
 			while ($row_reco = mysql_fetch_array($sql_reco)) {
 			  $recos[$row_reco["id"]] = $row_reco["reco"];
 			}
-			$sql_vote = mysql_query("SELECT * from voting where report_id='$row[proxy_id]' order by resolution_number asc");
+			$sql_vote = mysql_query("SELECT * from voting where report_id='$row[proxy_id]' order by priority, resolution_number asc");
 			$i_in = $i;
 			if($count_student %2 == 0) $color = 'FFFFFFFF';
 				else $color = 'FFE7E7E7';

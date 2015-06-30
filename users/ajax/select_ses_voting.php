@@ -30,7 +30,7 @@ $str .= '<th>Your Vote</th><th>Comment</th></tr>';
 	$man_recos = array("","FOR","AGAINST","ABSTAIN");
 		
 
-		$sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by resolution_number asc");
+		$sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by priority, resolution_number asc");
 		     $count =1;
 		     while($row_vote = mysql_fetch_array($sql_vote)) {
 		      $str .= '<tr id="tr_vote_'.$row_vote["id"].'">';

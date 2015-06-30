@@ -278,7 +278,7 @@ while($row = mysql_fetch_array($sql_query)){
 	$company_details = mysql_query("SELECT com_name from companies where com_id='$row[com_id]' ");
 	$com  = mysql_fetch_array($company_details);
 
-	$total_res_query = mysql_query("SELECT resolution_number, resolution_name, id from voting where report_id='$report_id' order by resolution_number asc ");
+	$total_res_query = mysql_query("SELECT resolution_number, resolution_name, id from voting where report_id='$report_id' order by priority, resolution_number asc ");
 	while ($row_vote = mysql_fetch_array($total_res_query)) {
 		
 		$i = 0;

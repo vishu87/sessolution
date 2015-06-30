@@ -144,7 +144,7 @@ while($row_rep = mysql_fetch_array($query_rep))
 
 	foreach ($user_admin_proxy_array as $user_id_vote) {
 
-		$query_res = mysql_query("SELECT id, resolution_name, resolution_number, man_reco, man_share_reco from voting where report_id='$row_rep[report_id]' "); 
+		$query_res = mysql_query("SELECT id, resolution_name, resolution_number, man_reco, man_share_reco from voting where report_id='$row_rep[report_id]'  order by priority, resolution_number asc "); 
 			while ( $res = mysql_fetch_array($query_res)){
 				$i=0;
 				$query_vote = mysql_query("SELECT user_admin_voting.comment, votes.vote from user_admin_voting join votes on user_admin_voting.vote = votes.id where user_admin_voting.user_id='$user_id_vote' and user_admin_voting.vote_id='$res[id]'  limit 1");

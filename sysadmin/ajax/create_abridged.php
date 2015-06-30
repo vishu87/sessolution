@@ -234,7 +234,7 @@ $str .= '<div class="rest_page">
 	<tr style="background:#464646; color:#fff"><td class="center">S. No.</td><td>Resolution</td><td class="center">Type</td><td class="center">Recommendation</td><td class="center">Focus</td></tr>
 ';
 $count =0;
-$query = mysql_query("SELECT voting.resolution_number, voting.resolution_name, ses_recos.reco, voting.type_res_os, voting.focus from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$report_id' order by voting.resolution_number asc ");
+$query = mysql_query("SELECT voting.resolution_number, voting.resolution_name, ses_recos.reco, voting.type_res_os, voting.focus from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$report_id' order by voting.priority, voting.resolution_number asc ");
 while ($row = mysql_fetch_array($query)) {
 	$str .= '<tr class="';
 	$str .= ($count%2 == 0)?'light':'dark';
@@ -291,7 +291,7 @@ $str .= '<div style="width:400px; background:#EB641B; padding:10px 40px; color:#
 	<span style="font-size:30px; font-family:Arial;">SES C</span>omments
 </div>';
 
-$query = mysql_query("SELECT resolution_number, resolution_name, detail from voting where report_id='$report_id' order by resolution_number asc ");
+$query = mysql_query("SELECT resolution_number, resolution_name, detail from voting where report_id='$report_id' order by priority, resolution_number asc ");
 while ($row = mysql_fetch_array($query)) {
 	$str .= '<p style="align:justify"><b>Resolution #'.$row["resolution_number"].':'.$row["resolution_name"].'</b><br>
 		'.$row["detail"].'</p>';

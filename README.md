@@ -34,3 +34,7 @@ new table nsdl_votes
 
 -->
 proxy_ad an_id VARCHAR 100
+
+-->
+resolution_number TEXT
+priority INT

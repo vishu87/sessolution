@@ -152,7 +152,7 @@ foreach ($proxy_ids as $proxy_id) {
 		}
 		
 
-		$query_res = mysql_query("SELECT voting.id, voting.resolution_name, voting.resolution_number, voting.man_reco, voting.man_share_reco, ses_recos.reco from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$proxy_id' "); 
+		$query_res = mysql_query("SELECT voting.id, voting.resolution_name, voting.resolution_number, voting.man_reco, voting.man_share_reco, ses_recos.reco from voting inner join ses_recos on voting.ses_reco = ses_recos.id where voting.report_id='$proxy_id' order by voting.priority, voting.resolution_number "); 
 			while ( $res = mysql_fetch_array($query_res)){
 				$i=0;
 				$query_vote = mysql_query("SELECT $voting_table.comment, votes.vote from $voting_table join votes on $voting_table.vote = votes.id where $voting_table.user_id='$user_id_vote' and $voting_table.vote_id='$res[id]'  limit 1");

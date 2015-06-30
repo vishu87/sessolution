@@ -120,7 +120,7 @@ $body = '';
             $flag_self = 0;
 
 
-             $sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by resolution_number asc");
+             $sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by priority, resolution_number asc");
              if(mysql_num_rows($sql_vote) > 0){
                 $flag_self = 1;
                  $body .= '<h3>Agenda Items: SES</h3>';

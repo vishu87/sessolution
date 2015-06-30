@@ -212,7 +212,13 @@ echo '
              </div>
              <!--/span-->
              <div class="span6 ">
+              <div class="control-group">
+                 <label class="control-label">Order</label>
+                 <div class="controls">
+                    <input type="number" id="priority_pop" name="priority" value='.$vote["priority"].'>
 
+                 </div>
+                 </div>
              </div>
              <!--/span-->
           </div>

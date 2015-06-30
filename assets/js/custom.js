@@ -21,7 +21,7 @@ function check_add_vote(report_id){
           if(data == 'success'){ 
              var file = 'add_vote';
         $("#ses_voting_button").html("Adding");
-         $.post("ajax/"+ file +".php", {id:report_id, res_name:$("#resolution_name").val(),res_number:$("#resolution_number").val(),ses_reco:$("#ses_reco").val(),res:$("#resolution").val(), detail:$("#detail").val(),man_reco:$("#man_reco").val(),man_share_reco:$("#man_share_reco").val(), reason:$("#reason").val(), type_business:$("#type_business").val(), type_res_os:$("#type_res_os").val(), focus:$("#focus").val()}, function(data) {
+         $.post("ajax/"+ file +".php", {id:report_id, res_name:$("#resolution_name").val(),res_number:$("#resolution_number").val(),ses_reco:$("#ses_reco").val(),res:$("#resolution").val(), detail:$("#detail").val(),man_reco:$("#man_reco").val(),man_share_reco:$("#man_share_reco").val(), reason:$("#reason").val(), type_business:$("#type_business").val(), type_res_os:$("#type_res_os").val(), focus:$("#focus").val(), priority:$("#priority").val()}, function(data) {
 
             $('#table_votes').html(data);
             $("#resolution_name").val('');
@@ -68,8 +68,8 @@ function voting_submit(report_id,vote_id){
     $.post("ajax/"+ file +".php", {id:report_id, res_number:$("#resolution_number_pop").val(), vote_id:vote_id }, function(data) {
           if(data == 'success'){
              var file = 'edit_vote';
-        
-         $.post("ajax/"+ file +".php", {report_id:report_id, id:vote_id,  res_name:$("#resolution_name_pop").val(),res_number:$("#resolution_number_pop").val(),  res:$("#resolution_pop").val(), ses_reco:$("#ses_reco_pop").val(), detail:$("#detail_pop").val(),man_reco:$("#man_reco_pop").val(), man_share_reco:$("#man_share_reco_pop").val(), reason:$("#reason_pop").val(), type_business:$("#type_business_pop").val(), type_res_os:$("#type_res_os_pop").val(), focus:$("#focus_pop").val()}, function(data) {
+
+         $.post("ajax/"+ file +".php", {report_id:report_id, id:vote_id,  res_name:$("#resolution_name_pop").val(),res_number:$("#resolution_number_pop").val(),  res:$("#resolution_pop").val(), ses_reco:$("#ses_reco_pop").val(), detail:$("#detail_pop").val(),man_reco:$("#man_reco_pop").val(), man_share_reco:$("#man_share_reco_pop").val(), reason:$("#reason_pop").val(), type_business:$("#type_business_pop").val(), type_res_os:$("#type_res_os_pop").val(), focus:$("#focus_pop").val(), priority:$("#priority_pop").val()}, function(data) {
             
             $("#table_votes").html(data);
             $("#close_button2").trigger('click');

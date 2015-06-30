@@ -104,7 +104,7 @@ $objPHPExcel->getActiveSheet()->getStyle('A'.$seq.':'.$cell_val.$seq)->applyFrom
 $seq++;
 
 
-$query_votes = mysql_query("SELECT voting.resolution_number, voting.resolution_name, voting.man_share_reco, voting.type_business, resolutions.sebi_clause from voting left join resolutions on voting.resolution_type = resolutions.id  where voting.report_id ='$report_id' order by voting.resolution_number asc ");
+$query_votes = mysql_query("SELECT voting.resolution_number, voting.resolution_name, voting.man_share_reco, voting.type_business, resolutions.sebi_clause from voting left join resolutions on voting.resolution_type = resolutions.id  where voting.report_id ='$report_id' order by voting.priority, voting.resolution_number asc ");
  
 while($row_att = mysql_fetch_array($query_votes)){
 	$count = 0;

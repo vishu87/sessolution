@@ -46,7 +46,7 @@ $types = array("1"=>"Promoter and Promoter Group", "2" => "Public - Institutiona
 
 
 $array_voting_id = array();
-$sql_vote = mysql_query("SELECT id, resolution_number, resolution_name, ses_reco from voting where report_id='$rid' order by resolution_number asc");
+$sql_vote = mysql_query("SELECT id, resolution_number, resolution_name, ses_reco from voting where report_id='$rid' order by priority, resolution_number asc");
 while ($row_vote = mysql_fetch_array($sql_vote)) {
   array_push($array_voting_id, $row_vote["id"]);
   $votings[$row_vote["id"]] = array($row_vote["id"],$row_vote["resolution_number"],$row_vote["resolution_name"],$row_vote["ses_reco"]);

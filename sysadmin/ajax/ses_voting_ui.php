@@ -253,6 +253,13 @@ if(!$flag){
                                        </div>
                                        <!--/span-->
                                        <div class="span6 ">
+                                        <div class="control-group">
+                                       <label class="control-label">Order</label>
+                                       <div class="controls">
+                                          <input type="number" name="priority" id="priority">
+
+                                       </div>
+                                       </div>
 
                                        </div>
                                        <!--/span-->
@@ -282,7 +289,7 @@ while ($row_reco = mysql_fetch_array($sql_reco)) {
 }
 
 
-     $sql_vote = mysql_query("SELECT * from voting where report_id='$rid' order by resolution_number asc");
+     $sql_vote = mysql_query("SELECT * from voting where report_id='$rid' order by priority, resolution_number asc");
      $count =1;
      while($row_vote = mysql_fetch_array($sql_vote)) {
       echo '<tr id="tr_vote_'.$row_vote["id"].'">

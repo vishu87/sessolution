@@ -33,7 +33,7 @@ $user_id = mysql_real_escape_string($_POST["user_id"]);
       <th>Custom Comment</th>
     </tr>
   <?php
-  $sql_votes = mysql_query("SELECT voting.id, voting.resolution_number, voting.resolution_name, ses_recos.reco, customized_votes.ses_reco as custom_vote, customized_votes.detail as custom_comment from voting join ses_recos on voting.ses_reco = ses_recos.id left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id = '$report_id' order by voting.resolution_number asc ");
+  $sql_votes = mysql_query("SELECT voting.id, voting.resolution_number, voting.resolution_name, ses_recos.reco, customized_votes.ses_reco as custom_vote, customized_votes.detail as custom_comment from voting join ses_recos on voting.ses_reco = ses_recos.id left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id = '$report_id' order by voting.priority, voting.resolution_number asc ");
   while ($row = mysql_fetch_array($sql_votes)) {
   ?>
     <tr>

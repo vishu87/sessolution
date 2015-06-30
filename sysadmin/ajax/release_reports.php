@@ -34,7 +34,7 @@ $sql_reco = mysql_query("SELECT * from ses_recos");
 while ($row_reco = mysql_fetch_array($sql_reco)) {
   $recos[$row_reco["id"]] = $row_reco["reco"];
 }
-  $sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by resolution_number asc");
+  $sql_vote = mysql_query("SELECT * from voting where report_id='$report_id' order by priority, resolution_number asc");
      $count =1;
      while($row_vote = mysql_fetch_array($sql_vote)) {
       $voting_body .= '<tr><td>'.stripcslashes($row_vote["resolution_number"]).'</td><td>'.stripcslashes($row_vote["resolution_name"]).'</td><td>'.stripcslashes($man_recos[$row_vote["man_reco"]]).'</td><td>'.stripcslashes($recos[$row_vote["ses_reco"]]).'</td><td>'.stripcslashes($row_vote["detail"]).'</td></tr>';
@@ -159,7 +159,7 @@ foreach ($customized_users as $customized_user) {
         $voting_body_wo_comm_custom = '<table cellspacing="0" cellpadding="10" border="1"><tr><th>#</th><th>Resolution Name</th><th>Management/Shareholder Recommendation</th><th>SES Recommendation</th></tr>';
 
         
-          $sql_vote = mysql_query("SELECT voting.resolution_number, voting.resolution_name, voting.man_reco, customized_votes.ses_reco, customized_votes.detail from voting left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id='$report_id' order by voting.resolution_number asc");
+          $sql_vote = mysql_query("SELECT voting.resolution_number, voting.resolution_name, voting.man_reco, customized_votes.ses_reco, customized_votes.detail from voting left join customized_votes on voting.id = customized_votes.vote_id where voting.report_id='$report_id' order by voting.priority, voting.resolution_number asc");
              $count =1;
              while($row_vote = mysql_fetch_array($sql_vote)) {
               $voting_body_custom .= '<tr><td>'.stripcslashes($row_vote["resolution_number"]).'</td><td>'.stripcslashes($row_vote["resolution_name"]).'</td><td>'.stripcslashes($man_recos[$row_vote["man_reco"]]).'</td><td>'.stripcslashes($recos[$row_vote["ses_reco"]]).'</td><td>'.stripcslashes($row_vote["detail"]).'</td></tr>';
