@@ -53,7 +53,7 @@ $styleArray2 = array(
 
 $objPHPExcel->createSheet();
 $objPHPExcel->setActiveSheetIndex(0);
-$objPHPExcel->getDefaultStyle()->getFont()->setName('Arial');
+$objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
 $objPHPExcel->getDefaultStyle()->getFont()->setSize(9); 
 
 
