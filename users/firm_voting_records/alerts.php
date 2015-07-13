@@ -187,7 +187,7 @@ function change(param){
 function alert_add(){
    if(validate_required_number_idinfo($("#meeting_alert_add").val(), 'meeting_alert_add','Please input valid number') && $("#meeting_alert_add").val() <= 30 ) {
     if(parseInt($("#meeting_alert_add").val()) > 0){
-        var file = "alert_add_firm";
+        var file = "alert_add";
          $.post("ajax/"+ file +".php", {days:$("#meeting_alert_add").val()}, function(data) {
             if(data=='fail'){
               bootbox.alert('You have already alert for '+$("#meeting_alert_add").val()+' days');
@@ -208,7 +208,7 @@ function alert_remove(id){
        bootbox.confirm("Are you sure to delete ?", function(result){
           if(result){
             
-             var file = "alert_remove_firm";
+             var file = "alert_remove";
              $.post("ajax/"+ file +".php", {id:id}, function(data) {
                 if(data=='fail'){
                   bootbox.alert('Unknown Error');
