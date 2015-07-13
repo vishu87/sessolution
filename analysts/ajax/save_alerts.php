@@ -1,5 +1,5 @@
 <?php session_start();
-require_once('../../auth.php');
+require_once('../../subuserauth.php');
 $table = 'user_voting_company';
 $user_id = $_SESSION["MEM_ID"];
 $ar_fields = array("meeting_alert","meeting_schedule","report_upload","notice","annual_report","meeting_outcome","meeting_minutes");

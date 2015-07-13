@@ -45,9 +45,8 @@ if(!isset($title)  || !isset($user_id)) {
    }
    ?>
   
-<div class="row-fluid">
+<div class="row-fluid" style="overflow-y:auto ">
   <div class="span5">
- 
       <div class="row-fluid">
        <div class="span12">
           <div class="control-group">
@@ -76,12 +75,13 @@ if(!isset($title)  || !isset($user_id)) {
     </div>
   </div>
   <div class="span3">
-    <form action="<?php echo $folder; ?>process.php?cat=3" method="post" class="horizontal-form" id="alert_form">
+    <form class="horizontal-form alert_form" id="alert_form">
     <label class="control-label">&nbsp;</label>
-    <button class="btn green span3 pull-right" type="submit" style="margin-bottom:10px">Save</button>
+    <button class="btn green span3 pull-right" type="button" onclick="save_alerts()" id="save_btn" style="margin-bottom:10px">Save</button>
   </div>
 </div>
-            <div class="portlet box light-grey">
+  
+                       <div class="portlet box light-grey">
                           <div class="portlet-title">
                                  <h4><i class="icon-reorder"></i> Set Email Alerts</h4>
                                  <div class="tools">
@@ -92,7 +92,7 @@ if(!isset($title)  || !isset($user_id)) {
                 <table class="table table-stripped tablesorter_without">
                            <thead>
                               <tr>
-                                 <th>#</th>
+                                 <th>SN</th>
                                  <th>Company Name</th>
                                  <th>BSE Code</th>
                                  <th>e-Voting Alerts</th>
@@ -113,13 +113,13 @@ if(!isset($title)  || !isset($user_id)) {
                                 <td></td>
                                    <td></td>
                                    <td></td>
-                                   <td><input type="checkbox" id="meeting_alert" onclick ="change('meeting_alert')" ></td>
-                                   <td><input type="checkbox" id="meeting_schedule" onclick ="change('meeting_schedule')" ></td>
-                                   <td><input type="checkbox" id="report_upload" onclick ="change('report_upload')"></td>
-                                   <td><input type="checkbox" id="notice" onclick ="change('notice')"></td>
-                                   <td><input type="checkbox" id="annual_report" onclick ="change('annual_report')"></td>
-                                   <td><input type="checkbox" id="meeting_outcome" onclick ="change('meeting_outcome')"></td>
-                                   <td><input type="checkbox" id="meeting_minutes" onclick ="change('meeting_minutes')"></td>
+                                   <td><input type="checkbox" value="1" id="meeting_alert" onclick ="change('meeting_alert')" ></td>
+                                   <td><input type="checkbox" value="1" id="meeting_schedule" onclick ="change('meeting_schedule')" ></td>
+                                   <td><input type="checkbox" value="1" id="report_upload" onclick ="change('report_upload')"></td>
+                                   <td><input type="checkbox" value="1" id="notice" onclick ="change('notice')"></td>
+                                   <td><input type="checkbox" value="1" id="annual_report" onclick ="change('annual_report')"></td>
+                                   <td><input type="checkbox" value="1" id="meeting_outcome" onclick ="change('meeting_outcome')"></td>
+                                   <td><input type="checkbox" value="1" id="meeting_minutes" onclick ="change('meeting_minutes')"></td>
                                    </tr>
                               <?php
 
@@ -131,29 +131,32 @@ if(!isset($title)  || !isset($user_id)) {
                                  echo '<td>'.$count.'</td>';
                                     echo '<td>'.$row["com_name"].'</td>';
                                     echo '<td>'.$row["com_bse_code"].'<input type="hidden" name="com_id[]" value="'.$row["com_id"].'"></td>';
-                                    echo '<td><input type="checkbox" name="meeting_alert_'.$row["com_id"].'" class="meeting_alert" ';
+                                    echo '<td><input type="checkbox" value="1" name="meeting_alert_'.$row["com_id"].'" class="meeting_alert" ';
                                     echo ($row["meeting_alert"] == 1)?'checked="checked"':'';
                                     echo ' ></td>';
-                                    echo '<td><input type="checkbox" name="meeting_schedule_'.$row["com_id"].'" class="meeting_schedule" ';
+                                    echo '<td><input type="checkbox" value="1" name="meeting_schedule_'.$row["com_id"].'" class="meeting_schedule" ';
                                     echo ($row["meeting_schedule"] == 1)?'checked="checked"':'';
                                     echo ' ></td>';
-                                    echo '<td><input type="checkbox" name="report_upload_'.$row["com_id"].'" class="report_upload" ';
+                                    echo '<td><input type="checkbox" value="1" name="report_upload_'.$row["com_id"].'" class="report_upload" ';
                                     echo ($row["report_upload"] == 1)?'checked="checked"':'';
                                     echo '></td>';
-                                    echo '<td><input type="checkbox" name="notice_'.$row["com_id"].'"  class="notice" ';
+                                    echo '<td><input type="checkbox" value="1" name="notice_'.$row["com_id"].'"  class="notice" ';
                                     echo ($row["notice"] == 1)?'checked="checked"':'';
                                     echo '></td>';
-                                    echo '<td><input type="checkbox" name="annual_report_'.$row["com_id"].'" class="annual_report" ';
+                                    echo '<td><input type="checkbox" value="1" name="annual_report_'.$row["com_id"].'" class="annual_report" ';
                                     echo ($row["annual_report"] == 1)?'checked="checked"':'';
                                     echo '></td>';
-                                    echo '<td><input type="checkbox" name="meeting_outcome_'.$row["com_id"].'" class="meeting_outcome" ';
+                                    echo '<td><input type="checkbox" value="1" name="meeting_outcome_'.$row["com_id"].'" class="meeting_outcome" ';
                                     echo ($row["meeting_outcome"] == 1)?'checked="checked"':'';
                                     echo'></td>';
-                                    echo '<td><input type="checkbox" name="meeting_minutes_'.$row["com_id"].'" class="meeting_minutes" ';
+                                    echo '<td><input type="checkbox" value="1" name="meeting_minutes_'.$row["com_id"].'" class="meeting_minutes" ';
                                     echo ($row["meeting_minutes"] == 1)?'checked="checked"':'';
                                     echo '></td>';
                                     echo '</tr>';
                                     $count++;
+                                    if($count%40 == 0){
+                                      echo '</form><form class="horizontal-form alert_form" id="alert_form">';
+                                    }
                                 }
                                                                 
                                     
@@ -217,6 +220,22 @@ function alert_remove(id){
           }
        });
 }
-
+var sent = 0;
+function save_alerts(){
+  $("#save_btn").html('Saving...');
+  var file = "save_alerts";
+  var count_form = 1;
+  $(".alert_form").each(function(){
+      var data_st = $(this).serialize();
+      var val_data = data_st+'&count_form='+count_form;
+      $.post("ajax/"+file+".php",val_data, function(data){
+        console.log(data);
+        if(++sent == $(".alert_form").length) {
+          location.reload();
+        }
+      })
+      count_form++;
+    });
+}
 
 </script>
